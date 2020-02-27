@@ -1,12 +1,39 @@
 package com.ptit.electricbill.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ptit.electricbill.dao.KhachHangDAO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
 public class CheckUserListController {
-    @GetMapping("/danh-sach-khach-hang")
-    public String dashboard(){
+
+    @Autowired
+    private KhachHangDAO khachHangDAO;
+
+    @GetMapping("/trang-chu")
+    public String dashboard() {
         return "userList";
+    }
+
+    @PostMapping("/danh-sach-khach-hang")
+    @ResponseBody
+    public String getUserList() {
+        List<Object> userList = khachHangDAO.getAll();
+        String data = null;
+        try {
+            data = (new ObjectMapper()).writeValueAsString(userList);
+            return data;
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
