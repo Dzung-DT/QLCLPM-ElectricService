@@ -1,8 +1,39 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{layout/template}">
 <head>
     <title>Dashboard</title>
+    <style>
+        .modal-header {
+            padding-bottom: 5px;
+        }
+
+        .modal-footer .btn-group button {
+            height: 40px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            border: none;
+        }
+
+        .modal-footer .btn-group:last-child > button {
+            border-right: 0;
+        }
+
+        .modal-title {
+            margin-bottom: 0;
+            margin-right: 152px;
+            line-height: 1.5385;
+        }
+
+        .modal-header .close {
+            padding: 1.25rem 1.25rem;
+            margin: -2.25rem -26.25rem -1.25rem auto;
+        }
+
+        .modal-header .close {
+            color: red;
+        }
+    </style>
 </head>
 <body>
 <div class="content">
@@ -11,6 +42,33 @@
             $(document).ready(function () {
                 showCustomerTable();
             });
+            
+            function sendMailOneCustomer() {
+                var mailContent = $.trim($("#text__mail-content").val());
+                $.ajax({
+                    url: "/gui-mail-khach-hang",
+                    type: "POST",
+                    data: {
+                        "mailContent": mailContent,
+                    },
+                    success: function (data) {
+                        alert(data);
+                    }, error: function () {
+                        alert("FAIL!");
+                    }
+                });
+            }
+
+            function getIDKH() {
+
+                $('#bang_khach_hang').find('tr').click( function(){
+                    var id = $(this).find('td').eq(0).text();
+                    var emailPickUp = $(this).find('td').eq(1).text();
+                    var namePickUp = $(this).find('td').eq(5).text();
+                    $("#mail_address_receive").html(emailPickUp);
+                    $("#name_customer_receive").html(namePickUp);
+                });
+            }
 
             function showCustomerTable() {
                 $.ajax({
@@ -18,8 +76,8 @@
                     type: "POST",
                     dataType: "json",
                     success: function (data) {
-                        let contentString;
-                        for (let i = 0; i < data.length; i++) {
+                        var contentString;
+                        for (var i = 0; i < data.length; i++) {
                             contentString = contentString
                                 + '<tr role="row" class="odd">'
                                 + '<td>' + data[i][0] + '</td>'
@@ -30,6 +88,44 @@
                                 + '<td>' + data[i][5] + '</td>'
                                 + '<td>' + data[i][6] + '</td>'
                                 + '<td>' + data[i][7] + '</td>'
+                                + '<td>' + data[i][8] + '</td>'
+                                + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block"><i class="icon-mail-read"></i></button></a></td>'
+                                + '</tr>';
+                        }
+                        $("#bang_khach_hang").html(contentString);
+                    }, error: function () {
+                        alert("FAIL!");
+                    }
+                });
+            }
+
+            function searchCustomerByID() {
+                var customerID = $("#customer_ID_search").val().trim();
+                $.ajax({
+                    url: "/tim-kiem-khach-hang",
+                    type: "POST",
+                    dataType: "json",
+                    data: {
+                        "customerID": customerID,
+                    },
+                    success: function (data) {
+                        if (data.length == 0) {
+                            $('#SearchModalCustomer').modal('show');
+                        }
+                        var contentString;
+                        for (var i = 0; i < data.length; i++) {
+                            contentString = contentString
+                                + '<tr role="row" class="odd">'
+                                + '<td>' + data[i][0] + '</td>'
+                                + '<td>' + data[i][1] + '</td>'
+                                + '<td>' + data[i][2] + '</td>'
+                                + '<td>' + data[i][3] + '</td>'
+                                + '<td>' + data[i][4] + '</td>'
+                                + '<td>' + data[i][5] + '</td>'
+                                + '<td>' + data[i][6] + '</td>'
+                                + '<td>' + data[i][7] + '</td>'
+                                + '<td>' + data[i][8] + '</td>'
+                                + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block"><i class="icon-mail-read"></i></button></a></td>'
                                 + '</tr>';
                         }
                         $("#bang_khach_hang").html(contentString);
@@ -45,8 +141,24 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header header-elements-inline">
-                        <h5 class="card-title font-weight-bold">Danh sách khách hàng</h5>
+                        <a th:href="@{/trang-chu}" class="nav-link"><h5 class="card-title font-weight-bold">Danh sách
+                            khách hàng</h5></a>
+
+                        <div class="d-flex align-items-end flex-nowrap flex-xl-nowrap"
+                             style="margin-left: auto; margin-right: 60px">
+                            <span class="mr-2">Tìm:</span>
+                            <input type="text" class="form-control text-dark flex-1 wmin-xl-200 border-bottom-1"
+                                   placeholder="Nhập mã khách hàng"
+                                   style="text-align: center; color: red !important; font-size: 16px"
+                                   id="customer_ID_search">
+                            <button type="submit"
+                                    class="btn-dark bg-transparent border-dark text-dark ml-3 ml-xl-2 legitRipple"
+                                    style="border-radius: 30%" onclick="searchCustomerByID()">
+                                <i class="icon-search4" data-toggle="tooltip" title="Tìm"></i>
+                            </button>
+                        </div>
                     </div>
+                    <hr>
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
                         <div class="datatable-scroll-wrap">
                             <table class="table datatable-responsive dataTable no-footer dtr-inline"
@@ -58,21 +170,15 @@
                                     <th>Ngày sinh</th>
                                     <th>Số CMND</th>
                                     <th>Địa chỉ</th>
+                                    <th>Mail</th>
                                     <th>Giới tính</th>
                                     <th>Ngày BDSD</th>
                                     <th>Mục đích SD</th>
                                     <th>Tùy chọn</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody id="bang_khach_hang">
-                                <!--                                <tr role="row" class="odd">-->
-                                <!--                                    <td>1</td>-->
-                                <!--                                    <td class="text-center">-->
-                                <!--                                        <a href="#" class="list-icons-item text-teal-600"><i class="icon-cog6"></i></a>-->
-                                <!--                                        <a href="#" class="list-icons-item text-danger-600 ml-1"><i-->
-                                <!--                                                class="icon-trash"></i></a>-->
-                                <!--                                    </td>-->
-                                <!--                                </tr>-->
                                 </tbody>
                             </table>
                         </div>
@@ -80,6 +186,52 @@
                 </div>
             </div>
         </div>
+        <!--Start Modal send mail-->
+        <div class="modal fade alert" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span><span
+                                class="sr-only">Close</span></button>
+                        <h3 class="modal-title" id="lineModalLabel">Please enter mail content !</h3>
+                    </div>
+                    <div class="modal-body">
+                        <label>From: <span
+                                style="color: black; font-weight: bold; font-size: 16px">Electric Company</span></label>
+                        <br>
+                        <label>To: <span id="mail_address_receive"
+                                         style="color: black; font-weight: bold; font-size: 16px; margin-right: 4px;"></span></label>
+                        <label>(<span id="name_customer_receive"
+                                      style="color: coral; font-weight: bold; font-size: 16px;"></span>)</label>
+
+                        <div class="form-group" style="text-align: center">
+                            <label for="text__mail-content"><textarea id="text__mail-content" rows="10" cols="85"
+                                                                      style="text-align: left">
+                                </textarea></label>
+                        </div>
+                        <button type="submit" class="btn btn-primary center-block" style="margin-left: 250px"
+                                id="btn__modal-send" onclick="sendMailOneCustomer()">Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End Modal send mail-->
+
+        <!--Start Modal Search Customer Status -->
+        <div class="modal fade" id="SearchModalCustomer" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content bg-warning">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle" style="margin-top: 32px;  margin-bottom: 43px;line-height: 1.5385;margin-left: 48px;">Không tìm được khách hàng !</h5>
+                        <i class="icon-warning" style="font-size: 70px; margin-right: 54px;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End Modal Search Customer Status -->
     </section>
 </div>
 </body>

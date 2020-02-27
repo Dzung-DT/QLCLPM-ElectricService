@@ -62,13 +62,13 @@
     <!-- Header with logos -->
     <div class="navbar-header navbar-dark d-none d-md-flex align-items-md-center">
         <div class="navbar-brand navbar-brand-md">
-            <a href="index.html">
+            <a th:href="@{/trang-chu}">
                 <img th:src="@{/global_assets/images/logo_new1.png}" alt="" class="ml-5">
             </a>
         </div>
 
         <div class="navbar-brand navbar-brand-xs">
-            <a href="index.html" class="d-inline-block">
+            <ath:href="@{/trang-chu}" class="d-inline-block">
                 <img th:src="@{/global_assets/images/logo_icon_light.png}" alt="">
             </a>
         </div>
@@ -77,7 +77,7 @@
     <!-- Mobile controls -->
     <div class="d-flex flex-1 d-md-none">
         <div class="navbar-brand mr-auto">
-            <a href="index.html" class="d-inline-block">
+            <a th:href="@{/trang-chu}" class="d-inline-block">
                 <img th:src="@{/global_assets/images/logo_dark.png}" alt="">
             </a>
         </div>
@@ -99,17 +99,6 @@
                     <i class="icon-paragraph-justify3"></i>
                 </a>
             </li>
-        </ul>
-
-        <ul class="align-self-center justify-content-center ml-md-1 mr-md-auto">
-            <form class="d-flex align-items-end flex-nowrap flex-xl-nowrap">
-                <input type="text" class="form-control text-dark flex-1 wmin-xl-300 border-bottom-1"
-                       placeholder="Enter keywords">
-                <button type="submit" class="btn-dark bg-transparent border-dark text-dark ml-3 ml-xl-2 legitRipple"
-                        style="border-radius: 30%">
-                    <i class="icon-search4"></i>
-                </button>
-            </form>
         </ul>
     </div>
     <!-- /navbar content -->

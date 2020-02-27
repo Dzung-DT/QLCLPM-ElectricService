@@ -9,11 +9,12 @@ public class KhachHang {
     private String gioiTinh;
     private String ngayBDSD;
     private String mucdichSD;
+    private String mailAddress;
 
     public KhachHang() {
     }
 
-    public KhachHang(String maKhachHang, String tenKhachHang, String ngaySinh, String soCMND, String diaChi, String gioiTinh, String ngayBDSD, String mucdichSD) {
+    public KhachHang(String maKhachHang, String tenKhachHang, String ngaySinh, String soCMND, String diaChi, String gioiTinh, String ngayBDSD, String mucdichSD, String mailAddress) {
         this.maKhachHang = maKhachHang;
         this.tenKhachHang = tenKhachHang;
         this.ngaySinh = ngaySinh;
@@ -22,6 +23,7 @@ public class KhachHang {
         this.gioiTinh = gioiTinh;
         this.ngayBDSD = ngayBDSD;
         this.mucdichSD = mucdichSD;
+        this.mailAddress = mailAddress;
     }
 
     public String getMaKhachHang() {
@@ -86,5 +88,13 @@ public class KhachHang {
 
     public void setMucdichSD(String mucdichSD) {
         this.mucdichSD = mucdichSD;
+    }
+
+    public String getMailAddress() {
+        return mailAddress;
+    }
+
+    public void setMailAddress(String mailAddress) {
+        this.mailAddress = mailAddress;
     }
 }

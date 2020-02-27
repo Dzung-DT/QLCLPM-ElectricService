@@ -22,4 +22,12 @@ public class KhachHangDAOImpl implements KhachHangDAO {
         List<Object> userList = query.getResultList();
         return userList;
     }
+
+    @Override
+    public Object getByMaKH(String maKH) {
+        String sql = "SELECT * FROM khachhang where MaKH = '"+maKH+"'";
+        Query query = entityManager.createNativeQuery(sql);
+        Object user = query.getResultList();
+        return user;
+    }
 }
