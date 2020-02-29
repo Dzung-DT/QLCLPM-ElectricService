@@ -131,7 +131,8 @@
             function sendMailOneCustomer() {
                 var mailAddressReceive = emailPickUp;
                 var mailSubject = $("#text__mail-subject").val().trim();
-                var mailContent = $.trim($("#text__mail-content").val().trim());
+                // var mailContent = $.trim($("#text__mail-content").val().trim());
+                var mailContent = CKEDITOR.instances['text__mail-content'].getData();
                 $.ajax({
                     url: "/gui-mail-khach-hang",
                     type: "POST",
@@ -160,7 +161,7 @@
                 });
 
                 $("#text__mail-subject").val('');
-                $("#text__mail-content").val('');
+                CKEDITOR.instances['text__mail-content'].setData('');
             }
 
             function showCustomerTable() {
@@ -303,14 +304,15 @@
                             <input id="text__mail-subject" style="margin-left: 2px; width: 475px;"
                                    placeholder="Enter subject mail">
                         </label>
-                        <div class="form-group" style="text-align: left">
-                            <label for="text__mail-content">
-                                Content:
-                                <textarea id="text__mail-content" rows="10" cols="88"
-                                          style="text-align: left">
-                                </textarea>
-                            </label>
-                        </div>
+
+                        <label for="text__mail-content">
+                            Content:
+                            <textarea id="text__mail-content"></textarea>
+                            <script>
+                                CKEDITOR.replace('text__mail-content');
+                            </script>
+                        </label>
+
                         <button type="submit" class="btn btn-primary center-block" style="margin-left: 250px"
                                 id="btn__modal-send" onclick="sendMailOneCustomer()">Send
                         </button>
