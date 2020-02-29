@@ -38,12 +38,7 @@ public class CheckUserListController {
         return null;
     }
 
-    @PostMapping("/gui-mail-khach-hang")
-    @ResponseBody
-    public String sendMail(@RequestParam("mailContent") String mailContent) {
-        System.out.println(mailContent);
-        return mailContent;
-    }
+
 
     @PostMapping("/tim-kiem-khach-hang")
     @ResponseBody

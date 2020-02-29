@@ -33,6 +33,88 @@
         .modal-header .close {
             color: red;
         }
+
+        /*animation send mail success*/
+
+        @keyframes scaleAnimation {
+            0% {
+                opacity: 0;
+                transform: scale(1.5);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes drawCircle {
+            0% {
+                stroke-dashoffset: $ circle-length;
+            }
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes drawCheck {
+            0% {
+                stroke-dashoffset: $ check-length;
+            }
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        #successAnimationCircle {
+            stroke-dasharray: $ circle-length $ circle-length;
+            stroke: #FFF;
+        }
+
+        #successAnimationCheck {
+            stroke-dasharray: $ check-length $ check-length;
+            stroke: #FFF;
+        }
+
+        #successAnimationResult {
+            fill: #FFF;
+            opacity: 0;
+        }
+
+        #successAnimation.animated {
+            animation: 1s ease-out 0s 1 both scaleAnimation;
+
+        #successAnimationCircle {
+            animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle,
+            0.3s linear 0.9s 1 both fadeOut;
+        }
+
+        #successAnimationCheck {
+            animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck,
+            0.3s linear 0.9s 1 both fadeOut;
+        }
+
+        #successAnimationResult {
+            animation: 0.3s linear 0.9s both fadeIn;
+        }
+
     </style>
 </head>
 <body>
@@ -42,17 +124,26 @@
             $(document).ready(function () {
                 showCustomerTable();
             });
-            
+
+            var emailPickUp;
+            var namePickUp;
+
             function sendMailOneCustomer() {
-                var mailContent = $.trim($("#text__mail-content").val());
+                var mailAddressReceive = emailPickUp;
+                var mailSubject = $("#text__mail-subject").val().trim();
+                var mailContent = $.trim($("#text__mail-content").val().trim());
                 $.ajax({
                     url: "/gui-mail-khach-hang",
                     type: "POST",
                     data: {
-                        "mailContent": mailContent,
-                    },
+                        "mailAddressReceive": mailAddressReceive,
+                        "mailSubject": mailSubject,
+                        "mailContent": mailContent
+                    }
+                    ,
                     success: function (data) {
-                        alert(data);
+                        $('#squarespaceModal').modal('hide'); // Show modal
+                        $('#SuccessModalSendMail').modal('show'); // Show modal
                     }, error: function () {
                         alert("FAIL!");
                     }
@@ -61,13 +152,15 @@
 
             function getIDKH() {
 
-                $('#bang_khach_hang').find('tr').click( function(){
-                    var id = $(this).find('td').eq(0).text();
-                    var emailPickUp = $(this).find('td').eq(1).text();
-                    var namePickUp = $(this).find('td').eq(5).text();
+                $('#bang_khach_hang').find('tr').click(function () {
+                    namePickUp = $(this).find('td').eq(1).text();
+                    emailPickUp = $(this).find('td').eq(5).text();
                     $("#mail_address_receive").html(emailPickUp);
                     $("#name_customer_receive").html(namePickUp);
                 });
+
+                $("#text__mail-subject").val('');
+                $("#text__mail-content").val('');
             }
 
             function showCustomerTable() {
@@ -192,9 +285,10 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">x</span><span
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"
+                                                                                       style="margin-right: 86px;">x</span><span
                                 class="sr-only">Close</span></button>
-                        <h3 class="modal-title" id="lineModalLabel">Please enter mail content !</h3>
+                        <h3 class="modal-title" id="lineModalLabel">Mail Information</h3>
                     </div>
                     <div class="modal-body">
                         <label>From: <span
@@ -204,11 +298,18 @@
                                          style="color: black; font-weight: bold; font-size: 16px; margin-right: 4px;"></span></label>
                         <label>(<span id="name_customer_receive"
                                       style="color: coral; font-weight: bold; font-size: 16px;"></span>)</label>
-
-                        <div class="form-group" style="text-align: center">
-                            <label for="text__mail-content"><textarea id="text__mail-content" rows="10" cols="85"
-                                                                      style="text-align: left">
-                                </textarea></label>
+                        <label for="text__mail-content">
+                            Mail Subject:
+                            <input id="text__mail-subject" style="margin-left: 2px; width: 475px;"
+                                   placeholder="Enter subject mail">
+                        </label>
+                        <div class="form-group" style="text-align: left">
+                            <label for="text__mail-content">
+                                Content:
+                                <textarea id="text__mail-content" rows="10" cols="88"
+                                          style="text-align: left">
+                                </textarea>
+                            </label>
                         </div>
                         <button type="submit" class="btn btn-primary center-block" style="margin-left: 250px"
                                 id="btn__modal-send" onclick="sendMailOneCustomer()">Send
@@ -225,13 +326,39 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content bg-warning">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle" style="margin-top: 32px;  margin-bottom: 43px;line-height: 1.5385;margin-left: 48px;">Không tìm được khách hàng !</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle"
+                            style="margin-top: 32px;  margin-bottom: 43px;line-height: 1.5385;margin-left: 48px;">Không
+                            tìm được khách hàng !</h5>
                         <i class="icon-warning" style="font-size: 70px; margin-right: 54px;"></i>
                     </div>
                 </div>
             </div>
         </div>
         <!--End Modal Search Customer Status -->
+
+        <!--Start Send mail success-->
+        <div class="modal fade" id="SuccessModalSendMail" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content bg-success-600">
+                    <div class="modal-header">
+                        <h5 class="modal-title"
+                            style="margin-top: 32px;  margin-bottom: 43px;line-height: 1.5385;margin-left: 48px;">Gửi
+                            mail thành công!</h5>
+                        <svg id="successAnimation" class="animated" xmlns="http://www.w3.org/2000/svg" width="70"
+                             height="70" viewBox="0 0 70 70">
+                            <path id="successAnimationResult" fill="#D8D8D8"
+                                  d="M35,60 C21.1928813,60 10,48.8071187 10,35 C10,21.1928813 21.1928813,10 35,10 C48.8071187,10 60,21.1928813 60,35 C60,48.8071187 48.8071187,60 35,60 Z M23.6332378,33.2260427 L22.3667622,34.7739573 L34.1433655,44.40936 L47.776114,27.6305926 L46.223886,26.3694074 L33.8566345,41.59064 L23.6332378,33.2260427 Z"/>
+                            <circle id="successAnimationCircle" cx="35" cy="35" r="24" stroke="#979797" stroke-width="2"
+                                    stroke-linecap="round" fill="transparent"/>
+                            <polyline id="successAnimationCheck" stroke="#979797" stroke-width="2"
+                                      points="23 34 34 43 47 27" fill="transparent"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--ENd Send mail success-->
     </section>
 </div>
 </body>
