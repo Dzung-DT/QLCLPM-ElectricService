@@ -18,7 +18,9 @@ public class SendMailController {
     public String sendMail(@RequestParam("mailContent") String mailContent,
                            @RequestParam("mailAddressReceive") String mailAddressReceive,
                            @RequestParam("mailSubject") String mailSubject) {
-        mailService.sendMail(mailAddressReceive,mailSubject,mailContent);
+        (new Thread(() -> {
+            mailService.sendMail(mailAddressReceive,mailSubject,mailContent);
+        })).start();
         return "OK";
     }
 }

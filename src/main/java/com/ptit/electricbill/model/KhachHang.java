@@ -7,22 +7,22 @@ public class KhachHang {
     private String soCMND;
     private String diaChi;
     private String gioiTinh;
+    private String soDienThoai;
     private String ngayBDSD;
-    private String mucdichSD;
     private String mailAddress;
 
     public KhachHang() {
     }
 
-    public KhachHang(String maKhachHang, String tenKhachHang, String ngaySinh, String soCMND, String diaChi, String gioiTinh, String ngayBDSD, String mucdichSD, String mailAddress) {
+    public KhachHang(String maKhachHang, String tenKhachHang, String ngaySinh, String soCMND, String diaChi, String gioiTinh, String soDienThoai, String ngayBDSD, String mailAddress) {
         this.maKhachHang = maKhachHang;
         this.tenKhachHang = tenKhachHang;
         this.ngaySinh = ngaySinh;
         this.soCMND = soCMND;
         this.diaChi = diaChi;
         this.gioiTinh = gioiTinh;
+        this.soDienThoai = soDienThoai;
         this.ngayBDSD = ngayBDSD;
-        this.mucdichSD = mucdichSD;
         this.mailAddress = mailAddress;
     }
 
@@ -74,20 +74,20 @@ public class KhachHang {
         this.gioiTinh = gioiTinh;
     }
 
+    public String getSoDienThoai() {
+        return soDienThoai;
+    }
+
+    public void setSoDienThoai(String soDienThoai) {
+        this.soDienThoai = soDienThoai;
+    }
+
     public String getNgayBDSD() {
         return ngayBDSD;
     }
 
     public void setNgayBDSD(String ngayBDSD) {
         this.ngayBDSD = ngayBDSD;
-    }
-
-    public String getMucdichSD() {
-        return mucdichSD;
-    }
-
-    public void setMucdichSD(String mucdichSD) {
-        this.mucdichSD = mucdichSD;
     }
 
     public String getMailAddress() {

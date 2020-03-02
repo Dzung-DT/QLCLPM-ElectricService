@@ -3,119 +3,6 @@
       layout:decorate="~{layout/template}">
 <head>
     <title>Dashboard</title>
-    <style>
-        .modal-header {
-            padding-bottom: 5px;
-        }
-
-        .modal-footer .btn-group button {
-            height: 40px;
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
-            border: none;
-        }
-
-        .modal-footer .btn-group:last-child > button {
-            border-right: 0;
-        }
-
-        .modal-title {
-            margin-bottom: 0;
-            margin-right: 152px;
-            line-height: 1.5385;
-        }
-
-        .modal-header .close {
-            padding: 1.25rem 1.25rem;
-            margin: -2.25rem -26.25rem -1.25rem auto;
-        }
-
-        .modal-header .close {
-            color: red;
-        }
-
-        /*animation send mail success*/
-
-        @keyframes scaleAnimation {
-            0% {
-                opacity: 0;
-                transform: scale(1.5);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        @keyframes drawCircle {
-            0% {
-                stroke-dashoffset: $ circle-length;
-            }
-            100% {
-                stroke-dashoffset: 0;
-            }
-        }
-
-        @keyframes drawCheck {
-            0% {
-                stroke-dashoffset: $ check-length;
-            }
-            100% {
-                stroke-dashoffset: 0;
-            }
-        }
-
-        @keyframes fadeOut {
-            0% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-            }
-        }
-
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-
-        #successAnimationCircle {
-            stroke-dasharray: $ circle-length $ circle-length;
-            stroke: #FFF;
-        }
-
-        #successAnimationCheck {
-            stroke-dasharray: $ check-length $ check-length;
-            stroke: #FFF;
-        }
-
-        #successAnimationResult {
-            fill: #FFF;
-            opacity: 0;
-        }
-
-        #successAnimation.animated {
-            animation: 1s ease-out 0s 1 both scaleAnimation;
-
-        #successAnimationCircle {
-            animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle,
-            0.3s linear 0.9s 1 both fadeOut;
-        }
-
-        #successAnimationCheck {
-            animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck,
-            0.3s linear 0.9s 1 both fadeOut;
-        }
-
-        #successAnimationResult {
-            animation: 0.3s linear 0.9s both fadeIn;
-        }
-
-    </style>
 </head>
 <body>
 <div class="content">
@@ -123,7 +10,10 @@
         <script>
             $(document).ready(function () {
                 showCustomerTable();
+                $("#dateOfBirth").datepicker();
+                $("#dateBeginUse").datepicker();
             });
+
 
             var emailPickUp;
             var namePickUp;
@@ -164,13 +54,14 @@
                 CKEDITOR.instances['text__mail-content'].setData('');
             }
 
+
             function showCustomerTable() {
                 $.ajax({
                     url: "/danh-sach-khach-hang",
                     type: "POST",
                     dataType: "json",
                     success: function (data) {
-                        var contentString;
+                        var contentString
                         for (var i = 0; i < data.length; i++) {
                             contentString = contentString
                                 + '<tr role="row" class="odd">'
@@ -183,7 +74,9 @@
                                 + '<td>' + data[i][6] + '</td>'
                                 + '<td>' + data[i][7] + '</td>'
                                 + '<td>' + data[i][8] + '</td>'
-                                + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block"><i class="icon-mail-read"></i></button></a></td>'
+                                + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block mb-1" style="padding: 5px 5px 5px 5px;"><i class="icon-mail-read"></i></button></a>' +
+                                '<button data-toggle="tooltip" title="Edit" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-pencil"></i></button>' +
+                                '<a href="#" data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-danger center-block" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-box-remove"></i></button></a></td>'
                                 + '</tr>';
                         }
                         $("#bang_khach_hang").html(contentString);
@@ -191,6 +84,19 @@
                         alert("FAIL!");
                     }
                 });
+            }
+
+            function showEditForm() {
+                $('.overlay_bang_khach_hang').show();
+                $('.nav__edit-customer').show();
+                $('#bang_khach_hang').find('tr').click(function () {
+                    var codePickUp = $(this).find('td').eq(0).text();
+                });
+            }
+
+            function closeEditForm() {
+                $('.overlay_bang_khach_hang').hide();
+                $('.nav__edit-customer').hide();
             }
 
             function searchCustomerByID() {
@@ -219,7 +125,9 @@
                                 + '<td>' + data[i][6] + '</td>'
                                 + '<td>' + data[i][7] + '</td>'
                                 + '<td>' + data[i][8] + '</td>'
-                                + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block"><i class="icon-mail-read"></i></button></a></td>'
+                                + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block mb-1" style="padding: 5px 5px 5px 5px;"><i class="icon-mail-read"></i></button></a>' +
+                                '<a data-toggle="tooltip" title="Edit"><button  class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-pencil"></i></button></a>' +
+                                '<a href="#" data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-danger center-block" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-box-remove"></i></button></a></td>'
                                 + '</tr>';
                         }
                         $("#bang_khach_hang").html(contentString);
@@ -228,6 +136,8 @@
                     }
                 });
             }
+
+
         </script>
     </header>
     <section class="container-fluid" layout:fragment="content_body">
@@ -237,7 +147,6 @@
                     <div class="card-header header-elements-inline">
                         <a th:href="@{/trang-chu}" class="nav-link"><h5 class="card-title font-weight-bold">Danh sách
                             khách hàng</h5></a>
-
                         <div class="d-flex align-items-end flex-nowrap flex-xl-nowrap"
                              style="margin-left: auto; margin-right: 60px">
                             <span class="mr-2">Tìm:</span>
@@ -257,6 +166,7 @@
                         <div class="datatable-scroll-wrap">
                             <table class="table datatable-responsive dataTable no-footer dtr-inline"
                                    id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                                <div class="overlay_bang_khach_hang"></div>
                                 <thead>
                                 <tr role="row">
                                     <th>Mã KH</th>
@@ -266,10 +176,9 @@
                                     <th>Địa chỉ</th>
                                     <th>Mail</th>
                                     <th>Giới tính</th>
+                                    <th>Số ĐT</th>
                                     <th>Ngày BDSD</th>
-                                    <th>Mục đích SD</th>
                                     <th>Tùy chọn</th>
-                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody id="bang_khach_hang">
@@ -277,6 +186,59 @@
                             </table>
                         </div>
                     </div>
+                    <nav class="nav__edit-customer">
+                        <ul class="nav__edit-list">
+                            <li class="nav__edit-input">
+                                <i class="icon-users">
+                                    <span class="ml-2" style="font-size: 22px; color: #0f74a8">Cập nhật thông tin người dùng</span></i>
+                            </li>
+                            <hr>
+                            <li class="nav__edit-input">
+                                Mã KH: <input style="border: 1px #ececec solid; margin-left: 16px" size="40">
+                            </li>
+                            <li class="nav__edit-input">
+                                Tên KH: <input style="border: 1px #ececec solid; margin-left: 14px" size="40">
+                            </li>
+                            <li class="nav__edit-input">
+                                Ngày sinh: <input id="dateOfBirth" placeholder="...click me please !!!"
+                                                  style="border: 1px #ececec solid" size="40">
+                            </li>
+                            <li class="nav__edit-input">
+                                Số CMND: <input style="border: 1px #ececec solid; margin-left: 1px" size="40">
+                            </li>
+                            <li class="nav__edit-input">
+                                Địa chỉ: <textarea style="border: 1px #ececec solid" cols="50" rows="2"></textarea>
+                            </li>
+                            <li class="nav__edit-input">
+                                Mail: <input type="email" style="border: 1px #ececec solid; margin-left: 1px" size="45">
+                            </li>
+                            <li class="nav__edit-input">
+                                Giới tính:
+                                <input type="checkbox" id="nam" name="nam" value="Nam" style="margin-left: 80px">
+                                <label for="nam">Nam</label>
+                                <input type="checkbox" id="nu" name="nu" value="Nu" style="margin-left: 30px">
+                                <label for="nu">Nu</label>
+                            </li>
+                            <li class="nav__edit-input">
+                                Số ĐT: <input style="border: 1px #ececec solid;margin-left: 3px" size="43">
+                            </li>
+                            <li class="nav__edit-input">
+                                Ngày BĐSD: <input id="dateBeginUse" placeholder="...click me please !!!"
+                                                  style="border: 1px #ececec solid; margin-left: 1px" size="38">
+                            </li>
+                        </ul>
+                        <hr>
+                        <a href="#" data-toggle="tooltip" title="Edit">
+                            <button class="btn btn-info center-block mb-1"
+                                    style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 140px">
+                                Cập nhật
+                            </button>
+                            <button onclick="closeEditForm()" class="btn btn-danger center-block mb-1"
+                                    style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 30px">
+                                Hủy
+                            </button>
+                        </a>
+                    </nav>
                 </div>
             </div>
         </div>
@@ -287,7 +249,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"
-                                                                                       style="margin-right: 86px;">x</span><span
+                                                                                       style="margin-right: 62px;">x</span><span
                                 class="sr-only">Close</span></button>
                         <h3 class="modal-title" id="lineModalLabel">Mail Information</h3>
                     </div>
@@ -304,7 +266,6 @@
                             <input id="text__mail-subject" style="margin-left: 2px; width: 475px;"
                                    placeholder="Enter subject mail">
                         </label>
-
                         <label for="text__mail-content">
                             Content:
                             <textarea id="text__mail-content"></textarea>
@@ -312,7 +273,6 @@
                                 CKEDITOR.replace('text__mail-content');
                             </script>
                         </label>
-
                         <button type="submit" class="btn btn-primary center-block" style="margin-left: 250px"
                                 id="btn__modal-send" onclick="sendMailOneCustomer()">Send
                         </button>
