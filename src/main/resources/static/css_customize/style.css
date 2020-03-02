@@ -64,9 +64,6 @@
     padding: 8px 0;
 }
 
-.abc11:checked ~ .overlay_bang_khach_hang{
-    display: block;
-}
 
 @keyframes fadeIn {
     from{

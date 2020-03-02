@@ -10,8 +10,8 @@
         <script>
             $(document).ready(function () {
                 showCustomerTable();
-                $("#dateOfBirth").datepicker();
-                $("#dateBeginUse").datepicker();
+                $("#dob_edit").datepicker();
+                $("#ngayBDSD_edit").datepicker();
             });
 
 
@@ -90,8 +90,23 @@
                 $('.overlay_bang_khach_hang').show();
                 $('.nav__edit-customer').show();
                 $('#bang_khach_hang').find('tr').click(function () {
-                    var codePickUp = $(this).find('td').eq(0).text();
+                    var idKH = $(this).find('td').eq(0).text(); $('#idKH_edit').val(idKH);
+                    var tenKH = $(this).find('td').eq(1).text(); $('#ten_edit').val(tenKH);
+                    var dob = $(this).find('td').eq(2).text(); $('#dob_edit').val(dob);
+                    var soCmnd = $(this).find('td').eq(3).text(); $('#soCmnd_edit').val(soCmnd);
+                    var diaChi = $(this).find('td').eq(4).text(); $('#diaChi_edit').val(diaChi);
+                    var mail = $(this).find('td').eq(5).text(); $('#mail_edit').val(mail);
+                    var gioiTinh = $(this).find('td').eq(6).text();
+                    if(gioiTinh.trim()=='Nam'){
+                        $('input:checkbox[name=nam]').attr('checked',true);
+                    }
+                    else if(gioiTinh.trim()=='Nữ'){
+                        $('input:checkbox[name=nu]').attr('checked',true);
+                    }
+                    var soDT = $(this).find('td').eq(7).text(); $('#sdt_edit').val(soDT);
+                    var ngayBDSD = $(this).find('td').eq(8).text(); $('#ngayBDSD_edit').val(ngayBDSD);
                 });
+
             }
 
             function closeEditForm() {
@@ -194,36 +209,36 @@
                             </li>
                             <hr>
                             <li class="nav__edit-input">
-                                Mã KH: <input style="border: 1px #ececec solid; margin-left: 16px" size="40">
+                                Mã KH: <input id="idKH_edit" style="border: 1px #ececec solid; margin-left: 16px" size="40">
                             </li>
                             <li class="nav__edit-input">
-                                Tên KH: <input style="border: 1px #ececec solid; margin-left: 14px" size="40">
+                                Tên KH: <input id="ten_edit" style="border: 1px #ececec solid; margin-left: 14px" size="40">
                             </li>
                             <li class="nav__edit-input">
-                                Ngày sinh: <input id="dateOfBirth" placeholder="...click me please !!!"
+                                Ngày sinh: <input id="dob_edit" placeholder="...click me please !!!"
                                                   style="border: 1px #ececec solid" size="40">
                             </li>
                             <li class="nav__edit-input">
-                                Số CMND: <input style="border: 1px #ececec solid; margin-left: 1px" size="40">
+                                Số CMND: <input id="soCmnd_edit" style="border: 1px #ececec solid; margin-left: 1px" size="40">
                             </li>
                             <li class="nav__edit-input">
-                                Địa chỉ: <textarea style="border: 1px #ececec solid" cols="50" rows="2"></textarea>
+                                Địa chỉ: <textarea id="diaChi_edit" style="border: 1px #ececec solid" cols="50" rows="2"></textarea>
                             </li>
                             <li class="nav__edit-input">
-                                Mail: <input type="email" style="border: 1px #ececec solid; margin-left: 1px" size="45">
+                                Mail: <input id="mail_edit" type="email" style="border: 1px #ececec solid; margin-left: 1px" size="45">
                             </li>
                             <li class="nav__edit-input">
                                 Giới tính:
-                                <input type="checkbox" id="nam" name="nam" value="Nam" style="margin-left: 80px">
-                                <label for="nam">Nam</label>
-                                <input type="checkbox" id="nu" name="nu" value="Nu" style="margin-left: 30px">
-                                <label for="nu">Nu</label>
+                                <input type="checkbox" id="nam_checkbox_edit" name="nam" value="Nam" style="margin-left: 80px">
+                                <label for="nam_checkbox_edit">Nam</label>
+                                <input type="checkbox" id="nu_checkbox_edit" name="nu" value="Nu" style="margin-left: 30px">
+                                <label for="nu_checkbox_edit">Nữ</label>
                             </li>
                             <li class="nav__edit-input">
-                                Số ĐT: <input style="border: 1px #ececec solid;margin-left: 3px" size="43">
+                                Số ĐT: <input id="sdt_edit" style="border: 1px #ececec solid;margin-left: 3px" size="43">
                             </li>
                             <li class="nav__edit-input">
-                                Ngày BĐSD: <input id="dateBeginUse" placeholder="...click me please !!!"
+                                Ngày BĐSD: <input id="ngayBDSD_edit" placeholder="...click me please !!!"
                                                   style="border: 1px #ececec solid; margin-left: 1px" size="38">
                             </li>
                         </ul>
