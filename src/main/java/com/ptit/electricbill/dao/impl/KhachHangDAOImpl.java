@@ -1,6 +1,7 @@
 package com.ptit.electricbill.dao.impl;
 
 import com.ptit.electricbill.dao.KhachHangDAO;
+import com.ptit.electricbill.model.KhachHang;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,5 +30,12 @@ public class KhachHangDAOImpl implements KhachHangDAO {
         Query query = entityManager.createNativeQuery(sql);
         Object user = query.getResultList();
         return user;
+    }
+
+    @Override
+    public void updateInformation(KhachHang KH) {
+        String sql = "UPDATE khachhang SET TenKH = '"+KH.getTenKhachHang()+"',Ngaysinh = '"+ KH.getNgaySinh()+"',CMND = '"+KH.getSoCMND()+"',Diachi = '"+KH.getDiaChi()+"',MailAddress = '"+KH.getMailAddress()+"',Gioitinh = '"+KH.getGioiTinh()+"',SoDienThoai = '"+KH.getSoDienThoai()+"',NgayBDSD = '"+KH.getNgayBDSD()+"' WHERE (MaKH = '"+KH.getMaKhachHang()+"')";
+        Query query = entityManager.createNativeQuery(sql);
+        query.executeUpdate();
     }
 }
