@@ -8,4 +8,5 @@ public interface KhachHangDAO {
     List<Object> getAll();
     Object getByMaKH(String maKH);
     void updateInformation(KhachHang KH);
+    void addKH(KhachHang KH);
 }

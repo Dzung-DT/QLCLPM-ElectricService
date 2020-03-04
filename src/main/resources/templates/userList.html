@@ -26,6 +26,7 @@
             // Send mail
             var emailPickUp;
             var namePickUp;
+
             function sendMailOneCustomer() {
                 var mailAddressReceive = emailPickUp;
                 var mailSubject = $("#text__mail-subject").val().trim();
@@ -83,8 +84,8 @@
                                 + '<td>' + data[i][7] + '</td>'
                                 + '<td>' + data[i][8] + '</td>'
                                 + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block mb-1" style="padding: 5px 5px 5px 5px;"><i class="icon-mail-read"></i></button></a>' +
-                                '<button data-toggle="tooltip" title="Edit" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-pencil"></i></button>' +
-                                '<a href="#" data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-danger center-block" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-box-remove"></i></button></a></td>'
+                                '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-pencil"></i></button>' +
+                                '<a href="#" data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-danger center-block" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
                                 + '</tr>';
                         }
                         $("#bang_khach_hang").html(contentString);
@@ -125,6 +126,58 @@
 
             }
 
+            function showAddFormCustomer() {
+                $('.overlay_bang_khach_hang').show();
+                $('.nav__edit-customer').show();
+                $('#idKH_edit_input').show();
+                $('#title_addUser').show();
+                $('#btn-add-user').show();
+                $('#title_editUser').hide();
+                $('#idKH_edit').hide();
+                $('#btn-edit-user').hide();
+            }
+
+            function addCustomer() {
+                var idKH_add= $('#idKH_edit_input').val().trim();
+                var tenKH_add= $('#ten_edit').val().trim();
+                var dob_add= $('#dob_edit').val().trim();
+                var soCmnd_add= $('#soCmnd_edit').val().trim();
+                var diaChi_add= $('#diaChi_edit').val().trim();
+                var mail_add= $('#mail_edit').val().trim();
+                var gioiTinh_add;
+                if ($('#nam_checkbox_edit').is(':checked')) {
+                    gioiTinh_add= $('#nam_checkbox_edit').val().trim();
+                } else if ($('#nu_checkbox_edit').is(':checked')) {
+                    gioiTinh_add= $('#nu_checkbox_edit').val().trim();
+                }
+                var soDT_add= $('#sdt_edit').val().trim();
+                var ngayBDSD_add= $('#ngayBDSD_edit').val().trim();
+
+                $.ajax({
+                    url: "/them-khach-hang",
+                    type: "POST",
+                    data: {
+                        "idKH_add": idKH_add,
+                        "tenKH_add": tenKH_add,
+                        "dob_add": dob_add,
+                        "soCmnd_add": soCmnd_add,
+                        "diaChi_add": diaChi_add,
+                        "mail_add": mail_add,
+                        "gioiTinh_add": gioiTinh_add,
+                        "soDT_add": soDT_add,
+                        "ngayBDSD_add": ngayBDSD_add
+                    },
+                    success: function (data) {
+                        $('.overlay_bang_khach_hang').hide();
+                        $('.nav__edit-customer').hide();
+                        $('#SuccessModalSendMail').modal('show'); // Show modal
+                    }, error: function () {
+                        alert("FAIL!");
+                    }
+                });
+
+            }
+
             function closeEditForm() {
                 $('.overlay_bang_khach_hang').hide();
                 $('.nav__edit-customer').hide();
@@ -159,8 +212,8 @@
                                 + '<td>' + data[i][7] + '</td>'
                                 + '<td>' + data[i][8] + '</td>'
                                 + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block mb-1" style="padding: 5px 5px 5px 5px;"><i class="icon-mail-read"></i></button></a>' +
-                                '<a data-toggle="tooltip" title="Edit"><button  class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-pencil"></i></button></a>' +
-                                '<a href="#" data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-danger center-block" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-box-remove"></i></button></a></td>'
+                                '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-pencil"></i></button>' +
+                                '<a href="#" data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-danger center-block" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
                                 + '</tr>';
                         }
                         $("#bang_khach_hang").html(contentString);
@@ -217,8 +270,22 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header header-elements-inline">
-                        <a th:href="@{/trang-chu}" class="nav-link"><h5 class="card-title font-weight-bold">Danh sách
-                            khách hàng</h5></a>
+                        <div class="breadcrumb-elements-item dropdown p-0">
+                            <a href="#" class="breadcrumb-elements-item dropdown-toggle" data-toggle="dropdown"
+                               aria-expanded="false">
+                                <i class="icon-gear mr-2"></i>
+                                Chức năng
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right" x-placement="top-end"
+                                 style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-83px, -45px, 0px);">
+                                <a th:href="@{/trang-chu}" class="dropdown-item"><i class="icon-accessibility"></i>Danh
+                                    sách khách hàng</a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" onclick="showAddFormCustomer()" class="dropdown-item"><i
+                                        class="icon-plus-circle2"></i>Thêm khách hàng</a>
+                            </div>
+                        </div>
                         <div class="d-flex align-items-end flex-nowrap flex-xl-nowrap"
                              style="margin-left: auto; margin-right: 60px">
                             <span class="mr-2">Tìm:</span>
@@ -226,11 +293,11 @@
                                    placeholder="Nhập mã khách hàng"
                                    style="text-align: center; color: red !important; font-size: 16px"
                                    id="customer_ID_search">
-                            <button type="submit"
-                                    class="btn-dark bg-transparent border-dark text-dark ml-3 ml-xl-2 legitRipple"
-                                    style="border-radius: 30%" onclick="searchCustomerByID()">
-                                <i class="icon-search4" data-toggle="tooltip" title="Tìm"></i>
-                            </button>
+                            <button data-toggle="tooltip" title="Tìm" class="btn btn-info center-block ml-1"
+                                    type="submit"
+                                    onclick="searchCustomerByID()"
+                                    style="padding: 5px 5px 0px 5px; border-radius: 10px"><i
+                                    class="icon-search4"></i></button>
                         </div>
                     </div>
                     <hr>
@@ -262,12 +329,15 @@
                         <ul class="nav__edit-list">
                             <li class="nav__edit-input">
                                 <i class="icon-users">
-                                    <span class="ml-2" style="font-size: 22px; color: #0f74a8">Cập nhật thông tin người dùng</span></i>
+                                    <span class="ml-2" style="font-size: 22px; color: #0f74a8" id="title_editUser">Cập nhật thông tin người dùng</span></i>
+                                <span class="ml-2"
+                                      style="font-size: 22px; color: #0f74a8; display: none" id="title_addUser">Thêm người dùng</span></i>
                             </li>
                             <hr>
                             <li class="nav__edit-input">
                                 Mã KH:
-                                <!--                                <input id="idKH_edit" style="border: 1px #ececec solid; margin-left: 16px" size="40">-->
+                                <input id="idKH_edit_input"
+                                       style="border: 1px #ececec solid; margin-left: 16px; dislay:none" size="40">
                                 <label id="idKH_edit" style="margin-left: 16px"></label>
                             </li>
                             <li class="nav__edit-input">
@@ -310,9 +380,13 @@
                         </ul>
                         <hr>
                         <a href="#" data-toggle="tooltip" title="Edit">
-                            <button class="btn btn-info center-block mb-1" onclick="updateInforCustomer()"
+                            <button class="btn btn-info center-block mb-1" onclick="updateInforCustomer()" id="btn-edit-user"
                                     style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 140px">
                                 Cập nhật
+                            </button>
+                            <button class="btn btn-info center-block mb-1" onclick="addCustomer()" id="btn-add-user"
+                                    style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 140px; display: none">
+                                Thêm mới
                             </button>
                             <button onclick="closeEditForm()" class="btn btn-danger center-block mb-1"
                                     style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 30px">
@@ -386,7 +460,8 @@
                 <div class="modal-content bg-success-600">
                     <div class="modal-header">
                         <h5 class="modal-title"
-                            style="margin-top: 32px;  margin-bottom: 43px;line-height: 1.5385;margin-left: 48px;">Thành công!</h5>
+                            style="margin-top: 32px;  margin-bottom: 43px;line-height: 1.5385;margin-left: 48px;">Thành
+                            công!</h5>
                         <svg id="successAnimation" class="animated" xmlns="http://www.w3.org/2000/svg" width="70"
                              height="70" viewBox="0 0 70 70">
                             <path id="successAnimationResult" fill="#D8D8D8"

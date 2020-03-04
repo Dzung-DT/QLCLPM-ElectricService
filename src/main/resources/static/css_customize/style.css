@@ -53,11 +53,11 @@
     display: none;
 }
 
-.nav__edit-list{
+.nav__add-list{
     margin-top: 24px;
 }
 
-.nav__edit-input{
+.nav__add-input{
     text-decoration: none;
     color:#333;
     display: block;

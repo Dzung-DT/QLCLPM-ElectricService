@@ -38,4 +38,11 @@ public class KhachHangDAOImpl implements KhachHangDAO {
         Query query = entityManager.createNativeQuery(sql);
         query.executeUpdate();
     }
+
+    @Override
+    public void addKH(KhachHang KH) {
+        String sql = "INSERT INTO khachhang (MaKH,TenKH,Ngaysinh,CMND,Diachi,MailAddress,Gioitinh,SoDienThoai,NgayBDSD) VALUES ('"+KH.getMaKhachHang()+"', '"+KH.getTenKhachHang()+"', '"+KH.getNgaySinh()+"', '"+ KH.getSoCMND()+"', '"+KH.getDiaChi()+"', '"+KH.getMailAddress()+"', '"+KH.getGioiTinh()+"', '"+KH.getSoDienThoai()+"', '"+KH.getNgayBDSD()+"')";
+        Query query = entityManager.createNativeQuery(sql);
+        query.executeUpdate();
+    }
 }

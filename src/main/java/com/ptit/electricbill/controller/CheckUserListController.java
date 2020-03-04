@@ -6,8 +6,6 @@ import com.ptit.electricbill.dao.KhachHangDAO;
 import com.ptit.electricbill.model.KhachHang;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
-import org.springframework.web.HttpRequestHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -66,6 +64,22 @@ public class CheckUserListController {
                                      @RequestParam("ngayBDSD_update") String ngayBDSD_update) {
         KhachHang KH = new KhachHang(idKH_update,tenKH_update,dob_update,soCmnd_update,diaChi_update,gioiTinh_update,soDT_update,ngayBDSD_update,mail_update);
         khachHangDAO.updateInformation(KH);
+        return "OK";
+    }
+
+    @PostMapping("/them-khach-hang")
+    @ResponseBody
+    public String addCustomer(@RequestParam("idKH_add") String idKH_add,
+                                     @RequestParam("tenKH_add") String tenKH_add,
+                                     @RequestParam("dob_add") String dob_add,
+                                     @RequestParam("soCmnd_add") String soCmnd_add,
+                                     @RequestParam("diaChi_add") String diaChi_add,
+                                     @RequestParam("mail_add") String mail_add,
+                                     @RequestParam("gioiTinh_add") String gioiTinh_add,
+                                     @RequestParam("soDT_add") String soDT_add,
+                                     @RequestParam("ngayBDSD_add") String ngayBDSD_add) {
+        KhachHang KH = new KhachHang(idKH_add,tenKH_add,dob_add,soCmnd_add,diaChi_add,gioiTinh_add,soDT_add,ngayBDSD_add,mail_add);
+        khachHangDAO.addKH(KH);
         return "OK";
     }
 }
