@@ -9,4 +9,5 @@ public interface KhachHangDAO {
     Object getByMaKH(String maKH);
     void updateInformation(KhachHang KH);
     void addKH(KhachHang KH);
+    void deleteKH(String idKH);
 }

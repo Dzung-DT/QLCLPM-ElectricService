@@ -85,7 +85,7 @@
                                 + '<td>' + data[i][8] + '</td>'
                                 + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block mb-1" style="padding: 5px 5px 5px 5px;"><i class="icon-mail-read"></i></button></a>' +
                                 '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-pencil"></i></button>' +
-                                '<a href="#" data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-danger center-block" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
+                                '<a data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#confirmModalDeleteCustomer"  onclick="showConfirmDeleteCustomer()" class="btn btn-danger center-block" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
                                 + '</tr>';
                         }
                         $("#bang_khach_hang").html(contentString);
@@ -138,20 +138,20 @@
             }
 
             function addCustomer() {
-                var idKH_add= $('#idKH_edit_input').val().trim();
-                var tenKH_add= $('#ten_edit').val().trim();
-                var dob_add= $('#dob_edit').val().trim();
-                var soCmnd_add= $('#soCmnd_edit').val().trim();
-                var diaChi_add= $('#diaChi_edit').val().trim();
-                var mail_add= $('#mail_edit').val().trim();
+                var idKH_add = $('#idKH_edit_input').val().trim();
+                var tenKH_add = $('#ten_edit').val().trim();
+                var dob_add = $('#dob_edit').val().trim();
+                var soCmnd_add = $('#soCmnd_edit').val().trim();
+                var diaChi_add = $('#diaChi_edit').val().trim();
+                var mail_add = $('#mail_edit').val().trim();
                 var gioiTinh_add;
                 if ($('#nam_checkbox_edit').is(':checked')) {
-                    gioiTinh_add= $('#nam_checkbox_edit').val().trim();
+                    gioiTinh_add = $('#nam_checkbox_edit').val().trim();
                 } else if ($('#nu_checkbox_edit').is(':checked')) {
-                    gioiTinh_add= $('#nu_checkbox_edit').val().trim();
+                    gioiTinh_add = $('#nu_checkbox_edit').val().trim();
                 }
-                var soDT_add= $('#sdt_edit').val().trim();
-                var ngayBDSD_add= $('#ngayBDSD_edit').val().trim();
+                var soDT_add = $('#sdt_edit').val().trim();
+                var ngayBDSD_add = $('#ngayBDSD_edit').val().trim();
 
                 $.ajax({
                     url: "/them-khach-hang",
@@ -170,7 +170,12 @@
                     success: function (data) {
                         $('.overlay_bang_khach_hang').hide();
                         $('.nav__edit-customer').hide();
+                        $('#idKH_edit_input').hide();
+                        $('#title_addUser').hide();
+                        $('#btn-add-user').hide();
                         $('#SuccessModalSendMail').modal('show'); // Show modal
+                        // showCustomerTable();
+                        location.reload();
                     }, error: function () {
                         alert("FAIL!");
                     }
@@ -181,6 +186,17 @@
             function closeEditForm() {
                 $('.overlay_bang_khach_hang').hide();
                 $('.nav__edit-customer').hide();
+                // $('#idKH_edit').val("");
+                // $('#ten_edit').val("");
+                // $('#dob_edit').val("");
+                // $('#soCmnd_edit').val("");
+                // $('#diaChi_edit').val("");
+                // $('#mail_edit').val("");
+                // $('#nam_checkbox_edit').prop('checked', false);
+                // $('#nu_checkbox_edit').prop('checked', false);
+                // $('#sdt_edit').val("");
+                // $('#ngayBDSD_edit').val("");
+                location.reload();
             }
 
 
@@ -213,7 +229,7 @@
                                 + '<td>' + data[i][8] + '</td>'
                                 + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block mb-1" style="padding: 5px 5px 5px 5px;"><i class="icon-mail-read"></i></button></a>' +
                                 '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-pencil"></i></button>' +
-                                '<a href="#" data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-danger center-block" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
+                                '<a data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#confirmModalDeleteCustomer"  onclick="showConfirmDeleteCustomer()" class="btn btn-danger center-block" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
                                 + '</tr>';
                         }
                         $("#bang_khach_hang").html(contentString);
@@ -258,6 +274,36 @@
                         $('.overlay_bang_khach_hang').hide();
                         $('.nav__edit-customer').hide();
                         $('#SuccessModalSendMail').modal('show'); // Show modal
+                        // showCustomerTable();
+                        location.reload();
+                    }, error: function () {
+                        alert("FAIL!");
+                    }
+                });
+            }
+
+            function showConfirmDeleteCustomer() {
+                $('#bang_khach_hang').find('tr').click(function () {
+                    var idKHdelete = $(this).find('td').eq(0).text();
+                    var nameKHdelete = $(this).find('td').eq(1).text();
+                    $("#customerIDDelete").html(idKHdelete);
+                    $("#customerNameDelete").html(nameKHdelete);
+                });
+            }
+
+            function deleteCustomer() {
+                var idKHDelete = $("#customerIDDelete").text().trim();
+                $.ajax({
+                    url: "/xoa-khach-hang",
+                    type: "POST",
+                    data: {
+                        "idKHDelete": idKHDelete
+                    },
+                    success: function (data) {
+                        $('#confirmModalDeleteCustomer').modal('hide');
+                        $('#SuccessModalSendMail').modal('show'); // Show modal
+                        // showCustomerTable();
+                        location.reload();
                     }, error: function () {
                         alert("FAIL!");
                     }
@@ -326,41 +372,41 @@
                         </div>
                     </div>
                     <nav class="nav__edit-customer">
-                        <ul class="nav__edit-list">
+                        <ul class="nav__edit-list" style="padding-top: 16px">
                             <li class="nav__edit-input">
                                 <i class="icon-users">
-                                    <span class="ml-2" style="font-size: 22px; color: #0f74a8" id="title_editUser">Cập nhật thông tin người dùng</span></i>
-                                <span class="ml-2"
+                                    <span class="ml-2 mt-2" style="font-size: 22px; color: #0f74a8" id="title_editUser">Cập nhật thông tin người dùng</span></i>
+                                <span class="ml-3 mt-2"
                                       style="font-size: 22px; color: #0f74a8; display: none" id="title_addUser">Thêm người dùng</span></i>
                             </li>
                             <hr>
-                            <li class="nav__edit-input">
+                            <li class="nav__edit-input" style=" padding-bottom: 5px">
                                 Mã KH:
                                 <input id="idKH_edit_input"
-                                       style="border: 1px #ececec solid; margin-left: 16px; dislay:none" size="40">
+                                       style="border: 1px #ececec solid; margin-left: 16px; display:none" size="40">
                                 <label id="idKH_edit" style="margin-left: 16px"></label>
                             </li>
-                            <li class="nav__edit-input">
+                            <li class="nav__edit-input" style=" padding-bottom: 5px">
                                 Tên KH: <input id="ten_edit" style="border: 1px #ececec solid; margin-left: 14px"
                                                size="40">
                             </li>
-                            <li class="nav__edit-input">
+                            <li class="nav__edit-input" style=" padding-bottom: 5px">
                                 Ngày sinh: <input id="dob_edit" placeholder="...click me please !!!"
                                                   style="border: 1px #ececec solid" size="40">
                             </li>
-                            <li class="nav__edit-input">
+                            <li class="nav__edit-input" style=" padding-bottom: 5px">
                                 Số CMND: <input id="soCmnd_edit" style="border: 1px #ececec solid; margin-left: 1px"
                                                 size="40">
                             </li>
-                            <li class="nav__edit-input">
+                            <li class="nav__edit-input" style=" padding-bottom: 5px">
                                 Địa chỉ: <textarea id="diaChi_edit" style="border: 1px #ececec solid" cols="50"
                                                    rows="2"></textarea>
                             </li>
-                            <li class="nav__edit-input">
+                            <li class="nav__edit-input" style=" padding-bottom: 5px">
                                 Mail: <input id="mail_edit" type="email"
                                              style="border: 1px #ececec solid; margin-left: 1px" size="45">
                             </li>
-                            <li class="nav__edit-input">
+                            <li class="nav__edit-input" style=" padding-bottom: 5px">
                                 Giới tính:
                                 <input type="checkbox" id="nam_checkbox_edit" name="nam" value="Nam"
                                        style="margin-left: 80px">
@@ -369,18 +415,19 @@
                                        style="margin-left: 30px">
                                 <label for="nu_checkbox_edit">Nữ</label>
                             </li>
-                            <li class="nav__edit-input">
+                            <li class="nav__edit-input" style=" padding-bottom: 5px">
                                 Số ĐT: <input id="sdt_edit" style="border: 1px #ececec solid;margin-left: 3px"
                                               size="43">
                             </li>
-                            <li class="nav__edit-input">
+                            <li class="nav__edit-input" style=" padding-bottom: 5px">
                                 Ngày BĐSD: <input id="ngayBDSD_edit" placeholder="...click me please !!!"
                                                   style="border: 1px #ececec solid; margin-left: 1px" size="38">
                             </li>
                         </ul>
                         <hr>
                         <a href="#" data-toggle="tooltip" title="Edit">
-                            <button class="btn btn-info center-block mb-1" onclick="updateInforCustomer()" id="btn-edit-user"
+                            <button class="btn btn-info center-block mb-1" onclick="updateInforCustomer()"
+                                    id="btn-edit-user"
                                     style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 140px">
                                 Cập nhật
                             </button>
@@ -476,6 +523,29 @@
             </div>
         </div>
         <!--ENd Send mail success-->
+
+        <div class="modal fade" id="confirmModalDeleteCustomer" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Do you want to delete ?</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal-header">
+                            <h5 class="modal-title"><label>Mã khách hàng: <h5 id="customerIDDelete"></h5></label></h5>
+                        </div>
+                        <div class="modal-header">
+                            <h5 class="modal-title"> <label>Tên khách hàng: <h5 id="customerNameDelete"></h5></label></h5>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" onclick="deleteCustomer()">Delete</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 </div>
 </body>

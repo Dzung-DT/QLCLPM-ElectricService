@@ -45,4 +45,11 @@ public class KhachHangDAOImpl implements KhachHangDAO {
         Query query = entityManager.createNativeQuery(sql);
         query.executeUpdate();
     }
+
+    @Override
+    public void deleteKH(String idKH) {
+        String sql="DELETE FROM khachhang where MaKH = '"+idKH+"'";
+        Query query = entityManager.createNativeQuery(sql);
+        query.executeUpdate();
+    }
 }

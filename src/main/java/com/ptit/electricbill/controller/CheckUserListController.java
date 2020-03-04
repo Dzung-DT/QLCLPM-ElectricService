@@ -82,4 +82,12 @@ public class CheckUserListController {
         khachHangDAO.addKH(KH);
         return "OK";
     }
+
+    @PostMapping("/xoa-khach-hang")
+    @ResponseBody
+    public String deleteCustomer(@RequestParam("idKHDelete") String idKHDelete) {
+        khachHangDAO.deleteKH(idKHDelete);
+        return "OK";
+    }
+
 }
