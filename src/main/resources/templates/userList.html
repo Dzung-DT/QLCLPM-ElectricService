@@ -302,8 +302,7 @@
                     success: function (data) {
                         $('#confirmModalDeleteCustomer').modal('hide');
                         $('#SuccessModalSendMail').modal('show'); // Show modal
-                        // showCustomerTable();
-                        location.reload();
+                        showCustomerTable();
                     }, error: function () {
                         alert("FAIL!");
                     }

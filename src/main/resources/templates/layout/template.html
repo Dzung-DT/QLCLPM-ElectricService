@@ -47,8 +47,10 @@
     <!-- /theme JS files -->
 
     <link th:href="@{/css_customize/style.css}" rel="stylesheet" type="text/css">
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css">
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css">
 </head>
 
 <body>
@@ -140,17 +142,19 @@
                            class="nav-link"><i class="icon-color-sampler"></i> <span>Danh sách khách hàng</span></a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link" data-toggle="tooltip" title="Gửi mail khách hàng"><i
-                                class="icon-copy"></i> <span>Tìm kiếm khách hàng</span></a>
-                    </li>
-
-                    <li class="nav-item">
                         <a href="#" class="nav-link" data-toggle="tooltip" title="Xuất báo cáo"><i
                                 class="icon-stack"></i> <span>Xuất báo cáo</span></a>
                     </li>
-                    <li class="nav-item"><a href="#" class="nav-link" data-toggle="tooltip" title="Cấu hình"><i
-                            class="icon-width"></i>
-                        <span>Cấu hình</span></a></li>
+                    <li class="nav-item nav-item-submenu">
+                        <a href="#" class="nav-link legitRipple"><i class="icon-color-sampler"></i> <span>Cấu hình</span></a>
+
+                        <ul class="nav nav-group-sub" data-submenu-title="Themes">
+                            <li class="nav-item"><a th:href="@{/cau-hinh-don-gia}" class="nav-link legitRipple">Đơn giá</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link active legitRipple">Material</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link legitRipple">Dark</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link disabled">Clean <span class="badge bg-transparent align-self-center ml-auto">Coming soon</span></a></li>
+                        </ul>
+                    </li>
                     <!-- /main -->
                 </ul>
             </div>
