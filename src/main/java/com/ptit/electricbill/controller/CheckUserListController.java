@@ -21,7 +21,7 @@ public class CheckUserListController {
 
     @GetMapping("/trang-chu")
     public String dashboard() {
-        return "userList";
+        return "danhSachKH";
     }
 
     @PostMapping("/danh-sach-khach-hang")

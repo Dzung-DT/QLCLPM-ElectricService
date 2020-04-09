@@ -347,7 +347,7 @@
                     </div>
                     <hr>
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
-                        <div class="datatable-scroll-wrap">
+                        <div class="datatable-scroll-wrap" style="overflow-y:scroll; max-height: 500px; text-align: center; margin-top: 30px">
                             <table class="table datatable-responsive dataTable no-footer dtr-inline"
                                    id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
                                 <div class="overlay_bang_khach_hang"></div>
@@ -522,29 +522,6 @@
             </div>
         </div>
         <!--ENd Send mail success-->
-
-        <div class="modal fade" id="confirmModalDeleteCustomer" tabindex="-1" role="dialog"
-             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Do you want to delete ?</h5>
-                    </div>
-                    <div class="modal-body">
-                        <div class="modal-header">
-                            <h5 class="modal-title"><label>Mã khách hàng: <h5 id="customerIDDelete"></h5></label></h5>
-                        </div>
-                        <div class="modal-header">
-                            <h5 class="modal-title"> <label>Tên khách hàng: <h5 id="customerNameDelete"></h5></label></h5>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" onclick="deleteCustomer()">Delete</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </section>
 </div>
 </body>
