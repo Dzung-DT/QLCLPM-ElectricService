@@ -150,9 +150,13 @@
                             <li class="nav-item"><a th:href="@{/cap-nhat-so-dien}" class="nav-link legitRipple">Cập nhật số điện</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" data-toggle="tooltip" title="Xuất báo cáo"><i
-                                class="icon-stack"></i> <span>Xuất báo cáo</span></a>
+                    <li class="nav-item nav-item-submenu">
+                        <a href="#" class="nav-link legitRipple"><i class="icon-stack"></i>
+                            <span>Quản lý hóa đơn</span></a>
+                        <ul class="nav nav-group-sub" data-submenu-title="Themes">
+                            <li class="nav-item"><a th:href="@{/xem-hoa-don}" class="nav-link legitRipple">Xem hóa đơn</a></li>
+                            <li class="nav-item"><a th:href="@{/lap-hoa-don}" class="nav-link legitRipple">Lập hóa đơn</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a th:href="@{/logout}" class="nav-link" data-toggle="tooltip" title="Đăng xuất"><i

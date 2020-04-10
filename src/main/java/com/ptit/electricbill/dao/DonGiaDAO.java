@@ -9,4 +9,6 @@ public interface DonGiaDAO {
     void update(DonGia donGia);
     void add(DonGia donGia);
     void delete(int IDDonGia);
+
+    List<Integer> getGia(String loaiDonGia);
 }

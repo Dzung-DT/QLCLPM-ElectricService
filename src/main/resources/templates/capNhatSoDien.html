@@ -84,9 +84,10 @@
         <div class="col-md-4">
             <!-- Horizontal form -->
             <div class="card">
-                <div class="card-header header-elements-inline d-flex justify-content-center" style="display: flex">
+                <div class="card-header header-elements-inline d-flex justify-content-center">
                     <h5 class="card-title">Thông tin điện kế</h5>
                 </div>
+                <div class="dropdown-divider" style="border: 2px solid #ced3cf"></div>
                 <div class="card-body">
                     <form action="#">
                         <div class="form-group row">
@@ -114,7 +115,7 @@
                                 <input id="chiSoMoi_input" type="number" class="form-control"  size="6" placeholder="VD: 22222">
                             </div>
                         </div>
-                        <div class="text-right">
+                        <div class="text-center">
                             <button type="submit" class="btn btn-primary legitRipple" style="padding: 4px 4px 4px 4px"
                                     onclick="addSoDien()">Thêm
                             </button>
@@ -127,9 +128,9 @@
 
         <div class="col-md-8">
             <!-- Vertical form -->
-            <div class="card" style="height: 368px!important;">
+            <div class="card" style="height: 450px!important;">
                 <div class="card-header header-elements-inline d-flex justify-content-center">
-                    <h5 class="card-title">Bảng giá tiền điện</h5>
+                    <h5 class="card-title">Bảng thống điện kế</h5>
                 </div>
                 <div class="card-body">
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
@@ -173,29 +174,6 @@
                             <polyline id="successAnimationCheck" stroke="#979797" stroke-width="2"
                                       points="23 34 34 43 47 27" fill="transparent"/>
                         </svg>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="confirmModalDeleteCustomer" tabindex="-1" role="dialog"
-             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Do you want to delete ?</h5>
-                    </div>
-                    <div class="modal-body">
-                        <div class="modal-header">
-                            <h5 class="modal-title"><label>Mã khách hàng: <h5 id="customerIDDelete"></h5></label></h5>
-                        </div>
-                        <div class="modal-header">
-                            <h5 class="modal-title"><label>Tên khách hàng: <h5 id="customerNameDelete"></h5></label>
-                            </h5>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" onclick="deleteCustomer()">Delete</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

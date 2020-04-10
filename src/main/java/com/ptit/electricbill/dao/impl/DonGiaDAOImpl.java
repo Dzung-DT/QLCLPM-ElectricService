@@ -45,4 +45,12 @@ public class DonGiaDAOImpl implements DonGiaDAO {
         Query query = entityManager.createNativeQuery(sql);
         query.executeUpdate();
     }
+
+    @Override
+    public List<Integer> getGia(String loaiDonGia) {
+        String sql = "select gia as g from dongia where GhiChu = '"+loaiDonGia+"' order by g asc";
+        Query query = entityManager.createNativeQuery(sql);
+        List<Integer> giaList = query.getResultList();
+        return giaList;
+    }
 }
