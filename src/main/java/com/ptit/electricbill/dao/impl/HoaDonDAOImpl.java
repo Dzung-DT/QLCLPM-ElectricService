@@ -20,7 +20,10 @@ public class HoaDonDAOImpl implements HoaDonDAO {
 
     @Override
     public List<Object> getAll() {
-        return null;
+        String sql = "SELECT  * from hoadon";
+        Query query = entityManager.createNativeQuery(sql);
+        List<Object> hoaDonList = query.getResultList();
+        return hoaDonList;
     }
 
     @Override

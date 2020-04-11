@@ -10,6 +10,6 @@ public class HoaDon {
     private String maKH;
     private String maThang;
     private int luongDienTT;
-    private int loaiDien;
-    private int tien;
+    private String loaiDien;
+    private double tien;
 }

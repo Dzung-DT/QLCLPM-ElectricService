@@ -43,6 +43,7 @@
                 $("#maKH_modalCreatBillForm").html(maKH);
                 var maThang = $(this).find('td').eq(2).text();
                 $("#maThang_modalCreatBillForm").html(maThang);
+                $("#maHD_modalCreatBillForm").html(maThang);
                 var chiSoMoi = $(this).find('td').eq(3).text();
                 $("#chiSoMoi_modalCreatBillForm").html(chiSoMoi);
                 var chiSoCu = $(this).find('td').eq(4).text();
@@ -54,7 +55,7 @@
         }
 
         function taoHoaDon() {
-            var maHD = $("#maHD_modalCreatBillForm").val().trim();
+            var maHD = $("#maHD_modalCreatBillForm").text().trim();
             var maKH = $("#maKH_modalCreatBillForm").text().trim();
             var maThang = $("#maThang_modalCreatBillForm").text().trim();
             var luongDienTT = $("#luongDienTT_modalCreatBillForm").text().trim();
@@ -145,7 +146,7 @@
                                 <div class="modal-header" style="padding: 0px!important;">
                                     <h6 class="modal-title" style="margin-right: 0px!important;">Mã KH:<label
                                             id="maKH_modalCreatBillForm"
-                                            style="margin-left: 32px "></label></h6>
+                                            style="margin-left: 49px "></label></h6>
                                 </div>
                                 <div class="modal-header" style="padding: 0px!important;">
                                     <h6 class="modal-title" style="margin-right: 0px!important;">Mã tháng:<label
@@ -155,34 +156,35 @@
                                 <div class="modal-header" style="padding: 0px!important;">
                                     <h6 class="modal-title" style="margin-right: 0px!important;">Chỉ số mới:<label
                                             id="chiSoMoi_modalCreatBillForm"
-                                            style="margin-left: 32px "></label></h6>
+                                            style="margin-left: 25px "></label></h6>
                                 </div>
                                 <div class="modal-header" style="padding: 0px!important;">
                                     <h6 class="modal-title" style="margin-right: 0px!important;">Chỉ số cũ:<label
                                             id="chiSoCu_modalCreatBillForm"
-                                            style="margin-left: 32px "></label></h6>
+                                            style="margin-left: 34px "></label></h6>
                                 </div>
                                 <div class="modal-header" style="padding: 0px!important;">
                                     <h6 class="modal-title" style="margin-right: 0px!important;">Số điện TT:<label
                                             id="luongDienTT_modalCreatBillForm"
-                                            style="margin-left: 32px "></label> kWh</h6>
+                                            style="margin-left: 23px "></label> kWh</h6>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="modal-body" style="padding: 0px!important;">
-                                <div class="modal-header d-flex">
-                                    <span>Mã HD</span>
-                                    <input id="maHD_modalCreatBillForm" type="number" class="form-control" size="4"
-                                           placeholder="VD: 0000">
+                                <div class="modal-header">
+                                    <h6 class="modal-title" style="margin-right: 0px!important;">Mã HD:<label
+                                            id="maHD_modalCreatBillForm" style="margin-left: 28px"></label></h6>
                                 </div>
-                                <div class="modal-header d-flex">
-                                    <span>Loại điện:</span>
-                                    <select id="loaiDienSuDung"
-                                            style="border-color: #cff0da; background-color: #e7d9e1">
+                                <div class="modal-header">
+                                    <h6 class="modal-title" style="margin-right: 0px!important;">Loại điện:<select
+                                            id="loaiDienSuDung"
+                                            style="border-color: #cff0da; background-color: #e7d9e1; margin-left: 15px">
                                         <option value="Sinh hoạt">Sinh hoạt</option>
                                         <option value="Sinh hoạt trả trước">Sinh hoạt trả trước</option>
-                                    </select>
+                                    </select></h6>
+
+
                                 </div>
                             </div>
                         </div>
