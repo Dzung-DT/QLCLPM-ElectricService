@@ -34,7 +34,7 @@ public class HoaDonDAOImpl implements HoaDonDAO {
 
     @Override
     public List<Object> getAllDetail() {
-        String sql = "SELECT hoadon.MaHD, hoadon.MaThang, hoadon.MaKH, khachhang.TenKH, khachhang.Diachi, dienke.SoDienMoi, dienke.SoDienCu, hoadon.LuongDienTT, hoadon.LoaiDien, hoadon.Tien from hoadon, khachhang, dienke where hoadon.MaKH = khachhang.MaKH and hoadon.MaThang = dienke.MaThang";
+        String sql = "SELECT hoadon.MaHD, hoadon.MaThang, hoadon.MaKH, khachhang.TenKH, khachhang.Diachi, dienke.SoDienMoi, dienke.SoDienCu, hoadon.LuongDienTT, hoadon.LoaiDien, hoadon.Tien, hoadon.ThoiGian from hoadon, khachhang, dienke where hoadon.MaKH = khachhang.MaKH and hoadon.MaThang = dienke.MaThang";
         Query query = entityManager.createNativeQuery(sql);
         List<Object> hoaDonChiTietList = query.getResultList();
         return hoaDonChiTietList;
