@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface HoaDonDAO {
     List<Object> getAll();
-    void update(HoaDon hoaDon);
+    List<Object> getAllDetail();
     void add(HoaDon hoaDon);
-    void delete(int IDHoaDon);
 }

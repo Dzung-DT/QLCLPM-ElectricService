@@ -12,4 +12,5 @@ public class HoaDon {
     private int luongDienTT;
     private String loaiDien;
     private double tien;
+    private String thoiGian;
 }

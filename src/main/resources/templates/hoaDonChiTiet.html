@@ -3,98 +3,39 @@
       layout:decorate="~{layout/template}">
 <head>
     <meta charset="UTF-8">
-    <title>Lập hóa đơn</title>
+    <title>Hóa đơn chi tiết</title>
 </head>
 <body>
 <header layout:fragment="header" class="mt-3 ml-2 mr-2">
     <script>
         $(document).ready(function () {
-            showDSSoDien();
-            showTTHoaDonTomTat();
+            showDSHoaDon();
         });
 
-        function showDSSoDien() {
+        function showDSHoaDon() {
             $.ajax({
-                url: "/danh-sach-so-dien",
+                url: "/danh-sach-hoa-don",
                 type: "POST",
                 dataType: "json",
                 success: function (data) {
                     var contentString;
                     for (var i = 0; i < data.length; i++) {
+                        var index = i + 1;
                         contentString = contentString
                             + '<tr>'
-                            + '<td>' + data[i][0] + '</td>'
-                            + '<td>' + data[i][1] + '</td>'
-                            + '<td>' + data[i][2] + '</td>'
-                            + '<td>' + data[i][3] + '</td>'
-                            + '<td>' + data[i][4] + '</td>'
-                            + '<td style="padding: 0px 0px 0px 0px"><a data-toggle="tooltip" title="Lập hóa đơn"><button data-toggle="modal" data-target="#modalCreatBillForm" class="btn btn-info center-block ml-1" onclick="lapHoaDon()" style="padding: 3px 6px 3px 6px; border-radius: 54%;"><i class="icon-pencil"></i></button></a></td>' +
-                            +'</tr>';
-                    }
-                    $("#bang_so_dien").html(contentString);
-                }, error: function () {
-                    alert("FAIL!");
-                }
-            });
-        }
-
-        function lapHoaDon() {
-            $('#bang_so_dien').find('tr').click(function () {
-                var maKH = $(this).find('td').eq(1).text();
-                $("#maKH_modalCreatBillForm").html(maKH);
-                var maThang = $(this).find('td').eq(2).text();
-                $("#maThang_modalCreatBillForm").html(maThang);
-                $("#maHD_modalCreatBillForm").html(maThang);
-                var chiSoMoi = $(this).find('td').eq(3).text();
-                $("#chiSoMoi_modalCreatBillForm").html(chiSoMoi);
-                var chiSoCu = $(this).find('td').eq(4).text();
-                $("#chiSoCu_modalCreatBillForm").html(chiSoCu);
-                var luongDienTT = chiSoMoi - chiSoCu;
-                $("#luongDienTT_modalCreatBillForm").html(luongDienTT);
-            });
-
-        }
-
-        function taoHoaDon() {
-            var maHD = $("#maHD_modalCreatBillForm").text().trim();
-            var maKH = $("#maKH_modalCreatBillForm").text().trim();
-            var maThang = $("#maThang_modalCreatBillForm").text().trim();
-            var luongDienTT = $("#luongDienTT_modalCreatBillForm").text().trim();
-            var loaiDienSD = $("#loaiDienSuDung option:selected").text().trim();
-
-            $.ajax({
-                url: "/them-hoa-don",
-                type: "POST",
-                dataType: "json",
-                data: {
-                    "maHD": maHD,
-                    "maKH": maKH,
-                    "maThang": maThang,
-                    "luongDienTT": luongDienTT,
-                    "loaiDienSD": loaiDienSD
-                }
-            });
-            location.reload();
-        }
-
-        function showTTHoaDonTomTat() {
-            $.ajax({
-                url: "/danh-sach-hoa-don-tom-tat",
-                type: "POST",
-                dataType: "json",
-                success: function (data) {
-                    console.log(data);
-                    var contentString;
-                    for (var i = 0; i < data.length; i++) {
-                        contentString = contentString
-                            + '<tr>'
+                            + '<td>' + index + '</td>'
                             + '<td>' + data[i][0] + '</td>'
                             + '<td>' + data[i][1] + '</td>'
                             + '<td>' + data[i][2] + '</td>'
                             + '<td>' + data[i][3] + '</td>'
                             + '<td>' + data[i][4] + '</td>'
                             + '<td>' + data[i][5] + '</td>'
-                            // + '<td style="padding: 0px 0px 0px 0px"><a data-toggle="tooltip" title="Lập hóa đơn"><button data-toggle="modal" data-target="#modalCreatBillForm" class="btn btn-info center-block ml-1" onclick="lapHoaDon()" style="padding: 3px 6px 3px 6px; border-radius: 54%;"><i class="icon-pencil"></i></button></a></td>' +
+                            + '<td>' + data[i][6] + '</td>'
+                            + '<td>' + data[i][7] + '</td>'
+                            + '<td>' + data[i][8] + '</td>'
+                            + '<td>10%</td>'
+                            + '<td>' + data[i][9] + '</td>'
+                            + '<td style="padding: 0px 0px 0px 0px"><a data-toggle="tooltip" title="Lập hóa đơn"><button data-toggle="modal" data-target="#modalCreatBillForm" class="btn btn-info center-block ml-1" onclick="lapHoaDon()" style="padding: 3px 6px 3px 6px; border-radius: 54%;"><i class="icon-pencil"></i></button></a></td>' +
                             +'</tr>';
                     }
                     $("#bang_hoa_don").html(contentString);
@@ -108,77 +49,50 @@
         <div class="page-header-content header-elements-md-inline" style="margin-bottom: 10px">
             <div class="page-title ">
                 <h4><i class="icon-arrow-right8 mr-2"></i> <span class="font-weight-semibold">Quản lý hoán đơn</span> -
-                    Lập hóa đơn</h4>
+                    Danh sách hóa đơn</h4>
             </div>
         </div>
     </div>
 </header>
 <section class="container-fluid" layout:fragment="content_body">
     <div class="row">
-        <div class="col-md-5">
-            <!-- Vertical form -->
-            <div class="card">
-                <div class="card-header header-elements-inline d-flex justify-content-center">
-                    <h5 class="card-title">Bảng danh sách điện kế</h5>
-                </div>
-                <div class="dropdown-divider" style="border: 1px solid #ced3cf"></div>
-                <div class="card-body">
-                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
-                        <div class="datatable-scroll-wrap" style="overflow-y:scroll; max-height:400px; text-align: center;">
-                            <table class="table datatable-responsive dataTable no-footer dtr-inline"
-                                   id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
-                                <thead>
-                                <tr role="row">
-                                    <th>ID</th>
-                                    <th style="padding-left: 0px">Mã KH</th>
-                                    <th>Mã tháng</th>
-                                    <th>Chỉ số mới</th>
-                                    <th>Chỉ số cũ</th>
-                                    <th>Tác vụ</th>
-                                </tr>
-                                </thead>
-                                <tbody id="bang_so_dien">
-                                </tbody>
-                            </table>
-                        </div>
+        <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header header-elements-inline d-flex justify-content-center">
+                <h5 class="card-title">Bảng danh sách hóa đơn</h5>
+            </div>
+            <div class="dropdown-divider" style="border: 1px solid #ced3cf"></div>
+            <div class="card-body">
+                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+                    <div class="datatable-scroll-wrap" style="overflow-y:scroll; max-height:400px; text-align: center;">
+                        <table class="table datatable-responsive dataTable no-footer dtr-inline"
+                               id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                            <thead>
+                            <tr role="row">
+                                <th>STT</th>
+                                <th>Mã HD</th>
+                                <th>Mã tháng</th>
+                                <th>Mã KH</th>
+                                <th>Tên</th>
+                                <th>Địa chỉ</th>
+                                <th>Chỉ số mới</th>
+                                <th>Chỉ số cũ</th>
+                                <th>Số Kwh</th>
+                                <th>Mục dích</th>
+                                <th>Thuế</th>
+                                <th>Tiền (Đồng)</th>
+                                <th>Tác vụ</th>
+                            </tr>
+                            </thead>
+                            <tbody id="bang_hoa_don">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-            <!-- /vertical form -->
         </div>
-
-        <div class="col-md-7">
-            <!-- Horizontal form -->
-            <div class="card">
-                <div class="card-header header-elements-inline d-flex justify-content-center" style="display: flex">
-                    <h5 class="card-title">Thông tin hóa đơn tóm tắt</h5>
-                </div>
-                <div class="dropdown-divider" style="border: 1px solid #ced3cf"></div>
-                <div class="card-body">
-                    <div class="dataTables_wrapper no-footer">
-                        <div class="datatable-scroll-wrap"
-                             style="overflow-y:scroll; max-height:400px; text-align: center;">
-                            <table class="table datatable-responsive dataTable no-footer dtr-inline" role="grid" aria-describedby="DataTables_Table_0_info">
-                                <thead>
-                                <tr role="row">
-                                    <th>Mã HD</th>
-                                    <th>Mã KH</th>
-                                    <th>Mã tháng</th>
-                                    <th>Lượng diện TT(Kwh)</th>
-                                    <th>Loại điện</th>
-                                    <th>Tiền(Đồng)</th>
-<!--                                    <th>Tác vụ</th>-->
-                                </tr>
-                                </thead>
-                                <tbody id="bang_hoa_don">
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- /horizotal form -->
         </div>
+        <!-- /vertical form -->
         <div class="modal fade" id="modalCreatBillForm" tabindex="-1" role="dialog"
              aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">

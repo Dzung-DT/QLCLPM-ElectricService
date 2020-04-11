@@ -1,5 +1,7 @@
 package com.ptit.electricbill.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptit.electricbill.dao.DonGiaDAO;
 import com.ptit.electricbill.dao.HoaDonDAO;
 import com.ptit.electricbill.model.HoaDon;
@@ -10,8 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @Controller
 public class ConfigBillController {
@@ -87,6 +92,10 @@ public class ConfigBillController {
         }else if(loaiDienSD.equals("Sinh hoạt trả trước")){
             giaTien = giaList.get(0) * soDien;
         }
+
+        SimpleDateFormat dateFormatGmt = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT+7"));
+
         HoaDon hoaDon = new HoaDon();
         hoaDon.setMaHD(maHD);
         hoaDon.setMaKH(maKH);
@@ -94,9 +103,43 @@ public class ConfigBillController {
         hoaDon.setLuongDienTT(Integer.parseInt(luongDienTT));
         hoaDon.setLoaiDien(loaiDienSD);
         hoaDon.setTien(Math.round((double) (giaTien * 1.1)));
+        hoaDon.setThoiGian(dateFormatGmt.format(new Date())+"");
         hoaDonDAO.add(hoaDon);
+
         return "OK";
     }
 
+    @PostMapping("/danh-sach-hoa-don-tom-tat")
+    @ResponseBody
+    public String getDSHoaDonTomTat(){
+        List<Object> hoaDonTTList = hoaDonDAO.getAll();
+        String data;
+        try {
+            data =(new ObjectMapper()).writeValueAsString(hoaDonTTList);
+            return data;
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
+
+    @GetMapping("/danh-sach-hoa-don")
+    public String xemHoadon() {
+        return "hoaDonChiTiet";
+    }
+
+    @PostMapping("/danh-sach-hoa-don")
+    @ResponseBody
+    public String xemHoaDon(){
+        List<Object> hoaDonCTList = hoaDonDAO.getAllDetail();
+        String data;
+        try {
+            data =(new ObjectMapper()).writeValueAsString(hoaDonCTList);
+            return data;
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

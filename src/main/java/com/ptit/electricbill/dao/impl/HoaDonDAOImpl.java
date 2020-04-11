@@ -3,7 +3,6 @@ package com.ptit.electricbill.dao.impl;
 import com.ptit.electricbill.dao.HoaDonDAO;
 import com.ptit.electricbill.model.HoaDon;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -27,19 +26,17 @@ public class HoaDonDAOImpl implements HoaDonDAO {
     }
 
     @Override
-    public void update(HoaDon hoaDon) {
-
-    }
-
-    @Override
     public void add(HoaDon hoaDon) {
-        String sql = "INSERT INTO hoadon (MaHD,MaKH,MaThang,LuongDienTT,LoaiDien,Tien) VALUES ('"+hoaDon.getMaHD()+"', '"+hoaDon.getMaKH()+"', '"+hoaDon.getMaThang()+"', '"+hoaDon.getLuongDienTT()+"', '"+hoaDon.getLoaiDien()+"', '"+hoaDon.getTien()+"')";
+        String sql = "INSERT INTO hoadon (MaHD,MaKH,MaThang,LuongDienTT,LoaiDien,Tien,ThoiGian) VALUES ('"+hoaDon.getMaHD()+"', '"+hoaDon.getMaKH()+"', '"+hoaDon.getMaThang()+"', '"+hoaDon.getLuongDienTT()+"', '"+hoaDon.getLoaiDien()+"', '"+hoaDon.getTien()+"', '"+hoaDon.getThoiGian()+"')";
         Query query = entityManager.createNativeQuery(sql);
         query.executeUpdate();
     }
 
     @Override
-    public void delete(int IDHoaDon) {
-
+    public List<Object> getAllDetail() {
+        String sql = "SELECT hoadon.MaHD, hoadon.MaThang, hoadon.MaKH, khachhang.TenKH, khachhang.Diachi, dienke.SoDienMoi, dienke.SoDienCu, hoadon.LuongDienTT, hoadon.LoaiDien, hoadon.Tien from hoadon, khachhang, dienke where hoadon.MaKH = khachhang.MaKH and hoadon.MaThang = dienke.MaThang";
+        Query query = entityManager.createNativeQuery(sql);
+        List<Object> hoaDonChiTietList = query.getResultList();
+        return hoaDonChiTietList;
     }
 }
