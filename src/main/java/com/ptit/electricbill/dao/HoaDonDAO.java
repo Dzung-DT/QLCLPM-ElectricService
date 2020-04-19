@@ -8,4 +8,5 @@ public interface HoaDonDAO {
     List<Object> getAll();
     List<Object> getAllDetail();
     void add(HoaDon hoaDon);
+    Object getBill(String maKH, String maThang);
 }

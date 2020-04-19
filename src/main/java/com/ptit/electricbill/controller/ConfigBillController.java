@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptit.electricbill.dao.DonGiaDAO;
 import com.ptit.electricbill.dao.HoaDonDAO;
+import com.ptit.electricbill.dao.ThueDAO;
 import com.ptit.electricbill.model.HoaDon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,8 @@ public class ConfigBillController {
 
     @Autowired
     private HoaDonDAO hoaDonDAO;
+    @Autowired
+    private ThueDAO thueDAO;
 
     @GetMapping("/lap-hoa-don")
     public String lapHoadon() {
@@ -93,6 +96,8 @@ public class ConfigBillController {
             giaTien = giaList.get(0) * soDien;
         }
 
+        Double giaThue = thueDAO.getGiaThue();
+
         SimpleDateFormat dateFormatGmt = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT+7"));
 
@@ -102,7 +107,7 @@ public class ConfigBillController {
         hoaDon.setMaThang(maThang);
         hoaDon.setLuongDienTT(Integer.parseInt(luongDienTT));
         hoaDon.setLoaiDien(loaiDienSD);
-        hoaDon.setTien(Math.round((double) (giaTien * 1.1)));
+        hoaDon.setTien(Math.round(giaTien + giaTien*giaThue));
         hoaDon.setThoiGian(dateFormatGmt.format(new Date())+"");
         hoaDonDAO.add(hoaDon);
 
@@ -136,6 +141,22 @@ public class ConfigBillController {
         String data;
         try {
             data =(new ObjectMapper()).writeValueAsString(hoaDonCTList);
+            System.out.println(data);
+            return data;
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @PostMapping("/tim-kiem-hoa-don")
+    @ResponseBody
+    public String timHoaDon( @RequestParam("maKH") String maKH,
+                             @RequestParam("maThang") String maThang){
+        Object hoaDon = hoaDonDAO.getBill(maKH,maThang);
+        String data;
+        try {
+            data =(new ObjectMapper()).writeValueAsString(hoaDon);
             return data;
         } catch (JsonProcessingException e) {
             e.printStackTrace();

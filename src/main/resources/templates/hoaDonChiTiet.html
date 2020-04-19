@@ -9,6 +9,12 @@
 <header layout:fragment="header" class="mt-3 ml-2 mr-2">
     <script>
         $(document).ready(function () {
+            $('body').append('<div style="" id="loadingDiv"><div class="loader"></div></div>');
+            $(document).ajaxStart(function () {
+                $('#loadingDiv').show();
+            }).ajaxStop(function () {
+                $('#loadingDiv').remove();
+            });
             showDSHoaDon();
         });
 
@@ -33,12 +39,49 @@
                             + '<td>' + data[i][6] + '</td>'
                             + '<td>' + data[i][7] + '</td>'
                             + '<td>' + data[i][8] + '</td>'
-                            + '<td>10%</td>'
                             + '<td>' + data[i][9] + '</td>'
                             + '<td>' + data[i][10] + '</td>'
-                            // + '<td style="padding: 0px 0px 0px 0px"><a data-toggle="tooltip" title="Lập hóa đơn"><button data-toggle="modal" data-target="#modalCreatBillForm" class="btn btn-info center-block ml-1" onclick="lapHoaDon()" style="padding: 3px 6px 3px 6px; border-radius: 54%;"><i class="icon-pencil"></i></button></a></td>' +
+                            + '<td>' + data[i][11] + '</td>'
+                            + '<td style="padding: 0px 0px 0px 0px"><a data-toggle="tooltip" title="Lập hóa đơn"><button data-toggle="modal" data-target="#modalCreatBillForm" class="btn btn-info center-block ml-1" onclick="lapHoaDon()" style="padding: 3px 6px 3px 6px; border-radius: 54%;"><i class="icon-info22"></i></button></a></td>' +
                             +'</tr>';
                     }
+                    $("#bang_hoa_don").html(contentString);
+                }, error: function () {
+                    alert("FAIL!");
+                }
+            });
+        }
+
+        function timHoaDon() {
+            var maKH = $("#maKH_input").val().trim();
+            var maThang = $("#maThang_input").val().trim();
+            $.ajax({
+                url: "/tim-kiem-hoa-don",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "maKH": maKH,
+                    "maThang": maThang
+                },
+                success: function (data) {
+                    var contentString;
+                    contentString = contentString
+                        + '<tr>'
+                        + '<td>' + 1 + '</td>'
+                        + '<td>' + data[0] + '</td>'
+                        + '<td>' + data[1] + '</td>'
+                        + '<td>' + data[2] + '</td>'
+                        + '<td>' + data[3] + '</td>'
+                        + '<td>' + data[4] + '</td>'
+                        + '<td>' + data[5] + '</td>'
+                        + '<td>' + data[6] + '</td>'
+                        + '<td>' + data[7] + '</td>'
+                        + '<td>' + data[8] + '</td>'
+                        + '<td>' + data[9] + '</td>'
+                        + '<td>' + data[10] + '</td>'
+                        + '<td>' + data[11] + '</td>'
+                        + '<td style="padding: 0px 0px 0px 0px"><a data-toggle="tooltip" title="Lập hóa đơn"><button data-toggle="modal" data-target="#modalCreatBillForm" class="btn btn-info center-block ml-1" onclick="lapHoaDon()" style="padding: 3px 6px 3px 6px; border-radius: 54%;"><i class="icon-info22"></i></button></a></td>' +
+                        +'</tr>';
                     $("#bang_hoa_don").html(contentString);
                 }, error: function () {
                     alert("FAIL!");
@@ -58,41 +101,56 @@
 <section class="container-fluid" layout:fragment="content_body">
     <div class="row">
         <div class="col-lg-12">
-        <div class="card">
-            <div class="card-header header-elements-inline d-flex justify-content-center">
-                <h5 class="card-title">Bảng danh sách hóa đơn</h5>
-            </div>
-            <div class="dropdown-divider" style="border: 1px solid #ced3cf"></div>
-            <div class="card-body">
-                <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
-                    <div class="datatable-scroll-wrap" style="overflow-y:scroll; max-height:400px; text-align: center;">
-                        <table class="table datatable-responsive dataTable no-footer dtr-inline"
-                               id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
-                            <thead>
-                            <tr role="row">
-                                <th>STT</th>
-                                <th>Mã HD</th>
-                                <th>Mã tháng</th>
-                                <th>Mã KH</th>
-                                <th>Tên</th>
-                                <th>Địa chỉ</th>
-                                <th>Chỉ số mới</th>
-                                <th>Chỉ số cũ</th>
-                                <th>Số Kwh</th>
-                                <th>Mục dích</th>
-                                <th>Thuế</th>
-                                <th>Tiền (Đồng)</th>
-                                <th>Ngày tạo</th>
-<!--                                <th>Tác vụ</th>-->
-                            </tr>
-                            </thead>
-                            <tbody id="bang_hoa_don">
-                            </tbody>
-                        </table>
+            <div class="card">
+                <div class="card-header header-elements-inline">
+                    <div class="d-flex align-items-end flex-nowrap flex-xl-nowrap">
+                        <span class="mr-2">Tìm hóa đơn:</span>
+                        <input type="text" class="form-control text-dark flex-1 border-bottom-1 mr-2"
+                               placeholder="Nhập mã khách hàng"
+                               style="text-align: center;" id="maKH_input">
+                        <input type="text" class="form-control text-dark flex-1 border-bottom-1"
+                               placeholder="Nhập mã tháng"
+                               style="text-align: center;" id="maThang_input">
+                        <button data-toggle="tooltip" title="Tìm" class="btn btn-info center-block ml-1"
+                                type="submit"
+                                onclick="timHoaDon()"
+                                style="padding: 5px 5px 0px 5px; border-radius: 10px"><i class="icon-search4"
+                                                                                         style="margin-bottom: 2px;"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="dropdown-divider" style="border: 1px solid #ced3cf"></div>
+                <div class="card-body">
+                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+                        <div class="datatable-scroll-wrap"
+                             style="overflow-y:scroll; max-height:400px; text-align: center;">
+                            <table class="table datatable-responsive dataTable no-footer dtr-inline"
+                                   id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                                <thead>
+                                <tr role="row">
+                                    <th>STT</th>
+                                    <th>Mã HD</th>
+                                    <th>Mã tháng</th>
+                                    <th>Mã KH</th>
+                                    <th>Tên</th>
+                                    <th>Địa chỉ</th>
+                                    <th>Chỉ số mới</th>
+                                    <th>Chỉ số cũ</th>
+                                    <th>Số Kwh</th>
+                                    <th>Mục dích</th>
+                                    <th>Thuế</th>
+                                    <th>Tiền (Đồng)</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Tác vụ</th>
+                                </tr>
+                                </thead>
+                                <tbody id="bang_hoa_don">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         </div>
         <!-- /vertical form -->
         <div class="modal fade" id="modalCreatBillForm" tabindex="-1" role="dialog"
