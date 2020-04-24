@@ -38,6 +38,8 @@
                 var mailSubject = $("#text__mail-subject").val().trim();
                 // var mailContent = $.trim($("#text__mail-content").val().trim());
                 var mailContent = CKEDITOR.instances['text__mail-content'].getData();
+
+                console.log(mailAddressReceive+" "+mailSubject+" "+mailContent);
                 $.ajax({
                     url: "/gui-mail-khach-hang",
                     type: "POST",
@@ -89,6 +91,7 @@
                                 + '<td>' + data[i][6] + '</td>'
                                 + '<td>' + data[i][7] + '</td>'
                                 + '<td>' + data[i][8] + '</td>'
+                                + '<td>' + data[i][9] + '</td>'
                                 + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block mb-1" style="padding: 5px 5px 5px 5px;"><i class="icon-mail-read"></i></button></a>' +
                                 '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-pencil"></i></button>' +
                                 '<a data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#confirmModalDeleteCustomer"  onclick="showConfirmDeleteCustomer()" class="btn btn-danger center-block" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
@@ -128,6 +131,14 @@
                     $('#sdt_edit').val(soDT);
                     var ngayBDSD = $(this).find('td').eq(8).text();
                     $('#ngayBDSD_edit').val(ngayBDSD);
+                    var mucDichSD = $(this).find('td').eq(9).text();
+                    if(mucDichSD=="Sinh hoạt"){
+                        $('#MDSD_edit').children('option:first').text('Sinh hoạt');
+                        $('#MDSD_edit').children('option:last').text('Sinh hoạt trả trước');
+                    }else{
+                        $('#MDSD_edit').children('option:first').text('Sinh hoạt trả trước');
+                        $('#MDSD_edit').children('option:last').text('Sinh hoạt');
+                    }
                 });
 
             }
@@ -158,6 +169,7 @@
                 }
                 var soDT_add = $('#sdt_edit').val().trim();
                 var ngayBDSD_add = $('#ngayBDSD_edit').val().trim();
+                var MDSD_add = $("#MDSD_edit option:selected").text().trim();
 
                 $.ajax({
                     url: "/them-khach-hang",
@@ -171,7 +183,8 @@
                         "mail_add": mail_add,
                         "gioiTinh_add": gioiTinh_add,
                         "soDT_add": soDT_add,
-                        "ngayBDSD_add": ngayBDSD_add
+                        "ngayBDSD_add": ngayBDSD_add,
+                        "MDSD_add": MDSD_add
                     },
                     success: function (data) {
                         $('.overlay_bang_khach_hang').hide();
@@ -192,16 +205,6 @@
             function closeEditForm() {
                 $('.overlay_bang_khach_hang').hide();
                 $('.nav__edit-customer').hide();
-                // $('#idKH_edit').val("");
-                // $('#ten_edit').val("");
-                // $('#dob_edit').val("");
-                // $('#soCmnd_edit').val("");
-                // $('#diaChi_edit').val("");
-                // $('#mail_edit').val("");
-                // $('#nam_checkbox_edit').prop('checked', false);
-                // $('#nu_checkbox_edit').prop('checked', false);
-                // $('#sdt_edit').val("");
-                // $('#ngayBDSD_edit').val("");
                 location.reload();
             }
 
@@ -233,6 +236,7 @@
                                 + '<td>' + data[i][6] + '</td>'
                                 + '<td>' + data[i][7] + '</td>'
                                 + '<td>' + data[i][8] + '</td>'
+                                + '<td>' + data[i][9] + '</td>'
                                 + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block mb-1" style="padding: 5px 5px 5px 5px;"><i class="icon-mail-read"></i></button></a>' +
                                 '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-pencil"></i></button>' +
                                 '<a data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#confirmModalDeleteCustomer"  onclick="showConfirmDeleteCustomer()" class="btn btn-danger center-block" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
@@ -261,6 +265,8 @@
                 }
                 var soDT_update = $('#sdt_edit').val().trim();
                 var ngayBDSD_update = $('#ngayBDSD_edit').val().trim();
+                var MDSD_update = $("#MDSD_edit option:selected").text().trim();
+
 
                 $.ajax({
                     url: "/cap-nhat-thong-tin-khach-hang",
@@ -274,7 +280,8 @@
                         "mail_update": mail_update,
                         "gioiTinh_update": gioiTinh_update,
                         "soDT_update": soDT_update,
-                        "ngayBDSD_update": ngayBDSD_update
+                        "ngayBDSD_update": ngayBDSD_update,
+                        "MDSD_update":MDSD_update
                     },
                     success: function (data) {
                         $('.overlay_bang_khach_hang').hide();
@@ -342,7 +349,7 @@
                             <span class="mr-2">Tìm:</span>
                             <input type="text" class="form-control text-dark flex-1 wmin-xl-200 border-bottom-1"
                                    placeholder="Nhập mã khách hàng"
-                                   style="text-align: center; color: red !important; font-size: 16px"
+                                   style="text-align: center; color: red !important; font-size: 13px"
                                    id="customer_ID_search">
                             <button data-toggle="tooltip" title="Tìm" class="btn btn-info center-block ml-1"
                                     type="submit"
@@ -368,6 +375,7 @@
                                     <th>Giới tính</th>
                                     <th>Số ĐT</th>
                                     <th>Ngày BDSD</th>
+                                    <th>Mục đích SD</th>
                                     <th>Tùy chọn</th>
                                 </tr>
                                 </thead>
@@ -427,6 +435,13 @@
                             <li class="nav__edit-input" style=" padding-bottom: 5px">
                                 Ngày BĐSD: <input id="ngayBDSD_edit" placeholder="...click me please !!!"
                                                   style="border: 1px #ececec solid; margin-left: 1px" size="38">
+                            </li>
+                            <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                Mục đích SD:
+                                <select id="MDSD_edit">
+                                    <option value="1">Sinh hoạt</option>
+                                    <option value="2">Sinh hoạt trả trước</option>
+                                </select>
                             </li>
                         </ul>
                         <hr>

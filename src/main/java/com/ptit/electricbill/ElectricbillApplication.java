@@ -2,7 +2,6 @@ package com.ptit.electricbill;
 
 import com.ptit.electricbill.security.UrlAuthenSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +23,10 @@ public class ElectricbillApplication extends WebSecurityConfigurerAdapter implem
     private UrlAuthenSuccessHandler urlAuthenSuccessHandler;
 
     public static void main(String[] args) {
+        String password = "0123456789";
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(password);
+        System.out.println(hashedPassword);
         SpringApplication.run(ElectricbillApplication.class, args);
     }
 

@@ -61,8 +61,9 @@ public class CheckUserListController {
                                      @RequestParam("mail_update") String mail_update,
                                      @RequestParam("gioiTinh_update") String gioiTinh_update,
                                      @RequestParam("soDT_update") String soDT_update,
-                                     @RequestParam("ngayBDSD_update") String ngayBDSD_update) {
-        KhachHang KH = new KhachHang(idKH_update,tenKH_update,dob_update,soCmnd_update,diaChi_update,gioiTinh_update,soDT_update,ngayBDSD_update,mail_update);
+                                     @RequestParam("ngayBDSD_update") String ngayBDSD_update,
+                                     @RequestParam("MDSD_update") String MDSD_update) {
+        KhachHang KH = new KhachHang(idKH_update,tenKH_update,dob_update,soCmnd_update,diaChi_update,gioiTinh_update,soDT_update,ngayBDSD_update,mail_update,MDSD_update);
         khachHangDAO.updateInformation(KH);
         return "OK";
     }
@@ -77,8 +78,9 @@ public class CheckUserListController {
                                      @RequestParam("mail_add") String mail_add,
                                      @RequestParam("gioiTinh_add") String gioiTinh_add,
                                      @RequestParam("soDT_add") String soDT_add,
-                                     @RequestParam("ngayBDSD_add") String ngayBDSD_add) {
-        KhachHang KH = new KhachHang(idKH_add,tenKH_add,dob_add,soCmnd_add,diaChi_add,gioiTinh_add,soDT_add,ngayBDSD_add,mail_add);
+                                     @RequestParam("ngayBDSD_add") String ngayBDSD_add,
+                                     @RequestParam("MDSD_add") String MDSD_add ) {
+        KhachHang KH = new KhachHang(idKH_add,tenKH_add,dob_add,soCmnd_add,diaChi_add,gioiTinh_add,soDT_add,ngayBDSD_add,mail_add,MDSD_add);
         khachHangDAO.addKH(KH);
         return "OK";
     }

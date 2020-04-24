@@ -141,7 +141,6 @@ public class ConfigBillController {
         String data;
         try {
             data =(new ObjectMapper()).writeValueAsString(hoaDonCTList);
-            System.out.println(data);
             return data;
         } catch (JsonProcessingException e) {
             e.printStackTrace();

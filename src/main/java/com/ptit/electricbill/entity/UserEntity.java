@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(name = "thanhvien")
 public class UserEntity {
     @Id
     @Column(name = "id", nullable = false)
