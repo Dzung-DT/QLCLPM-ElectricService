@@ -3,6 +3,13 @@
       layout:decorate="~{layout/template}">
 <head>
     <title>Dashboard</title>
+    <style>
+        label.error {
+            color: red;
+            width: 200px;
+            position: absolute;
+        }
+    </style>
 </head>
 <body>
 <div class="content">
@@ -32,31 +39,66 @@
             // Send mail
             var emailPickUp;
             var namePickUp;
-
-            function sendMailOneCustomer() {
-                var mailAddressReceive = emailPickUp;
-                var mailSubject = $("#text__mail-subject").val().trim();
-                // var mailContent = $.trim($("#text__mail-content").val().trim());
-                var mailContent = CKEDITOR.instances['text__mail-content'].getData();
-
-                console.log(mailAddressReceive+" "+mailSubject+" "+mailContent);
-                $.ajax({
-                    url: "/gui-mail-khach-hang",
-                    type: "POST",
-                    data: {
-                        "mailAddressReceive": mailAddressReceive,
-                        "mailSubject": mailSubject,
-                        "mailContent": mailContent
-                    }
-                    ,
-                    success: function (data) {
-                        $('#squarespaceModal').modal('hide'); // Show modal
-                        $('#SuccessModalSendMail').modal('show'); // Show modal
-                    }, error: function () {
-                        alert("FAIL!");
+            $(function () {
+                $("#form_sendMail").validate({
+                    rules: {
+                        text_mail_subject: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        text_mail_subject: {
+                            required: "Nhập tiêu đề"
+                        }
+                    },
+                    submitHandler: function () {
+                        var mailAddressReceive = emailPickUp;
+                        var mailSubject = $("#text_mail_subject").val().trim();
+                        var mailContent = CKEDITOR.instances['text_mail_content'].getData();
+                        $.ajax({
+                            url: "/gui-mail-khach-hang",
+                            type: "POST",
+                            data: {
+                                "mailAddressReceive": mailAddressReceive,
+                                "mailSubject": mailSubject,
+                                "mailContent": mailContent
+                            }
+                            ,
+                            success: function (data) {
+                                $('#squarespaceModal').modal('hide'); // Show modal
+                                $('#SuccessModalSendMail').modal('show'); // Show modal
+                            }, error: function () {
+                                alert("FAIL!");
+                            }
+                        });
                     }
                 });
-            }
+            })
+
+            // function sendMailOneCustomer() {
+            //     var mailAddressReceive = emailPickUp;
+            //     var mailSubject = $("#text__mail-subject").val().trim();
+            //     // var mailContent = $.trim($("#text__mail-content").val().trim());
+            //     var mailContent = CKEDITOR.instances['text__mail-content'].getData();
+            //
+            //     console.log(mailAddressReceive + " " + mailSubject + " " + mailContent);
+            //     $.ajax({
+            //         url: "/gui-mail-khach-hang",
+            //         type: "POST",
+            //         data: {
+            //             "mailAddressReceive": mailAddressReceive,
+            //             "mailSubject": mailSubject,
+            //             "mailContent": mailContent
+            //         }
+            //         ,
+            //         success: function (data) {
+            //             $('#squarespaceModal').modal('hide'); // Show modal
+            //             $('#SuccessModalSendMail').modal('show'); // Show modal
+            //         }, error: function () {
+            //             alert("FAIL!");
+            //         }
+            //     });
+            // }
 
             function getIDKH() {
 
@@ -67,8 +109,8 @@
                     $("#name_customer_receive").html(namePickUp);
                 });
 
-                $("#text__mail-subject").val('');
-                CKEDITOR.instances['text__mail-content'].setData('');
+                $("#text_mail_subject").val('');
+                CKEDITOR.instances['text_mail_content'].setData('');
             }
 
             //Show user list
@@ -132,10 +174,10 @@
                     var ngayBDSD = $(this).find('td').eq(8).text();
                     $('#ngayBDSD_edit').val(ngayBDSD);
                     var mucDichSD = $(this).find('td').eq(9).text();
-                    if(mucDichSD=="Sinh hoạt"){
+                    if (mucDichSD == "Sinh hoạt") {
                         $('#MDSD_edit').children('option:first').text('Sinh hoạt');
                         $('#MDSD_edit').children('option:last').text('Sinh hoạt trả trước');
-                    }else{
+                    } else {
                         $('#MDSD_edit').children('option:first').text('Sinh hoạt trả trước');
                         $('#MDSD_edit').children('option:last').text('Sinh hoạt');
                     }
@@ -208,46 +250,109 @@
                 location.reload();
             }
 
-
-            //Serch user by iD
-            function searchCustomerByID() {
-                var customerID = $("#customer_ID_search").val().trim();
-                $.ajax({
-                    url: "/tim-kiem-khach-hang",
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        "customerID": customerID,
+            // tìm kiếm khách hàng = mã KH
+            $(function () {
+                $("#form_search_customer").validate({
+                    rules: {
+                        customer_ID_search: {
+                            required: true,
+                            digits: true,
+                            minlength: 4,
+                            maxlength: 4
+                        }
                     },
-                    success: function (data) {
-                        if (data.length == 0) {
-                            $('#SearchModalCustomer').modal('show');
+                    messages: {
+                        customer_ID_search: {
+                            required: "Vui lòng nhập mã KH",
+                            digits: "Vui lòng nhập kí tự số",
+                            minlength: "Vui lòng chỉ nhập 4 chữ số",
+                            maxlength: "Vui lòng chỉ nhập 4 chữ số"
                         }
-                        var contentString;
-                        for (var i = 0; i < data.length; i++) {
-                            contentString = contentString
-                                + '<tr role="row" class="odd">'
-                                + '<td>' + data[i][0] + '</td>'
-                                + '<td>' + data[i][1] + '</td>'
-                                + '<td>' + data[i][2] + '</td>'
-                                + '<td>' + data[i][3] + '</td>'
-                                + '<td>' + data[i][4] + '</td>'
-                                + '<td>' + data[i][5] + '</td>'
-                                + '<td>' + data[i][6] + '</td>'
-                                + '<td>' + data[i][7] + '</td>'
-                                + '<td>' + data[i][8] + '</td>'
-                                + '<td>' + data[i][9] + '</td>'
-                                + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block mb-1" style="padding: 5px 5px 5px 5px;"><i class="icon-mail-read"></i></button></a>' +
-                                '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-pencil"></i></button>' +
-                                '<a data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#confirmModalDeleteCustomer"  onclick="showConfirmDeleteCustomer()" class="btn btn-danger center-block" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
-                                + '</tr>';
-                        }
-                        $("#bang_khach_hang").html(contentString);
-                    }, error: function () {
-                        alert("FAIL!");
+                    },
+                    submitHandler: function () {
+                        var customerID = $("#customer_ID_search").val().trim();
+                        $.ajax({
+                            url: "/tim-kiem-khach-hang",
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                "customerID": customerID,
+                            },
+                            success: function (data) {
+                                if (data.length == 0) {
+                                    $('#SearchModalCustomer').modal('show');
+                                }
+                                var contentString;
+                                for (var i = 0; i < data.length; i++) {
+                                    contentString = contentString
+                                        + '<tr role="row" class="odd">'
+                                        + '<td>' + data[i][0] + '</td>'
+                                        + '<td>' + data[i][1] + '</td>'
+                                        + '<td>' + data[i][2] + '</td>'
+                                        + '<td>' + data[i][3] + '</td>'
+                                        + '<td>' + data[i][4] + '</td>'
+                                        + '<td>' + data[i][5] + '</td>'
+                                        + '<td>' + data[i][6] + '</td>'
+                                        + '<td>' + data[i][7] + '</td>'
+                                        + '<td>' + data[i][8] + '</td>'
+                                        + '<td>' + data[i][9] + '</td>'
+                                        + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block mb-1" style="padding: 5px 5px 5px 5px;"><i class="icon-mail-read"></i></button></a>' +
+                                        '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-pencil"></i></button>' +
+                                        '<a data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#confirmModalDeleteCustomer"  onclick="showConfirmDeleteCustomer()" class="btn btn-danger center-block" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
+                                        + '</tr>';
+                                }
+                                $("#bang_khach_hang").html(contentString);
+                            }, error: function () {
+                                alert("FAIL!");
+                            }
+                        });
                     }
                 });
-            }
+            })
+
+            //Serch user by iD
+            // function searchCustomerByID() {
+            //     var customerID = $("#customer_ID_search").val().trim();
+            //     if (customerID == "") {
+            //         showCustomerTable();
+            //     } else {
+            //         $.ajax({
+            //             url: "/tim-kiem-khach-hang",
+            //             type: "POST",
+            //             dataType: "json",
+            //             data: {
+            //                 "customerID": customerID,
+            //             },
+            //             success: function (data) {
+            //                 if (data.length == 0) {
+            //                     $('#SearchModalCustomer').modal('show');
+            //                 }
+            //                 var contentString;
+            //                 for (var i = 0; i < data.length; i++) {
+            //                     contentString = contentString
+            //                         + '<tr role="row" class="odd">'
+            //                         + '<td>' + data[i][0] + '</td>'
+            //                         + '<td>' + data[i][1] + '</td>'
+            //                         + '<td>' + data[i][2] + '</td>'
+            //                         + '<td>' + data[i][3] + '</td>'
+            //                         + '<td>' + data[i][4] + '</td>'
+            //                         + '<td>' + data[i][5] + '</td>'
+            //                         + '<td>' + data[i][6] + '</td>'
+            //                         + '<td>' + data[i][7] + '</td>'
+            //                         + '<td>' + data[i][8] + '</td>'
+            //                         + '<td>' + data[i][9] + '</td>'
+            //                         + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block mb-1" style="padding: 5px 5px 5px 5px;"><i class="icon-mail-read"></i></button></a>' +
+            //                         '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-pencil"></i></button>' +
+            //                         '<a data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#confirmModalDeleteCustomer"  onclick="showConfirmDeleteCustomer()" class="btn btn-danger center-block" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
+            //                         + '</tr>';
+            //                 }
+            //                 $("#bang_khach_hang").html(contentString);
+            //             }, error: function () {
+            //                 alert("FAIL!");
+            //             }
+            //         });
+            //     }
+            // }
 
             //Update user information
             function updateInforCustomer() {
@@ -281,7 +386,7 @@
                         "gioiTinh_update": gioiTinh_update,
                         "soDT_update": soDT_update,
                         "ngayBDSD_update": ngayBDSD_update,
-                        "MDSD_update":MDSD_update
+                        "MDSD_update": MDSD_update
                     },
                     success: function (data) {
                         $('.overlay_bang_khach_hang').hide();
@@ -344,23 +449,27 @@
                                         class="icon-plus-circle2"></i>Thêm khách hàng</a>
                             </div>
                         </div>
-                        <div class="d-flex align-items-end flex-nowrap flex-xl-nowrap"
-                             style="margin-left: auto; margin-right: 60px">
-                            <span class="mr-2">Tìm:</span>
-                            <input type="text" class="form-control text-dark flex-1 wmin-xl-200 border-bottom-1"
-                                   placeholder="Nhập mã khách hàng"
-                                   style="text-align: center; color: red !important; font-size: 13px"
-                                   id="customer_ID_search">
-                            <button data-toggle="tooltip" title="Tìm" class="btn btn-info center-block ml-1"
-                                    type="submit"
-                                    onclick="searchCustomerByID()"
-                                    style="padding: 5px 5px 0px 5px; border-radius: 10px"><i
-                                    class="icon-search4"></i></button>
-                        </div>
+                        <form id="form_search_customer">
+                            <div class="d-flex align-items-end flex-nowrap flex-xl-nowrap"
+                                 style="margin-left: auto; margin-right: 60px">
+                                <label class="mr-2 mb-0" for="customer_ID_search">Tìm:</label>
+                                <div style="position: relative">
+                                    <input type="text" class="form-control text-dark flex-1 wmin-xl-200 border-bottom-1"
+                                           placeholder="Nhập mã khách hàng"
+                                           style="text-align: center"
+                                           id="customer_ID_search" name="customer_ID_search">
+                                    <label class="error"></label>
+                                </div>
+                                <button data-toggle="tooltip" title="Tìm" class="btn btn-info center-block ml-1"
+                                        style="padding: 5px 5px 0px 5px; border-radius: 10px"><i
+                                        class="icon-search4 mb-1"></i></button>
+                            </div>
+                        </form>
                     </div>
                     <hr>
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
-                        <div class="datatable-scroll-wrap" style="overflow-y:scroll; max-height: 500px; text-align: center; margin-top: 30px">
+                        <div class="datatable-scroll-wrap"
+                             style="overflow-y:scroll; max-height: 500px; text-align: center; margin-top: 30px">
                             <table class="table datatable-responsive dataTable no-footer dtr-inline"
                                    id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
                                 <div class="overlay_bang_khach_hang"></div>
@@ -394,10 +503,10 @@
                             </li>
                             <hr>
                             <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                Mã KH:
-                                <input id="idKH_edit_input"
-                                       style="border: 1px #ececec solid; margin-left: 16px; display:none" size="40">
-                                <label id="idKH_edit" style="margin-left: 16px"></label>
+                                <label for="idKH_edit_input">Mã KH:</label>
+                                <input name="pin" type="number" id="idKH_edit_input"
+                                       style="border: 1px #ececec solid; margin-left: 16px; display:none" size="40"
+                                       maxlength="4" min="0000" title="Mã KH có 4 chữ số, VD: 0001">
                             </li>
                             <li class="nav__edit-input" style=" padding-bottom: 5px">
                                 Tên KH: <input id="ten_edit" style="border: 1px #ececec solid; margin-left: 14px"
@@ -470,34 +579,44 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"
-                                                                                       style="margin-right: 62px;">x</span><span
+                        <button data-toggle="tooltip" title="Đóng" type="button" class="close"
+                                data-dismiss="modal"><span aria-hidden="true"
+                                                           style="margin-right: 62px;">x</span><span
                                 class="sr-only">Close</span></button>
-                        <h3 class="modal-title" id="lineModalLabel">Mail Information</h3>
+                        <h3 class="modal-title" id="lineModalLabel" style="margin-right: 198px!important;">Thông tin
+                            mail</h3>
                     </div>
                     <div class="modal-body">
-                        <label>From: <span
+                        <label>Bên gửi: <span
                                 style="color: black; font-weight: bold; font-size: 16px">Electric Company</span></label>
                         <br>
-                        <label>To: <span id="mail_address_receive"
-                                         style="color: black; font-weight: bold; font-size: 16px; margin-right: 4px;"></span></label>
+                        <label>Bên nhận: <span id="mail_address_receive"
+                                               style="color: black; font-weight: bold; font-size: 16px; margin-right: 4px;"></span></label>
                         <label>(<span id="name_customer_receive"
-                                      style="color: coral; font-weight: bold; font-size: 16px;"></span>)</label>
-                        <label for="text__mail-content">
-                            Mail Subject:
-                            <input id="text__mail-subject" style="margin-left: 2px; width: 475px;"
-                                   placeholder="Enter subject mail">
-                        </label>
-                        <label for="text__mail-content">
-                            Content:
-                            <textarea id="text__mail-content"></textarea>
-                            <script>
-                                CKEDITOR.replace('text__mail-content');
-                            </script>
-                        </label>
-                        <button type="submit" class="btn btn-primary center-block" style="margin-left: 250px"
-                                id="btn__modal-send" onclick="sendMailOneCustomer()">Send
-                        </button>
+                                      style="color: #47a4ff; font-weight: bold; font-size: 16px;"></span>)</label>
+                        <form id="form_sendMail">
+                            <label for="text_mail_subject">
+                                Tiêu đề: </label>
+                            <div style="position: relative">
+                                <input id="text_mail_subject" name="text_mail_subject"
+                                       style="margin-left: 2px; width: 475px;"
+                                       placeholder="Nhập tiêu đề mail">
+                                <label class="error ml-2"></label>
+                            </div>
+                            <label for="text_mail_content">
+                                Nội dung:
+                                <div style="position: relative">
+                                    <textarea id="text_mail_content" name="text_mail_content"></textarea><br>
+                                    <script>
+                                        CKEDITOR.replace('text_mail_content');
+                                    </script>
+                                </div>
+                            </label>
+                            <button data-toggle="tooltip" title="Gửi" type="submit" class="btn btn-primary center-block"
+                                    style="margin-left: 250px"
+                                    id="btn__modal-send">Gửi mail
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -512,7 +631,7 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLongTitle"
                             style="margin-top: 32px;  margin-bottom: 43px;line-height: 1.5385;margin-left: 48px;">Không
-                            tìm được khách hàng !</h5>
+                            tìm được khách hàng</h5>
                         <i class="icon-warning" style="font-size: 70px; margin-right: 54px;"></i>
                     </div>
                 </div>
@@ -556,7 +675,8 @@
                             <h5 class="modal-title"><label>Mã khách hàng: <h5 id="customerIDDelete"></h5></label></h5>
                         </div>
                         <div class="modal-header">
-                            <h5 class="modal-title"> <label>Tên khách hàng: <h5 id="customerNameDelete"></h5></label></h5>
+                            <h5 class="modal-title"><label>Tên khách hàng: <h5 id="customerNameDelete"></h5></label>
+                            </h5>
                         </div>
                     </div>
                     <div class="modal-footer">
