@@ -47,10 +47,8 @@ public class ConfigController {
     @PostMapping("/cap-nhat-don-gia")
     @ResponseBody
     public String updateDonGia(@RequestParam("idDonGia") int idDonGia,
-                               @RequestParam("giaMoi") int giaMoi,
-                               @RequestParam("ghiChuMoi") String ghiChuMoi){
-        DonGia dongia = new DonGia(idDonGia,giaMoi,ghiChuMoi);
-        donGiaDAO.update(dongia);
+                               @RequestParam("giaMoi") int giaMoi){
+        donGiaDAO.update(idDonGia,giaMoi);
         return "OK";
     }
 

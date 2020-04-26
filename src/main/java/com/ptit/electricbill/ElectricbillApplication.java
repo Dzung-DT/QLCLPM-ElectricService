@@ -23,10 +23,6 @@ public class ElectricbillApplication extends WebSecurityConfigurerAdapter implem
     private UrlAuthenSuccessHandler urlAuthenSuccessHandler;
 
     public static void main(String[] args) {
-        String password = "0123456789";
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String hashedPassword = passwordEncoder.encode(password);
-        System.out.println(hashedPassword);
         SpringApplication.run(ElectricbillApplication.class, args);
     }
 

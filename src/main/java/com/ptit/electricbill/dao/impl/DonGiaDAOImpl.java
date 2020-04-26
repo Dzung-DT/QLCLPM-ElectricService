@@ -26,8 +26,8 @@ public class DonGiaDAOImpl implements DonGiaDAO {
     }
 
     @Override
-    public void update(DonGia donGia) {
-        String sql = "UPDATE dongia SET Gia = '"+donGia.getGia()+"',GhiChu = '"+ donGia.getGhiChu()+"' WHERE (MaDG = '"+donGia.getMaDonGia()+"')";
+    public void update(int MaDG, int gia) {
+        String sql = "UPDATE dongia SET Gia = '"+gia+"' WHERE (MaDG = '"+MaDG+"')";
         Query query = entityManager.createNativeQuery(sql);
         query.executeUpdate();
     }

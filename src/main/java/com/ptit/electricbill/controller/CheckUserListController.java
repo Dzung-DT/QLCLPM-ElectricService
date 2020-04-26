@@ -3,8 +3,11 @@ package com.ptit.electricbill.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptit.electricbill.dao.KhachHangDAO;
+import com.ptit.electricbill.dao.UserDAO;
 import com.ptit.electricbill.model.KhachHang;
+import com.ptit.electricbill.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +21,8 @@ public class CheckUserListController {
 
     @Autowired
     private KhachHangDAO khachHangDAO;
+    @Autowired
+    private UserDAO userDAO;
 
     @GetMapping("/trang-chu")
     public String dashboard() {
@@ -82,6 +87,13 @@ public class CheckUserListController {
                               @RequestParam("MDSD_add") String MDSD_add) {
         KhachHang KH = new KhachHang(idKH_add, tenKH_add, dob_add, soCmnd_add, diaChi_add, gioiTinh_add, soDT_add, ngayBDSD_add, mail_add, MDSD_add);
         khachHangDAO.addKH(KH);
+        String password = soCmnd_add;
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(password);
+        if(userDAO.checkExistUser(mail_add)==false){
+            User user = new User(mail_add,hashedPassword,"USER");
+            userDAO.addUser(user);
+        }
         return "OK";
     }
 

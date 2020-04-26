@@ -9,6 +9,10 @@
             width: 200px;
             position: absolute;
         }
+
+        .dropdown-menu {
+            left: 30px !important;
+        }
     </style>
 </head>
 <body>
@@ -118,9 +122,9 @@
                                 + '<td>' + data[i][7] + '</td>'
                                 + '<td>' + data[i][8] + '</td>'
                                 + '<td>' + data[i][9] + '</td>'
-                                + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block mb-1" style="padding: 5px 5px 5px 5px;"><i class="icon-mail-read"></i></button></a>' +
-                                '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-pencil"></i></button>' +
-                                '<a data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#confirmModalDeleteCustomer"  onclick="showConfirmDeleteCustomer()" class="btn btn-danger center-block" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
+                                + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block mb-1" style="padding: 1px 1px 1px 1px;"><i class="icon-mail-read"></i></button></a>' +
+                                '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-pencil"></i></button>' +
+                                '<a data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#confirmModalDeleteCustomer"  onclick="showConfirmDeleteCustomer()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
                                 + '</tr>';
                         }
                         $("#bang_khach_hang").html(contentString);
@@ -185,9 +189,9 @@
                                         + '<td>' + data[i][7] + '</td>'
                                         + '<td>' + data[i][8] + '</td>'
                                         + '<td>' + data[i][9] + '</td>'
-                                        + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block mb-1" style="padding: 5px 5px 5px 5px;"><i class="icon-mail-read"></i></button></a>' +
-                                        '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-pencil"></i></button>' +
-                                        '<a data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#confirmModalDeleteCustomer"  onclick="showConfirmDeleteCustomer()" class="btn btn-danger center-block" style="padding: 5px 5px 5px 5px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
+                                        + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block mb-1" style="padding: 1px 1px 1px 1px;"><i class="icon-mail-read"></i></button></a>' +
+                                        '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="icon-pencil"></i></button>' +
+                                        '<a data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#confirmModalDeleteCustomer"  onclick="showConfirmDeleteCustomer()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
                                         + '</tr>';
                                 }
                                 $("#bang_khach_hang").html(contentString);
@@ -315,10 +319,10 @@
                                 "MDSD_add": MDSD_add
                             },
                             success: function (data) {
-                                $('.overlay_bang_khach_hang').hide();
                                 $('.nav__add-customer').hide();
+                                $('.overlay_bang_khach_hang').hide();
                                 $('#SuccessModalSendMail').modal('show');
-                                location.reload();
+                                showCustomerTable();
                             }, error: function () {
                                 alert("FAIL!");
                             }
@@ -473,7 +477,7 @@
                                 $('.nav__edit-customer').hide();
                                 $('.overlay_bang_khach_hang').hide();
                                 $('#SuccessModalSendMail').modal('show');
-                                location.reload();
+                                showCustomerTable();
                             }, error: function () {
                                 alert("FAIL!");
                             }
@@ -529,7 +533,7 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" x-placement="top-end"
-                                 style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-83px, -45px, 0px);">
+                                 style="position: absolute; will-change: transform; top: 0; left: 0; transform: translate3d(-83px, -45px, 0px);">
                                 <a th:href="@{/trang-chu}" class="dropdown-item"><i class="icon-accessibility"></i>Danh
                                     sách khách hàng</a>
                                 <div class="dropdown-divider"></div>
@@ -851,15 +855,16 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Do you want to delete ?</h5>
+                        <h4 class="modal-title" style="color: red; font-weight: bold">Bạn muốn xóa khách hàng này ?</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="modal-header">
-                            <h5 class="modal-title"><label>Mã khách hàng: <h5 id="customerIDDelete"></h5></label></h5>
+                        <div style="display: flex">
+                            <h5 class="modal-title" style="margin-right: 30px">Mã khách hàng:</h5>
+                            <h5 id="customerIDDelete"></h5>
                         </div>
-                        <div class="modal-header">
-                            <h5 class="modal-title"><label>Tên khách hàng: <h5 id="customerNameDelete"></h5></label>
-                            </h5>
+                        <div style="display: flex">
+                            <h5 class="modal-title" style="margin-right: 27px">Tên khách hàng:</h5>
+                            <h5 id="customerNameDelete"></h5>
                         </div>
                     </div>
                     <div class="modal-footer">

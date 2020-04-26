@@ -19,7 +19,7 @@ public class DienKeDAOImpl implements DienKeDAO{
 
     @Override
     public List<Object> getAll() {
-        String sql = "SELECT  * from dienke";
+        String sql = "SELECT  * from dienke order by MaThang desc";
         Query query = entityManager.createNativeQuery(sql);
         List<Object> dienKeList = query.getResultList();
         return dienKeList;
