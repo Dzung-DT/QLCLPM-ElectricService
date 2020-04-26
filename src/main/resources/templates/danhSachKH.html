@@ -78,7 +78,7 @@
                             }
                             ,
                             success: function (data) {
-                                $('#squarespaceModal').modal('hide'); // Show modal
+                                $('#SendMailModal').modal('hide'); // Show modal
                                 $('#SuccessModalSendMail').modal('show'); // Show modal
                             }, error: function () {
                                 alert("FAIL!");
@@ -122,7 +122,7 @@
                                 + '<td>' + data[i][7] + '</td>'
                                 + '<td>' + data[i][8] + '</td>'
                                 + '<td>' + data[i][9] + '</td>'
-                                + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block mb-1" style="padding: 1px 1px 1px 1px;"><i class="icon-mail-read"></i></button></a>' +
+                                + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#SendMailModal" class="btn btn-primary center-block mb-1" style="padding: 1px 1px 1px 1px;"><i class="icon-mail-read"></i></button></a>' +
                                 '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-pencil"></i></button>' +
                                 '<a data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#confirmModalDeleteCustomer"  onclick="showConfirmDeleteCustomer()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
                                 + '</tr>';
@@ -173,7 +173,8 @@
                             },
                             success: function (data) {
                                 if (data.length == 0) {
-                                    $('#SearchModalCustomer').modal('show');
+                                    $('#error_status').text('Khách hàng không tồn tại');
+                                    $('#ErrorModal').modal('show');
                                 }
                                 var contentString;
                                 for (var i = 0; i < data.length; i++) {
@@ -189,7 +190,7 @@
                                         + '<td>' + data[i][7] + '</td>'
                                         + '<td>' + data[i][8] + '</td>'
                                         + '<td>' + data[i][9] + '</td>'
-                                        + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#squarespaceModal" class="btn btn-primary center-block mb-1" style="padding: 1px 1px 1px 1px;"><i class="icon-mail-read"></i></button></a>' +
+                                        + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#SendMailModal" class="btn btn-primary center-block mb-1" style="padding: 1px 1px 1px 1px;"><i class="icon-mail-read"></i></button></a>' +
                                         '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="icon-pencil"></i></button>' +
                                         '<a data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#confirmModalDeleteCustomer"  onclick="showConfirmDeleteCustomer()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
                                         + '</tr>';
@@ -321,10 +322,12 @@
                             success: function (data) {
                                 $('.nav__add-customer').hide();
                                 $('.overlay_bang_khach_hang').hide();
+                                $('#success_status').text(data);
                                 $('#SuccessModalSendMail').modal('show');
                                 showCustomerTable();
-                            }, error: function () {
-                                alert("FAIL!");
+                            }, error: function (data) {
+                                $('#error_status').text(data.responseText);
+                                $('#ErrorModal').modal('show');
                             }
                         });
                     }
@@ -476,10 +479,12 @@
                             success: function (data) {
                                 $('.nav__edit-customer').hide();
                                 $('.overlay_bang_khach_hang').hide();
+                                $('#success_status').text(data);
                                 $('#SuccessModalSendMail').modal('show');
                                 showCustomerTable();
-                            }, error: function () {
-                                alert("FAIL!");
+                            }, error: function (data) {
+                                $('#error_status').text(data.responseText);
+                                $('#ErrorModal').modal('show');
                             }
                         });
                     }
@@ -505,7 +510,8 @@
                     },
                     success: function (data) {
                         $('#confirmModalDeleteCustomer').modal('hide');
-                        $('#SuccessModalSendMail').modal('show'); // Show modal
+                        $('#success_status').text(data);
+                        $('#SuccessModalSendMail').modal('show');
                         showCustomerTable();
                     }, error: function () {
                         alert("FAIL!");
@@ -514,7 +520,6 @@
             }
 
             function closeEditForm() {
-
                 location.reload();
             }
 
@@ -761,7 +766,7 @@
             </div>
         </div>
         <!--Start Modal send mail-->
-        <div class="modal fade alert" id="squarespaceModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+        <div class="modal fade alert" id="SendMailModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
              aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -811,14 +816,13 @@
         <!--End Modal send mail-->
 
         <!--Start Modal Search Customer Status -->
-        <div class="modal fade" id="SearchModalCustomer" tabindex="-1" role="dialog"
+        <div class="modal fade" id="ErrorModal" tabindex="-1" role="dialog"
              aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content bg-warning">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle"
-                            style="margin-top: 32px;  margin-bottom: 43px;line-height: 1.5385;margin-left: 48px;">Không
-                            tìm được khách hàng</h5>
+                        <h5 class="modal-title" id="error_status"
+                            style="margin-top: 32px;  margin-bottom: 43px;line-height: 1.5385;margin-left: 48px;"></h5>
                         <i class="icon-warning" style="font-size: 70px; margin-right: 54px;"></i>
                     </div>
                 </div>
@@ -833,8 +837,8 @@
                 <div class="modal-content bg-success-600">
                     <div class="modal-header">
                         <h5 class="modal-title"
-                            style="margin-top: 32px;  margin-bottom: 43px;line-height: 1.5385;margin-left: 48px;">Thành
-                            công!</h5>
+                            style="margin-top: 32px;  margin-bottom: 43px;line-height: 1.5385;margin-left: 48px;"
+                            id="success_status"></h5>
                         <svg id="successAnimation" class="animated" xmlns="http://www.w3.org/2000/svg" width="70"
                              height="70" viewBox="0 0 70 70">
                             <path id="successAnimationResult" fill="#D8D8D8"
