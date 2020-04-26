@@ -23,6 +23,16 @@
                     $('#loadingDiv').remove();
                 });
                 showCustomerTable();
+                $("#dob_add").datepicker(
+                    {
+                        format: 'dd/mm/yyyy'
+                    }
+                );
+                $("#ngayBDSD_add").datepicker(
+                    {
+                        format: 'dd/mm/yyyy'
+                    }
+                );
                 $("#dob_edit").datepicker(
                     {
                         format: 'dd/mm/yyyy'
@@ -34,7 +44,6 @@
                     }
                 );
             });
-
 
             // Send mail
             var emailPickUp;
@@ -121,142 +130,14 @@
                 });
             }
 
-            // Nav form edit
-            function showEditForm() {
-                $('.overlay_bang_khach_hang').show();
-                $('.nav__edit-customer').show();
-                $('#bang_khach_hang').find('tr').click(function () {
-                    var idKH = $(this).find('td').eq(0).text();
-                    $('#idKH_edit').html(idKH);
-                    var tenKH = $(this).find('td').eq(1).text();
-                    $('#ten_edit').val(tenKH);
-                    var dob = $(this).find('td').eq(2).text();
-                    $('#dob_edit').val(dob);
-                    var soCmnd = $(this).find('td').eq(3).text();
-                    $('#soCmnd_edit').val(soCmnd);
-                    var diaChi = $(this).find('td').eq(4).text();
-                    $('#diaChi_edit').val(diaChi);
-                    var mail = $(this).find('td').eq(5).text();
-                    $('#mail_edit').val(mail);
-                    var gioiTinh = $(this).find('td').eq(6).text();
-                    if (gioiTinh.trim() == 'Nam') {
-                        $('input:checkbox[name=nam]').attr('checked', true);
-                    } else if (gioiTinh.trim() == 'Nữ') {
-                        $('input:checkbox[name=nu]').attr('checked', true);
-                    }
-                    var soDT = $(this).find('td').eq(7).text();
-                    $('#sdt_edit').val(soDT);
-                    var ngayBDSD = $(this).find('td').eq(8).text();
-                    $('#ngayBDSD_edit').val(ngayBDSD);
-                    var mucDichSD = $(this).find('td').eq(9).text();
-                    if (mucDichSD == "Sinh hoạt") {
-                        $('#MDSD_edit').children('option:first').text('Sinh hoạt');
-                        $('#MDSD_edit').children('option:last').text('Sinh hoạt trả trước');
-                    } else {
-                        $('#MDSD_edit').children('option:first').text('Sinh hoạt trả trước');
-                        $('#MDSD_edit').children('option:last').text('Sinh hoạt');
-                    }
-                });
-
-            }
-
             function showAddFormCustomer() {
                 $('.overlay_bang_khach_hang').show();
-                $('.nav__edit-customer').show();
-                $('#idKH_edit_input').show();
-                $('#title_addUser').show();
-                $('#btn-add-user').show();
-                $('#title_editUser').hide();
-                $('#idKH_edit').hide();
-                $('#btn-edit-user').hide();
+                $('.nav__add-customer').show();
             }
 
-            jQuery.validator.addMethod("checkChar", function(value, element, param) {
+            jQuery.validator.addMethod("checkChar", function (value, element, param) {
                 return value.match(new RegExp("." + param + "$"));
             });
-            // field: { checkChar: "[0-9]+" }
-            // field: { checkChar: "[a-zA-Z]+" }
-
-            $(function () {
-                $("#add_edit_form").validate({
-                    rules: {
-                        idKH_edit_input: {
-                            required: true,
-                            digits: true,
-                            minlength: 4,
-                            maxlength: 4
-                        },
-                        ten_edit:{
-                            required:true,
-                            checkChar: "[a-zA-Z]+"
-                        }
-                    },
-                    messages: {
-                        idKH_edit_input: {
-                            required: "Vui lòng nhập mã KH",
-                            digits: "Vui lòng nhập kí tự số",
-                            minlength: "Vui lòng chỉ nhập 4 chữ số",
-                            maxlength: "Vui lòng chỉ nhập 4 chữ số"
-                        },
-                        ten_edit:{
-                            required: "Vui lòng nhập tên KH",
-                            checkChar: "Vui lòng chỉ nhập kí tự alphabet"
-                        }
-                    },
-                    submitHandler: function () {
-                        var idKH_add = $('#idKH_edit_input').val().trim();
-                        var tenKH_add = $('#ten_edit').val().trim();
-                        var dob_add = $('#dob_edit').val().trim();
-                        var soCmnd_add = $('#soCmnd_edit').val().trim();
-                        var diaChi_add = $('#diaChi_edit').val().trim();
-                        var mail_add = $('#mail_edit').val().trim();
-                        var gioiTinh_add;
-                        if ($('#nam_checkbox_edit').is(':checked')) {
-                            gioiTinh_add = $('#nam_checkbox_edit').val().trim();
-                        } else if ($('#nu_checkbox_edit').is(':checked')) {
-                            gioiTinh_add = $('#nu_checkbox_edit').val().trim();
-                        }
-                        var soDT_add = $('#sdt_edit').val().trim();
-                        var ngayBDSD_add = $('#ngayBDSD_edit').val().trim();
-                        var MDSD_add = $("#MDSD_edit option:selected").text().trim();
-
-                        $.ajax({
-                            url: "/them-khach-hang",
-                            type: "POST",
-                            data: {
-                                "idKH_add": idKH_add,
-                                "tenKH_add": tenKH_add,
-                                "dob_add": dob_add,
-                                "soCmnd_add": soCmnd_add,
-                                "diaChi_add": diaChi_add,
-                                "mail_add": mail_add,
-                                "gioiTinh_add": gioiTinh_add,
-                                "soDT_add": soDT_add,
-                                "ngayBDSD_add": ngayBDSD_add,
-                                "MDSD_add": MDSD_add
-                            },
-                            success: function (data) {
-                                $('.overlay_bang_khach_hang').hide();
-                                $('.nav__edit-customer').hide();
-                                $('#idKH_edit_input').hide();
-                                $('#title_addUser').hide();
-                                $('#btn-add-user').hide();
-                                $('#SuccessModalSendMail').modal('show'); // Show modal
-                                // showCustomerTable();
-                                location.reload();
-                            }, error: function () {
-                                alert("FAIL!");
-                            }
-                        });
-                    }
-                });
-            })
-
-            function closeEditForm() {
-                // $('.overlay_bang_khach_hang').hide();
-                // $('.nav__edit-customer').hide();
-                location.reload();
-            }
 
             // tìm kiếm khách hàng = mã KH
             $(function () {
@@ -318,50 +199,288 @@
                 });
             })
 
-            //Update user information
-            function updateInforCustomer() {
-                var idKH_update = $('#idKH_edit').text().trim();
-                var tenKH_update = $('#ten_edit').val().trim();
-                var dob_update = $('#dob_edit').val().trim();
-                var soCmnd_update = $('#soCmnd_edit').val().trim();
-                var diaChi_update = $('#diaChi_edit').val().trim();
-                var mail_update = $('#mail_edit').val().trim();
-                var gioiTinh_update;
-                if ($('#nam_checkbox_edit').is(':checked')) {
-                    gioiTinh_update = $('#nam_checkbox_edit').val().trim();
-                } else if ($('#nu_checkbox_edit').is(':checked')) {
-                    gioiTinh_update = $('#nu_checkbox_edit').val().trim();
-                }
-                var soDT_update = $('#sdt_edit').val().trim();
-                var ngayBDSD_update = $('#ngayBDSD_edit').val().trim();
-                var MDSD_update = $("#MDSD_edit option:selected").text().trim();
-
-                $.ajax({
-                    url: "/cap-nhat-thong-tin-khach-hang",
-                    type: "POST",
-                    data: {
-                        "idKH_update": idKH_update,
-                        "tenKH_update": tenKH_update,
-                        "dob_update": dob_update,
-                        "soCmnd_update": soCmnd_update,
-                        "diaChi_update": diaChi_update,
-                        "mail_update": mail_update,
-                        "gioiTinh_update": gioiTinh_update,
-                        "soDT_update": soDT_update,
-                        "ngayBDSD_update": ngayBDSD_update,
-                        "MDSD_update": MDSD_update
+            //thêm khách hàng
+            $(function () {
+                $("#add_form").validate({
+                    rules: {
+                        idKH_add_input: {
+                            required: true,
+                            digits: true,
+                            minlength: 4,
+                            maxlength: 4
+                        },
+                        ten_add: {
+                            required: true,
+                            checkChar: "[a-zA-Z]+",
+                            maxlength: 20
+                        },
+                        dob_add: {
+                            required: true
+                        },
+                        soCmnd_add: {
+                            required: true,
+                            checkChar: "[0-9]+",
+                            minlength: 9,
+                            maxlength: 9
+                        },
+                        diaChi_add: {
+                            required: true,
+                            maxlength: 100
+                        },
+                        mail_add: {
+                            required: true,
+                            email: true,
+                            maxlength: 45
+                        },
+                        sdt_add: {
+                            required: true,
+                            checkChar: "[0-9]+",
+                            minlength: 10,
+                            maxlength: 10
+                        },
+                        ngayBDSD_add: {
+                            required: true
+                        }
                     },
-                    success: function (data) {
-                        $('.overlay_bang_khach_hang').hide();
-                        $('.nav__edit-customer').hide();
-                        $('#SuccessModalSendMail').modal('show'); // Show modal
-                        // showCustomerTable();
-                        location.reload();
-                    }, error: function () {
-                        alert("FAIL!");
+                    messages: {
+                        idKH_add_input: {
+                            required: "Vui lòng nhập mã KH",
+                            digits: "Chỉ nhập kí tự số",
+                            minlength: "Chỉ nhập 4 chữ số",
+                            maxlength: "Chỉ nhập 4 chữ số"
+                        },
+                        ten_add: {
+                            required: "Vui lòng nhập tên KH",
+                            checkChar: "Chỉ nhập kí tự alphabet",
+                            maxlength: "Bạn nhập quá dài"
+                        },
+                        dob_add: {
+                            required: "Vui lòng chọn ngày sinh"
+                        },
+                        soCmnd_add: {
+                            required: "Vui lòng nhập số CMND",
+                            checkChar: "Chỉ nhập kí tự số",
+                            minlength: "Chỉ nhập 9 chữ số",
+                            maxlength: "Chỉ nhập 9 chữ số"
+                        },
+                        diaChi_add: {
+                            required: "Vui lòng nhập mã KH",
+                            maxlength: "Bạn nhập quá dài"
+                        },
+                        mail_add: {
+                            required: "VUi lòng nhập mail",
+                            email: "Không phải gmail",
+                            maxlength: "Bạn nhập quá dài"
+                        },
+                        sdt_add: {
+                            required: "Vui lòng nhập số đt",
+                            checkChar: "Chỉ nhập kí tự số",
+                            minlength: "Chỉ nhập 10 chữ số",
+                            maxlength: "Chỉ nhập 10 chữ số"
+                        },
+                        ngayBDSD_add: {
+                            required: "Vui lòng chọn ngày SD",
+                        }
+                    },
+                    submitHandler: function () {
+                        var idKH_add = $('#idKH_add_input').val().trim();
+                        var tenKH_add = $('#ten_add').val().trim();
+                        var dob_add = $('#dob_add').val().trim();
+                        var soCmnd_add = $('#soCmnd_add').val().trim();
+                        var diaChi_add = $('#diaChi_add').val().trim();
+                        var mail_add = $('#mail_add').val().trim();
+                        var gioiTinh_add;
+                        if ($('#nam_checkbox_add').is(':checked')) {
+                            gioiTinh_add = $('#nam_checkbox_add').val().trim();
+                        } else if ($('#nu_checkbox_add').is(':checked')) {
+                            gioiTinh_add = $('#nu_checkbox_add').val().trim();
+                        }
+                        var soDT_add = $('#sdt_add').val().trim();
+                        var ngayBDSD_add = $('#ngayBDSD_add').val().trim();
+                        var MDSD_add = $("#MDSD_add option:selected").text().trim();
+
+                        $.ajax({
+                            url: "/them-khach-hang",
+                            type: "POST",
+                            data: {
+                                "idKH_add": idKH_add,
+                                "tenKH_add": tenKH_add,
+                                "dob_add": dob_add,
+                                "soCmnd_add": soCmnd_add,
+                                "diaChi_add": diaChi_add,
+                                "mail_add": mail_add,
+                                "gioiTinh_add": gioiTinh_add,
+                                "soDT_add": soDT_add,
+                                "ngayBDSD_add": ngayBDSD_add,
+                                "MDSD_add": MDSD_add
+                            },
+                            success: function (data) {
+                                $('.overlay_bang_khach_hang').hide();
+                                $('.nav__add-customer').hide();
+                                $('#SuccessModalSendMail').modal('show');
+                                location.reload();
+                            }, error: function () {
+                                alert("FAIL!");
+                            }
+                        });
                     }
                 });
+            })
+
+            // Nav form edit
+            function showEditForm() {
+                $('.overlay_bang_khach_hang').show();
+                $('.nav__edit-customer').show();
+                $('#bang_khach_hang').find('tr').click(function () {
+                    var idKH = $(this).find('td').eq(0).text();
+                    $('#idKH_edit_input').val(idKH);
+                    var tenKH = $(this).find('td').eq(1).text();
+                    $('#ten_edit').val(tenKH);
+                    var dob = $(this).find('td').eq(2).text();
+                    $('#dob_edit').val(dob);
+                    var soCmnd = $(this).find('td').eq(3).text();
+                    $('#soCmnd_edit').val(soCmnd);
+                    var diaChi = $(this).find('td').eq(4).text();
+                    $('#diaChi_edit').val(diaChi);
+                    var mail = $(this).find('td').eq(5).text();
+                    $('#mail_edit').val(mail);
+                    var gioiTinh = $(this).find('td').eq(6).text();
+                    if (gioiTinh.trim() == 'Nam') {
+                        $('input:checkbox[name=nam]').attr('checked', true);
+                    } else if (gioiTinh.trim() == 'Nữ') {
+                        $('input:checkbox[name=nu]').attr('checked', true);
+                    }
+                    var soDT = $(this).find('td').eq(7).text();
+                    $('#sdt_edit').val(soDT);
+                    var ngayBDSD = $(this).find('td').eq(8).text();
+                    $('#ngayBDSD_edit').val(ngayBDSD);
+                    var mucDichSD = $(this).find('td').eq(9).text();
+                    if (mucDichSD == "Sinh hoạt") {
+                        $('#MDSD_edit').children('option:first').text('Sinh hoạt');
+                        $('#MDSD_edit').children('option:last').text('Sinh hoạt trả trước');
+                    } else {
+                        $('#MDSD_edit').children('option:first').text('Sinh hoạt trả trước');
+                        $('#MDSD_edit').children('option:last').text('Sinh hoạt');
+                    }
+                });
+
             }
+
+            //Update user information
+            $(function () {
+                $("#edit_form").validate({
+                    rules: {
+                        ten_edit: {
+                            required: true,
+                            checkChar: "[a-zA-Z]+",
+                            maxlength: 20
+                        },
+                        dob_edit: {
+                            required: true
+                        },
+                        soCmnd_edit: {
+                            required: true,
+                            checkChar: "[0-9]+",
+                            minlength: 9,
+                            maxlength: 9
+                        },
+                        diaChi_edit: {
+                            required: true,
+                            maxlength: 100
+                        },
+                        mail_edit: {
+                            required: true,
+                            email: true,
+                            maxlength: 45
+                        },
+                        sdt_edit: {
+                            required: true,
+                            checkChar: "[0-9]+",
+                            minlength: 10,
+                            maxlength: 10
+                        },
+                        ngayBDSD_edit: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        ten_edit: {
+                            required: "Vui lòng nhập tên KH",
+                            checkChar: "Chỉ nhập kí tự alphabet",
+                            maxlength: "Bạn nhập quá dài"
+                        },
+                        dob_edit: {
+                            required: "Vui lòng chọn ngày sinh"
+                        },
+                        soCmnd_edit: {
+                            required: "Vui lòng nhập số CMND",
+                            checkChar: "Chỉ nhập kí tự số",
+                            minlength: "Chỉ nhập 9 chữ số",
+                            maxlength: "Chỉ nhập 9 chữ số"
+                        },
+                        diaChi_edit: {
+                            required: "Vui lòng nhập mã KH",
+                            maxlength: "Bạn nhập quá dài"
+                        },
+                        mail_edit: {
+                            required: "VUi lòng nhập mail",
+                            email: "Không phải gmail",
+                            maxlength: "Bạn nhập quá dài"
+                        },
+                        sdt_edit: {
+                            required: "Vui lòng nhập số đt",
+                            checkChar: "Chỉ nhập kí tự số",
+                            minlength: "Chỉ nhập 10 chữ số",
+                            maxlength: "Chỉ nhập 10 chữ số"
+                        },
+                        ngayBDSD_edit: {
+                            required: "Vui lòng chọn ngày SD",
+                        }
+                    },
+                    submitHandler: function () {
+                        var idKH_update = $('#idKH_edit_input').val().trim();
+                        var tenKH_update = $('#ten_edit').val().trim();
+                        var dob_update = $('#dob_edit').val().trim();
+                        var soCmnd_update = $('#soCmnd_edit').val().trim();
+                        var diaChi_update = $('#diaChi_edit').val().trim();
+                        var mail_update = $('#mail_edit').val().trim();
+                        var gioiTinh_update;
+                        if ($('#nam_checkbox_edit').is(':checked')) {
+                            gioiTinh_update = $('#nam_checkbox_edit').val().trim();
+                        } else if ($('#nu_checkbox_edit').is(':checked')) {
+                            gioiTinh_update = $('#nu_checkbox_edit').val().trim();
+                        }
+                        var soDT_update = $('#sdt_edit').val().trim();
+                        var ngayBDSD_update = $('#ngayBDSD_edit').val().trim();
+                        var MDSD_update = $("#MDSD_edit option:selected").text().trim();
+
+                        $.ajax({
+                            url: "/cap-nhat-thong-tin-khach-hang",
+                            type: "POST",
+                            data: {
+                                "idKH_update": idKH_update,
+                                "tenKH_update": tenKH_update,
+                                "dob_update": dob_update,
+                                "soCmnd_update": soCmnd_update,
+                                "diaChi_update": diaChi_update,
+                                "mail_update": mail_update,
+                                "gioiTinh_update": gioiTinh_update,
+                                "soDT_update": soDT_update,
+                                "ngayBDSD_update": ngayBDSD_update,
+                                "MDSD_update": MDSD_update
+                            },
+                            success: function (data) {
+                                $('.nav__edit-customer').hide();
+                                $('.overlay_bang_khach_hang').hide();
+                                $('#SuccessModalSendMail').modal('show');
+                                location.reload();
+                            }, error: function () {
+                                alert("FAIL!");
+                            }
+                        });
+                    }
+                });
+            })
 
             function showConfirmDeleteCustomer() {
                 $('#bang_khach_hang').find('tr').click(function () {
@@ -389,6 +508,12 @@
                     }
                 });
             }
+
+            function closeEditForm() {
+
+                location.reload();
+            }
+
         </script>
     </header>
     <section class="container-fluid" layout:fragment="content_body">
@@ -456,22 +581,107 @@
                             </table>
                         </div>
                     </div>
-                    <form id="add_edit_form">
-                        <nav class="nav__edit-customer">
-                            <ul class="nav__edit-list" style="padding-top: 16px">
-                                <li class="nav__edit-input">
-                                    <i class="icon-users">
-                                        <span class="ml-2 mt-2" style="font-size: 22px; color: #0f74a8"
-                                              id="title_editUser">Cập nhật thông tin người dùng</span></i>
+
+                    <nav class="nav__add-customer">
+                        <ul class="nav__edit-list" style="padding-top: 16px">
+                            <li class="nav__edit-input">
+                                <i class="icon-users">
                                     <span class="ml-3 mt-2"
-                                          style="font-size: 22px; color: #0f74a8; display: none" id="title_addUser">Thêm người dùng</span></i>
+                                          style="font-size: 22px; color: #0f74a8;"
+                                          id="title_addUser">Thêm người dùng</span></i>
+                                <i class="icon-close2" style="color: red; margin-top: 1px; margin-left: 260px;"
+                                   data-toggle="tooltip" title="Đóng" onclick="closeEditForm()"></i>
+                            </li>
+                            <hr>
+                            <form id="add_form">
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    <label>Mã KH:</label>
+                                    <input name="idKH_add_input" id="idKH_add_input"
+                                           style="border: 1px #ececec solid; margin-left: 16px;" size="40">
+                                    <label class="error"></label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    Tên KH: <input id="ten_add" name="ten_add"
+                                                   style="border: 1px #ececec solid; margin-left: 14px"
+                                                   size="40">
+                                    <label class="error"></label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    Ngày sinh: <input id="dob_add" name="dob_add" placeholder="Chọn ngày sinh"
+                                                      style="border: 1px #ececec solid" size="40">
+                                    <label class="error"></label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    Số CMND: <input id="soCmnd_add" name="soCmnd_add"
+                                                    style="border: 1px #ececec solid; margin-left: 1px"
+                                                    size="40">
+                                    <label class="error"></label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    Địa chỉ: <textarea id="diaChi_add" name="diaChi_add"
+                                                       style="border: 1px #ececec solid" cols="50"
+                                                       rows="2"></textarea>
+                                    <label class="error"></label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    Mail: <input id="mail_add" name="mail_add"
+                                                 style="border: 1px #ececec solid; margin-left: 1px" size="45">
+                                    <label class="error"></label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    Giới tính:
+                                    <input type="checkbox" id="nam_checkbox_add" name="nam" value="Nam"
+                                           style="margin-left: 80px">
+                                    <label for="nam_checkbox_edit">Nam</label>
+                                    <input type="checkbox" id="nu_checkbox_add" name="nu" value="Nữ"
+                                           style="margin-left: 30px">
+                                    <label for="nu_checkbox_edit">Nữ</label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    Số ĐT: <input id="sdt_add" name="sdt_add"
+                                                  style="border: 1px #ececec solid;margin-left: 3px"
+                                                  size="43">
+                                    <label class="error"></label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    Ngày BĐSD: <input id="ngayBDSD_add" name="ngayBDSD_add"
+                                                      placeholder="Chọn ngày sử dụng"
+                                                      style="border: 1px #ececec solid; margin-left: 1px" size="38">
+                                    <label class="error"></label>
+                                </li>
+                                <li class="nav__edit-input" style=" padding-bottom: 5px">
+                                    Mục đích SD:
+                                    <select id="MDSD_add">
+                                        <option value="1">Sinh hoạt</option>
+                                        <option value="2">Sinh hoạt trả trước</option>
+                                    </select>
                                 </li>
                                 <hr>
+                                <a href="#" data-toggle="tooltip" title="Edit">
+                                    <button class="btn btn-info center-block mb-1" id="btn-add-user"
+                                            style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 140px;">
+                                        Thêm mới
+                                    </button>
+                                </a>
+                            </form>
+                        </ul>
+                    </nav>
+                    </form>
+                    <nav class="nav__edit-customer">
+                        <ul class="nav__edit-list" style="padding-top: 16px">
+                            <li class="nav__edit-input">
+                                <i class="icon-users">
+                                        <span class="ml-2 mt-2" style="font-size: 22px; color: #0f74a8"
+                                              id="title_editUser">Cập nhật thông tin người dùng</span></i>
+                                <i class="icon-close2" style="color: red; margin-top: 1px; margin-left: 170px;"
+                                   data-toggle="tooltip" title="Đóng" onclick="closeEditForm()"></i>
+                            </li>
+                            <hr>
+                            <form id="edit_form">
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
                                     <label>Mã KH:</label>
                                     <input name="idKH_edit_input" id="idKH_edit_input"
-                                           style="border: 1px #ececec solid; margin-left: 16px; display:none"
-                                           size="40">
+                                           style="border: 1px #ececec solid; margin-left: 16px;" size="40" readonly>
                                     <label class="error"></label>
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
@@ -481,7 +691,7 @@
                                     <label class="error"></label>
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    Ngày sinh: <input id="dob_edit" name="dob_edit" placeholder="...click me please !!!"
+                                    Ngày sinh: <input id="dob_edit" name="dob_edit" placeholder="Chọn ngày sinh"
                                                       style="border: 1px #ececec solid" size="40">
                                     <label class="error"></label>
                                 </li>
@@ -498,7 +708,7 @@
                                     <label class="error"></label>
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    Mail: <input id="mail_edit" name="mail_edit" type="email"
+                                    Mail: <input id="mail_edit" name="mail_edit"
                                                  style="border: 1px #ececec solid; margin-left: 1px" size="45">
                                     <label class="error"></label>
                                 </li>
@@ -519,7 +729,7 @@
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
                                     Ngày BĐSD: <input id="ngayBDSD_edit" name="ngayBDSD_edit"
-                                                      placeholder="...click me please !!!"
+                                                      placeholder="Chọn ngày sử dụng"
                                                       style="border: 1px #ececec solid; margin-left: 1px" size="38">
                                     <label class="error"></label>
                                 </li>
@@ -530,25 +740,19 @@
                                         <option value="2">Sinh hoạt trả trước</option>
                                     </select>
                                 </li>
-                            </ul>
-                            <hr>
-                            <a href="#" data-toggle="tooltip" title="Edit">
-                                <button class="btn btn-info center-block mb-1" onclick="updateInforCustomer()"
-                                        id="btn-edit-user"
-                                        style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 140px">
-                                    Cập nhật
-                                </button>
-                                <button class="btn btn-info center-block mb-1" id="btn-add-user"
-                                        style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 140px; display: none">
-                                    Thêm mới
-                                </button>
-                                <button onclick="closeEditForm()" class="btn btn-danger center-block mb-1"
-                                        style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 30px">
-                                    Hủy
-                                </button>
-                            </a>
-                        </nav>
-                    </form>
+                                <li>
+                                    <hr>
+                                    <a href="#" data-toggle="tooltip" title="Edit">
+                                        <button class="btn btn-info center-block mb-1"
+                                                id="btn-edit-user"
+                                                style="padding: 5px 5px 5px 5px; border-radius: 20px; margin-left: 140px">
+                                            Cập nhật
+                                        </button>
+                                    </a>
+                                </li>
+                            </form>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
