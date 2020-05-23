@@ -48,4 +48,11 @@ public class UserDAOImpl implements UserDAO {
         Query query = entityManager.createNativeQuery(sql);
         query.executeUpdate();
     }
+
+    @Override
+    public List<String> getCustomerID() {
+        String sql = "SELECT  distinct(MaKH) from khachhang";
+        Query query = entityManager.createNativeQuery(sql);
+        return query.getResultList();
+    }
 }

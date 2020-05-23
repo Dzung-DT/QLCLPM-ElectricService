@@ -42,15 +42,27 @@ public class UtilsDAOImpl implements UtilsDAO {
         return true;
     }
 
-    //Kiểm tra khách hàng
-
-
     @Override
-    public boolean kiemTraKhachHangTonTai(String column, String value) {
-        String sql = "select MaKH FROM khachhang where "+column+" = '"+value+"'";
+    public boolean kiemTraSoLuongGia(String ghiChu) {
+        String sql = "SELECT * FROM dongia where dongia.GhiChu = '"+ghiChu+"'";
         Query query = entityManager.createNativeQuery(sql);
-        List<String> maKHList = query.getResultList();
-        if (maKHList.size() == 1) {
+        List<Object> records = query.getResultList();
+        if(ghiChu.equals("Sinh hoạt") && records.size() < 6){
+            return true;
+        }
+        if(ghiChu.equals("Sinh hoạt trả trước") && records.size() < 1){
+            return true;
+        }
+        return false;
+    }
+
+    //Kiểm tra tồn tại
+    @Override
+    public boolean kiemTraTonTai(String tableName,String columnOut, String columnIn, String value) {
+        String sql = "select "+columnOut+" FROM "+tableName+" where "+columnIn+" = '"+value+"'";
+        Query query = entityManager.createNativeQuery(sql);
+        List<String> resultList = query.getResultList();
+        if (resultList.size() != 0) {
             return false;
         }
         return true;

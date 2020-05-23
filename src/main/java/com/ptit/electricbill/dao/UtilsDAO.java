@@ -9,8 +9,10 @@ public interface UtilsDAO {
 
     boolean kiemTraGiaTrung(int gia);
 
+    boolean kiemTraSoLuongGia(String ghiChu);
+
     //Kiểm tra khách hàng
 
-    boolean kiemTraKhachHangTonTai(String column, String value);
+    boolean kiemTraTonTai(String tableName, String columnOut, String columnIn, String value);
 
 }

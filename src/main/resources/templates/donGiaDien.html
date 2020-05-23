@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{layout/template}">
 <head>
     <meta charset="UTF-8">
@@ -16,167 +16,8 @@
         $(document).ready(function () {
             showDonGia();
         });
-
-        jQuery.validator.addMethod("checkChar", function (value, element, param) {
-            return value.match(new RegExp("." + param + "$"));
-        });
-
-        function showUpdateModal() {
-            $('#bang_don_gia_dien').find('tr').click(function () {
-                var idDonGia = $(this).find('td').eq(1).text();
-                $("#ID_donGia_update").html(idDonGia);
-            });
-
-        }
-
-        function showDonGia() {
-            $.ajax({
-                url: "/danh-sach-don-gia",
-                type: "POST",
-                dataType: "json",
-                success: function (data) {
-                    if (data.length >= 7) {
-                        $("#btn_them_don_gia").attr("disabled", true);
-                    } else {
-                        $("#btn_them_don_gia").attr("disabled", false);
-                    }
-                    var contentString;
-                    for (var i = 0; i < data.length; i++) {
-                        var index = i + 1;
-                        contentString = contentString
-                            + '<tr role="row" class="odd">'
-                            + '<td style="padding: 0px 0px 0px 25px">' + index + '</td>'
-                            + '<td style="padding: 0px 0px 0px 17px">' + data[i][0] + '</td>'
-                            + '<td style="padding: 0px 0px 0px 0px"><label id="gia" readonly>' + data[i][1] + '</label></td>'
-                            + '<td style="padding: 6px 0px 0px 0px"><label id="ghiChu" readonly>' + data[i][2] + '</label></td>'
-                            + '<td style="padding: 0px 0px 0px 0px"><a data-toggle="tooltip" title="Update"><button data-toggle="modal" data-target="#updateModal" class="btn btn-info center-block ml-1" onclick="showUpdateModal()" style="padding: 3px 6px 3px 6px; border-radius: 54%;"><i class="icon-pencil"></i></button></a>' +
-                            '<a data-toggle="tooltip" title="Remove"><button data-toggle="modal" data-target="#confirmModalDelete"  onclick="showConfirmDelete()" class="btn btn-danger center-block ml-1" style="padding: 3px 6px 3px 6px; border-radius: 54%;"><i class="icon-trash"></i></button></a></td>'
-                            + '</tr>';
-                    }
-                    $("#bang_don_gia_dien").html(contentString);
-                }, error: function () {
-                    alert("FAIL!");
-                }
-            });
-        }
-
-        //Thêm đơn giá
-        $(function () {
-            $("#add_form").validate({
-                rules: {
-                    addGia_input: {
-                        required: true,
-                        checkChar: "[0-9]+",
-                        minlength: 4,
-                        maxlength: 4
-                    }
-                },
-                messages: {
-                    addGia_input: {
-                        required: "Vui lòng nhập đơn giá",
-                        checkChar: "Đơn giá kí tự 0->9",
-                        minlength: "Đơn giá có 4 chữ số",
-                        maxlength: "Đơn giá có 4 chữ số"
-                    }
-                },
-                submitHandler: function () {
-                    var gia = $('#addGia_input').val().trim();
-                    var ghiChu = $("#addGhiChu_select option:selected").text().trim();
-                    $.ajax({
-                        url: "/them-don-gia",
-                        type: "POST",
-                        data: {
-                            "gia": gia,
-                            "ghiChu": ghiChu
-                        },
-                        success: function (data) {
-                            $('#success_status').text(data);
-                            $('#SuccessModalSendMail').modal('show');
-                            showDonGia();
-                            $('#addGia_input').val('');
-                        },
-                        error: function (data) {
-                            $('#error_status').text(data.responseText);
-                            $('#ErrorModal').modal('show');
-                        }
-                    });
-                }
-            });
-        })
-
-        //Sửa đơn giá
-        $(function () {
-            $("#edit_form").validate({
-                rules: {
-                    gia_update: {
-                        required: true,
-                        checkChar: "[0-9]+",
-                        minlength: 4,
-                        maxlength: 4
-                    }
-                },
-                messages: {
-                    gia_update: {
-                        required: "Vui lòng nhập đơn giá",
-                        checkChar: "Đơn giá kí tự 0->9",
-                        minlength: "Đơn giá có 4 chữ số",
-                        maxlength: "Đơn giá có 4 chữ số"
-                    }
-                },
-                submitHandler: function () {
-                    var idDonGia = $("#ID_donGia_update").text();
-                    var giaMoi = $("#gia_update").val();
-                    $.ajax({
-                        url: "/cap-nhat-don-gia",
-                        type: "POST",
-                        data: {
-                            "idDonGia": idDonGia,
-                            "giaMoi": giaMoi
-                        },
-                        success: function (data) {
-                            $('#updateModal').modal('hide');
-                            $('#success_status').text(data);
-                            $('#SuccessModalSendMail').modal('show');
-                            showDonGia();
-                            $('#gia_update').val('');
-                        },
-                        error: function (data) {
-                            $('#error_status').text(data.responseText);
-                            $('#ErrorModal').modal('show');
-                        }
-                    });
-                }
-            });
-        })
-
-        function showConfirmDelete() {
-            $('#bang_don_gia_dien').find('tr').click(function () {
-                var idDonGiaDelete = $(this).find('td').eq(1).text();
-                var giaDelete = $(this).find('td').eq(2).text();
-                var ghiChuDelete = $(this).find('td').eq(3).text();
-                $("#ID_DonGia_Delete").html(idDonGiaDelete);
-                $("#gia_DonGia_Delete").html(giaDelete);
-                $("#ghiChu_DonGia_Delete").html(ghiChuDelete);
-            });
-        }
-
-        function deleteDonGia() {
-            var idDonGia = $("#ID_DonGia_Delete").text();
-            $.ajax({
-                url: "/xoa-don-gia",
-                type: "POST",
-                data: {
-                    "idDonGia": idDonGia
-                },
-                success: function (data) {
-                    $('#success_status').text(data);
-                    $('#confirmModalDelete').modal('hide');
-                    $('#SuccessModalSendMail').modal('show');
-                    showDonGia();
-                }
-            });
-        }
     </script>
+    <script th:src="@{/js_templates/donGiaDien.js}"></script>
     <div class="page-header page-header-light">
         <div class="page-header-content header-elements-md-inline" style="margin-bottom: 10px">
             <div class="page-title d-flex">
@@ -240,7 +81,7 @@
                                 <thead>
                                 <tr role="row">
                                     <th>STT</th>
-                                    <th style="padding-left: 0px    ">Mã giá</th>
+                                    <th style="padding-left: 0px">Mã giá</th>
                                     <th>Giá</th>
                                     <th>Ghi chú</th>
                                     <th>Tùy chọn</th>
