@@ -18,6 +18,7 @@ import java.util.List;
 public class UserDAOImpl implements UserDAO {
     @PersistenceContext
     private EntityManager entityManager;
+
     @Override
     public UserEntity getByUsername(String username) {
         try {
@@ -32,19 +33,19 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public boolean checkExistUser(String username) {
-        String hql  = "SELECT u.username FROM UserEntity u";
+        String hql = "SELECT u.username FROM UserEntity u";
         Query query = entityManager.createQuery(hql);
         List<String> usernameList = query.getResultList();
-        if(usernameList.contains(username)){
+        if (usernameList.contains(username)) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
     @Override
     public void addUser(User user) {
-        String sql ="INSERT INTO thanhvien (username, password, role) VALUES ('"+user.getUsername()+"','"+user.getPassword()+"','"+user.getRole()+"')";
+        String sql = "INSERT INTO thanhvien (username, password, role) VALUES ('" + user.getUsername() + "','" + user.getPassword() + "','" + user.getRole() + "')";
         Query query = entityManager.createNativeQuery(sql);
         query.executeUpdate();
     }
@@ -54,5 +55,12 @@ public class UserDAOImpl implements UserDAO {
         String sql = "SELECT  distinct(MaKH) from khachhang";
         Query query = entityManager.createNativeQuery(sql);
         return query.getResultList();
+    }
+
+    @Override
+    public String getMDSD(String maKH) {
+        String sql = "SELECT MucDichSD FROM khachhang where MaKH = " + maKH + "";
+        Query query = entityManager.createNativeQuery(sql);
+        return (String) query.getSingleResult();
     }
 }

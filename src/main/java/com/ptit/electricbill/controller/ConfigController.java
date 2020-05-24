@@ -153,6 +153,17 @@ public class ConfigController {
         return new ResponseEntity<>("Xóa thành công", HttpStatus.OK);
     }
 
+    @PostMapping("/lay-MDSD-by-maKH")
+    @ResponseBody
+    public ResponseEntity<String> getMDSDByMaKH(@RequestParam("maKH") String maKH) {
+        String MDSD = userDAO.getMDSD(maKH);
+        try {
+            return new ResponseEntity<>((new ObjectMapper()).writeValueAsString(MDSD), HttpStatus.OK);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
 
     @PostMapping("/get-customer-id-list")
     @ResponseBody
@@ -177,7 +188,6 @@ public class ConfigController {
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-
         } else {
             return new ResponseEntity<>("Điện kế với mà KH " + customerID + " không tồn tại", HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -188,81 +198,81 @@ public class ConfigController {
 
     @PostMapping("/them-hoa-don")
     @ResponseBody
-    public String themHoaDon(@RequestParam("maHD") String maHD,
-                             @RequestParam("maKH") String maKH,
-                             @RequestParam("maThang") String maThang,
-                             @RequestParam("luongDienTT") String luongDienTT,
-                             @RequestParam("loaiDienSD") String loaiDienSD) {
-
-        List<Integer> giaList = donGiaDAO.getGia(loaiDienSD);
-        int soDien = Integer.parseInt(luongDienTT);
-        long giaTien = 0;
-        if (loaiDienSD.equals("Sinh hoạt")) {
-            int[] a = {giaList.get(0), giaList.get(1), giaList.get(2), giaList.get(3), giaList.get(4), giaList.get(5)};
-            int[] b = {50, 50, 100, 100, 100, 100};
-            List<Integer> c = new ArrayList<>();
-            if (soDien > 500) {
-                for (int x = 0; x < 5; x++) {
-                    giaTien += a[x] * b[x];
-                }
-                giaTien += a[5] * (soDien - 400);
-            } else if (soDien <= 500 && soDien >= 100) {
-                int i = 0;
-                while (true) {
-                    soDien = soDien - b[i];
-                    if (soDien > 0) {
-                        c.add(b[i]);
-                        i++;
-                    } else if (soDien < 0) {
-                        c.add(100 - soDien * (-1));
-                        break;
-                    } else if (soDien == 0) {
-                        c.add(soDien + b[i]);
-                        break;
+    public ResponseEntity<String> themHoaDon(@RequestParam("maHD") String maHD,
+                                             @RequestParam("maKH") String maKH,
+                                             @RequestParam("maThang") String maThang,
+                                             @RequestParam("luongDienTT") String luongDienTT,
+                                             @RequestParam("loaiDienSD") String loaiDienSD) {
+        boolean checkExist = utilsDAO.kiemTraTonTai("hoadon", "MaHD", "MaHD", maHD);
+        if (checkExist == false) {
+            return new ResponseEntity<>("Hoá đơn có mã " + maHD + " đã tồn tại", HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            List<Integer> giaList = donGiaDAO.getGia(loaiDienSD);
+            int soDien = Integer.parseInt(luongDienTT);
+            long giaTien = 0;
+            if (loaiDienSD.equals("Sinh hoạt")) {
+                int[] a = {giaList.get(0), giaList.get(1), giaList.get(2), giaList.get(3), giaList.get(4), giaList.get(5)};
+                int[] b = {50, 50, 100, 100, 100, 100};
+                List<Integer> c = new ArrayList<>();
+                if (soDien > 500) {
+                    for (int x = 0; x < 5; x++) {
+                        giaTien += a[x] * b[x];
+                    }
+                    giaTien += a[5] * (soDien - 400);
+                } else if (soDien <= 500 && soDien >= 100) {
+                    int i = 0;
+                    while (true) {
+                        soDien = soDien - b[i];
+                        if (soDien > 0) {
+                            c.add(b[i]);
+                            i++;
+                        } else if (soDien < 0) {
+                            c.add(100 - soDien * (-1));
+                            break;
+                        } else if (soDien == 0) {
+                            c.add(soDien + b[i]);
+                            break;
+                        }
+                    }
+                    for (int j = 0; j < c.size(); j++) {
+                        giaTien += a[j] * c.get(j);
+                    }
+                } else if (soDien < 100 && soDien >= 0) {
+                    int i = 0;
+                    while (true) {
+                        soDien = soDien - b[i];
+                        if (soDien > 0) {
+                            c.add(b[i]);
+                            i++;
+                        } else if (soDien < 0) {
+                            c.add(50 - soDien * (-1));
+                            break;
+                        } else if (soDien == 0) {
+                            c.add(soDien + b[i]);
+                            break;
+                        }
+                    }
+                    for (int j = 0; j < c.size(); j++) {
+                        giaTien += a[j] * c.get(j);
                     }
                 }
-                for (int j = 0; j < c.size(); j++) {
-                    giaTien += a[j] * c.get(j);
-                }
-            } else if (soDien < 100 && soDien >= 0) {
-                int i = 0;
-                while (true) {
-                    soDien = soDien - b[i];
-                    if (soDien > 0) {
-                        c.add(b[i]);
-                        i++;
-                    } else if (soDien < 0) {
-                        c.add(50 - soDien * (-1));
-                        break;
-                    } else if (soDien == 0) {
-                        c.add(soDien + b[i]);
-                        break;
-                    }
-                }
-                for (int j = 0; j < c.size(); j++) {
-                    giaTien += a[j] * c.get(j);
-                }
+            } else if (loaiDienSD.equals("Sinh hoạt trả trước")) {
+                giaTien = giaList.get(0) * soDien;
             }
-        } else if (loaiDienSD.equals("Sinh hoạt trả trước")) {
-            giaTien = giaList.get(0) * soDien;
+            Double giaThue = thueDAO.getGiaThue();
+            SimpleDateFormat dateFormatGmt = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT+7"));
+            HoaDon hoaDon = new HoaDon();
+            hoaDon.setMaHD(maHD);
+            hoaDon.setMaKH(maKH);
+            hoaDon.setMaThang(maThang);
+            hoaDon.setLuongDienTT(Integer.parseInt(luongDienTT));
+            hoaDon.setLoaiDien(loaiDienSD);
+            hoaDon.setTien(Math.round(giaTien + giaTien * giaThue));
+            hoaDon.setThoiGian(dateFormatGmt.format(new Date()) + "");
+            hoaDonDAO.add(hoaDon);
+            return new ResponseEntity<>("Tạo hóa đơn thành công", HttpStatus.OK);
         }
-
-        Double giaThue = thueDAO.getGiaThue();
-
-        SimpleDateFormat dateFormatGmt = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT+7"));
-
-        HoaDon hoaDon = new HoaDon();
-        hoaDon.setMaHD(maHD);
-        hoaDon.setMaKH(maKH);
-        hoaDon.setMaThang(maThang);
-        hoaDon.setLuongDienTT(Integer.parseInt(luongDienTT));
-        hoaDon.setLoaiDien(loaiDienSD);
-        hoaDon.setTien(Math.round(giaTien + giaTien * giaThue));
-        hoaDon.setThoiGian(dateFormatGmt.format(new Date()) + "");
-        hoaDonDAO.add(hoaDon);
-
-        return "OK";
     }
 
     @GetMapping("/danh-sach-hoa-don")

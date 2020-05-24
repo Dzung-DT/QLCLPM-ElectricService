@@ -70,7 +70,6 @@ $(function () {
                 $.ajax({
                     url: "/them-so-dien",
                     type: "POST",
-                    dataType: "json",
                     data: {
                         "maKH": maKH,
                         "maThang": maThang,
@@ -179,13 +178,25 @@ function lapHoaDon() {
         $("#maKH_modalCreatBillForm").html(maKH);
         var maThang = $(this).find('td').eq(2).text();
         $("#maThang_modalCreatBillForm").html(maThang);
-        $("#maHD_modalCreatBillForm").html(maThang);
+        var maHD = maKH + "-" + maThang;
+        $("#maHD_modalCreatBillForm").html(maHD);
         var chiSoMoi = $(this).find('td').eq(3).text();
         $("#chiSoMoi_modalCreatBillForm").html(chiSoMoi);
         var chiSoCu = $(this).find('td').eq(4).text();
         $("#chiSoCu_modalCreatBillForm").html(chiSoCu);
         var luongDienTT = chiSoMoi - chiSoCu;
         $("#luongDienTT_modalCreatBillForm").html(luongDienTT);
+        $.ajax({
+            url: "/lay-MDSD-by-maKH",
+            type: "POST",
+            dataType: "json",
+            data: {
+                "maKH": maKH
+            },
+            success: function (data) {
+                $("#loaiDienSuDung_modalCreatBillForm").html(data);
+            }
+        });
     });
 }
 
@@ -194,21 +205,26 @@ function taoHoaDon() {
     var maKH = $("#maKH_modalCreatBillForm").text().trim();
     var maThang = $("#maThang_modalCreatBillForm").text().trim();
     var luongDienTT = $("#luongDienTT_modalCreatBillForm").text().trim();
-    var loaiDienSD = $("#loaiDienSuDung option:selected").text().trim();
-
+    var loaiDienSD = $("#loaiDienSuDung_modalCreatBillForm").text().trim();
     $.ajax({
         url: "/them-hoa-don",
         type: "POST",
-        dataType: "json",
         data: {
             "maHD": maHD,
             "maKH": maKH,
             "maThang": maThang,
             "luongDienTT": luongDienTT,
             "loaiDienSD": loaiDienSD
+        },
+        success: function (data) {
+            $('#modalCreatBillForm').modal('hide');
+            swal("Done", data, "success");
+        },
+        error: function (data) {
+            $('#modalCreatBillForm').modal('hide');
+            swal("Fail", data.responseText, "warning");
         }
     });
-    location.reload();
 }
 
 function showInput() {

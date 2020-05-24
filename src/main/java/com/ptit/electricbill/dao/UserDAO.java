@@ -14,4 +14,6 @@ public interface UserDAO {
     void addUser(User user);
 
     List<String> getCustomerID();
+
+    String getMDSD(String maKH);
 }

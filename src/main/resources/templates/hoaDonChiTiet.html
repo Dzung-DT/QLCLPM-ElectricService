@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/template}">
 <head>
     <meta charset="UTF-8">
@@ -17,78 +17,8 @@
             });
             showDSHoaDon();
         });
-
-        function showDSHoaDon() {
-            $.ajax({
-                url: "/danh-sach-hoa-don",
-                type: "POST",
-                dataType: "json",
-                success: function (data) {
-                    var contentString;
-                    for (var i = 0; i < data.length; i++) {
-                        var index = i + 1;
-                        contentString = contentString
-                            + '<tr>'
-                            + '<td>' + index + '</td>'
-                            + '<td>' + data[i][0] + '</td>'
-                            + '<td>' + data[i][1] + '</td>'
-                            + '<td>' + data[i][2] + '</td>'
-                            + '<td>' + data[i][3] + '</td>'
-                            + '<td>' + data[i][4] + '</td>'
-                            + '<td>' + data[i][5] + '</td>'
-                            + '<td>' + data[i][6] + '</td>'
-                            + '<td>' + data[i][7] + '</td>'
-                            + '<td>' + data[i][8] + '</td>'
-                            + '<td>' + data[i][9] + '</td>'
-                            + '<td>' + data[i][10] + '</td>'
-                            + '<td>' + data[i][11] + '</td>'
-                            + '<td style="padding: 0px 0px 0px 0px"><a data-toggle="tooltip" title="Lập hóa đơn"><button data-toggle="modal" data-target="#modalCreatBillForm" class="btn btn-info center-block ml-1" onclick="lapHoaDon()" style="padding: 3px 6px 3px 6px; border-radius: 54%;"><i class="icon-info22"></i></button></a></td>' +
-                            +'</tr>';
-                    }
-                    $("#bang_hoa_don").html(contentString);
-                }, error: function () {
-                    alert("FAIL!");
-                }
-            });
-        }
-
-        function timHoaDon() {
-            var maKH = $("#maKH_input").val().trim();
-            var maThang = $("#maThang_input").val().trim();
-            $.ajax({
-                url: "/tim-kiem-hoa-don",
-                type: "POST",
-                dataType: "json",
-                data: {
-                    "maKH": maKH,
-                    "maThang": maThang
-                },
-                success: function (data) {
-                    var contentString;
-                    contentString = contentString
-                        + '<tr>'
-                        + '<td>' + 1 + '</td>'
-                        + '<td>' + data[0] + '</td>'
-                        + '<td>' + data[1] + '</td>'
-                        + '<td>' + data[2] + '</td>'
-                        + '<td>' + data[3] + '</td>'
-                        + '<td>' + data[4] + '</td>'
-                        + '<td>' + data[5] + '</td>'
-                        + '<td>' + data[6] + '</td>'
-                        + '<td>' + data[7] + '</td>'
-                        + '<td>' + data[8] + '</td>'
-                        + '<td>' + data[9] + '</td>'
-                        + '<td>' + data[10] + '</td>'
-                        + '<td>' + data[11] + '</td>'
-                        + '<td style="padding: 0px 0px 0px 0px"><a data-toggle="tooltip" title="Lập hóa đơn"><button data-toggle="modal" data-target="#modalCreatBillForm" class="btn btn-info center-block ml-1" onclick="lapHoaDon()" style="padding: 3px 6px 3px 6px; border-radius: 54%;"><i class="icon-info22"></i></button></a></td>' +
-                        +'</tr>';
-                    $("#bang_hoa_don").html(contentString);
-                }, error: function () {
-                    alert("FAIL!");
-                }
-            });
-        }
     </script>
+    <script th:src="@{/js_templates/hoaDon.js}"></script>
     <div class="page-header page-header-light">
         <div class="page-header-content header-elements-md-inline" style="margin-bottom: 10px">
             <div class="page-title ">
@@ -114,7 +44,7 @@
                         <button data-toggle="tooltip" title="Tìm" class="btn btn-info center-block ml-1"
                                 type="submit"
                                 onclick="timHoaDon()"
-                                style="padding: 5px 5px 0px 5px; border-radius: 10px"><i class="icon-search4"
+                                style="padding: 5px 5px 0 5px; border-radius: 10px"><i class="icon-search4"
                                                                                          style="margin-bottom: 2px;"></i>
                         </button>
                     </div>
@@ -164,48 +94,46 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="modal-body">
-                                <div class="modal-header" style="padding: 0px!important;">
-                                    <h6 class="modal-title" style="margin-right: 0px!important;">Mã KH:<label
+                                <div class="modal-header" style="padding: 0!important;">
+                                    <h6 class="modal-title" style="margin-right: 0!important;">Mã KH:<label
                                             id="maKH_modalCreatBillForm"
                                             style="margin-left: 49px "></label></h6>
                                 </div>
-                                <div class="modal-header" style="padding: 0px!important;">
-                                    <h6 class="modal-title" style="margin-right: 0px!important;">Mã tháng:<label
+                                <div class="modal-header" style="padding: 0!important;">
+                                    <h6 class="modal-title" style="margin-right: 0!important;">Mã tháng:<label
                                             id="maThang_modalCreatBillForm"
                                             style="margin-left: 32px "></label></h6>
                                 </div>
-                                <div class="modal-header" style="padding: 0px!important;">
-                                    <h6 class="modal-title" style="margin-right: 0px!important;">Chỉ số mới:<label
+                                <div class="modal-header" style="padding: 0!important;">
+                                    <h6 class="modal-title" style="margin-right: 0!important;">Chỉ số mới:<label
                                             id="chiSoMoi_modalCreatBillForm"
                                             style="margin-left: 25px "></label></h6>
                                 </div>
-                                <div class="modal-header" style="padding: 0px!important;">
-                                    <h6 class="modal-title" style="margin-right: 0px!important;">Chỉ số cũ:<label
+                                <div class="modal-header" style="padding: 0!important;">
+                                    <h6 class="modal-title" style="margin-right: 0!important;">Chỉ số cũ:<label
                                             id="chiSoCu_modalCreatBillForm"
                                             style="margin-left: 34px "></label></h6>
                                 </div>
-                                <div class="modal-header" style="padding: 0px!important;">
-                                    <h6 class="modal-title" style="margin-right: 0px!important;">Số điện TT:<label
+                                <div class="modal-header" style="padding: 0!important;">
+                                    <h6 class="modal-title" style="margin-right: 0!important;">Số điện TT:<label
                                             id="luongDienTT_modalCreatBillForm"
                                             style="margin-left: 23px "></label> kWh</h6>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-6">
-                            <div class="modal-body" style="padding: 0px!important;">
+                            <div class="modal-body" style="padding: 0!important;">
                                 <div class="modal-header">
-                                    <h6 class="modal-title" style="margin-right: 0px!important;">Mã HD:<label
+                                    <h6 class="modal-title" style="margin-right: 0!important;">Mã HD:<label
                                             id="maHD_modalCreatBillForm" style="margin-left: 28px"></label></h6>
                                 </div>
                                 <div class="modal-header">
-                                    <h6 class="modal-title" style="margin-right: 0px!important;">Loại điện:<select
+                                    <h6 class="modal-title" style="margin-right: 0!important;">Loại điện:<select
                                             id="loaiDienSuDung"
                                             style="border-color: #cff0da; background-color: #e7d9e1; margin-left: 15px">
                                         <option value="Sinh hoạt">Sinh hoạt</option>
                                         <option value="Sinh hoạt trả trước">Sinh hoạt trả trước</option>
                                     </select></h6>
-
-
                                 </div>
                             </div>
                         </div>
@@ -218,27 +146,6 @@
                         <button type="button" class="btn btn-danger justify-content-end" data-dismiss="modal"
                                 style="padding: 1px;color: black;">Hủy
                         </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="SuccessModalSendMail" tabindex="-1" role="dialog"
-             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content bg-success-600">
-                    <div class="modal-header">
-                        <h5 class="modal-title"
-                            style="margin-top: 32px;  margin-bottom: 43px;line-height: 1.5385;margin-left: 48px;">Thành
-                            công!</h5>
-                        <svg id="successAnimation" class="animated" xmlns="http://www.w3.org/2000/svg" width="70"
-                             height="70" viewBox="0 0 70 70">
-                            <path id="successAnimationResult" fill="#D8D8D8"
-                                  d="M35,60 C21.1928813,60 10,48.8071187 10,35 C10,21.1928813 21.1928813,10 35,10 C48.8071187,10 60,21.1928813 60,35 C60,48.8071187 48.8071187,60 35,60 Z M23.6332378,33.2260427 L22.3667622,34.7739573 L34.1433655,44.40936 L47.776114,27.6305926 L46.223886,26.3694074 L33.8566345,41.59064 L23.6332378,33.2260427 Z"/>
-                            <circle id="successAnimationCircle" cx="35" cy="35" r="24" stroke="#979797" stroke-width="2"
-                                    stroke-linecap="round" fill="transparent"/>
-                            <polyline id="successAnimationCheck" stroke="#979797" stroke-width="2"
-                                      points="23 34 34 43 47 27" fill="transparent"/>
-                        </svg>
                     </div>
                 </div>
             </div>
