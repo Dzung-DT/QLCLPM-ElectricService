@@ -9,8 +9,7 @@ public class HoaDon {
     private String maHD;
     private String maKH;
     private String maThang;
-    private int luongDienTT;
-    private String loaiDien;
+    private int maThue;
     private double tien;
     private String thoiGian;
 }

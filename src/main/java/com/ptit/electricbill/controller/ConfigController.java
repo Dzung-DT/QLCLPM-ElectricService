@@ -195,7 +195,6 @@ public class ConfigController {
     }
 
     //Hóa đơn
-
     @PostMapping("/them-hoa-don")
     @ResponseBody
     public ResponseEntity<String> themHoaDon(@RequestParam("maHD") String maHD,
@@ -266,8 +265,7 @@ public class ConfigController {
             hoaDon.setMaHD(maHD);
             hoaDon.setMaKH(maKH);
             hoaDon.setMaThang(maThang);
-            hoaDon.setLuongDienTT(Integer.parseInt(luongDienTT));
-            hoaDon.setLoaiDien(loaiDienSD);
+            hoaDon.setMaThue(1);
             hoaDon.setTien(Math.round(giaTien + giaTien * giaThue));
             hoaDon.setThoiGian(dateFormatGmt.format(new Date()) + "");
             hoaDonDAO.add(hoaDon);
@@ -296,16 +294,35 @@ public class ConfigController {
 
     @PostMapping("/tim-kiem-hoa-don")
     @ResponseBody
-    public String timHoaDon(@RequestParam("maKH") String maKH,
-                            @RequestParam("maThang") String maThang) {
-        Object hoaDon = hoaDonDAO.getBill(maKH, maThang);
-        String data;
-        try {
-            data = (new ObjectMapper()).writeValueAsString(hoaDon);
-            return data;
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+    public ResponseEntity<String> timHoaDon(@RequestParam("maKH") String maKH,
+                                            @RequestParam("maThang") String maThang) {
+        List<Object> hoaDonCTList = hoaDonDAO.getBillByColumn(maKH, maThang);
+        if (hoaDonCTList.size() > 0) {
+            try {
+                return new ResponseEntity<>((new ObjectMapper()).writeValueAsString(hoaDonCTList), HttpStatus.OK);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        } else {
+            return new ResponseEntity<>("Không tìm thấy hóa đơn", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return null;
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+
+
+    @PostMapping("/lay-maKH")
+    @ResponseBody
+    public ResponseEntity<String> layMaKH() {
+        List<String> maKHList = hoaDonDAO.getValueColumn("MaKH");
+        if (maKHList.size() > 0) {
+            try {
+                return new ResponseEntity<>((new ObjectMapper()).writeValueAsString(maKHList), HttpStatus.OK);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        } else {
+            return new ResponseEntity<>("Không tìm thấy kết quả", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 }
