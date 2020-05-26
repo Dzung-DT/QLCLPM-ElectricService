@@ -61,7 +61,6 @@ $(function () {
 });
 
 function showTable(data) {
-    console.log(data);
     var tongSodien = 0;
     var tongTien = 0;
     var contentString = "";
