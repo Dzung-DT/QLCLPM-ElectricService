@@ -1,7 +1,6 @@
 package com.ptit.electricbill.dao;
 
 import com.ptit.electricbill.model.HoaDon;
-import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 
 import java.util.List;
 
@@ -14,5 +13,7 @@ public interface HoaDonDAO {
 
     List<Object> getBillByColumn(String maKH, String maThang);
 
-    List<String> getValueColumn(String columnName);
+    List<String> getMaKH();
+
+    List<String> getMaThang();
 }

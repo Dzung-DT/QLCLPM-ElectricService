@@ -26,14 +26,14 @@ public class HoaDonDAOImpl implements HoaDonDAO {
 
     @Override
     public List<Object> getAllDetail() {
-        String sql = "SELECT hoadon.MaHD, hoadon.MaThang, hoadon.MaKH, khachhang.TenKH, khachhang.Diachi, dienke.SoDienMoi, dienke.SoDienCu, khachhang.MucDichSD , thue.giaThue, hoadon.Tien, hoadon.ThoiGian from hoadon, khachhang, dienke, thue where hoadon.MaKH = khachhang.MaKH and hoadon.MaThang = dienke.MaThang";
+        String sql = "SELECT hoadon.MaHD, hoadon.MaThang, hoadon.MaKH, khachhang.TenKH, khachhang.Diachi, dienke.SoDienMoi, dienke.SoDienCu, khachhang.MucDichSD , thue.giaThue, hoadon.Tien, hoadon.ThoiGian from hoadon, khachhang, dienke, thue where hoadon.MaKH = khachhang.MaKH and hoadon.MaThang = dienke.MaThang group by hoadon.MaHD order by hoadon.MaKH asc, hoadon.MaThang desc";
         Query query = entityManager.createNativeQuery(sql);
         return query.getResultList();
     }
 
     @Override
     public Object getBill(String maKH, String maThang) {
-        String sql = "SELECT hoadon.MaHD, hoadon.MaThang, hoadon.MaKH, khachhang.TenKH, khachhang.Diachi, dienke.SoDienMoi, dienke.SoDienCu, khachhang.MucDichSD , thue.giaThue, hoadon.Tien, hoadon.ThoiGian from hoadon, khachhang, dienke, thue where hoadon.MaKH = khachhang.MaKH and hoadon.MaThang = dienke.MaThang and hoadon.MaKH ='" + maKH + "' and hoadon.MaThang='" + maThang + "'";
+        String sql = "SELECT hoadon.MaHD, hoadon.MaThang, hoadon.MaKH, khachhang.TenKH, khachhang.Diachi, dienke.SoDienMoi, dienke.SoDienCu, khachhang.MucDichSD , thue.giaThue, hoadon.Tien, hoadon.ThoiGian from hoadon, khachhang, dienke, thue where hoadon.MaKH = khachhang.MaKH and hoadon.MaThang = dienke.MaThang and hoadon.MaKH ='" + maKH + "' and hoadon.MaThang='" + maThang + "'  group by hoadon.MaHD order by hoadon.MaKH asc, hoadon.MaThang desc";
         Query query = entityManager.createNativeQuery(sql);
         return query.getSingleResult();
     }
@@ -41,27 +41,34 @@ public class HoaDonDAOImpl implements HoaDonDAO {
     @Override
     public List<Object> getBillByColumn(String maKH, String maThang) {
         if (maKH.equals("") && maThang.equals("")) {
-            String sql = "SELECT hoadon.MaHD, hoadon.MaThang, hoadon.MaKH, khachhang.TenKH, khachhang.Diachi, dienke.SoDienMoi, dienke.SoDienCu, khachhang.MucDichSD , thue.giaThue, hoadon.Tien, hoadon.ThoiGian from hoadon, khachhang, dienke, thue where hoadon.MaKH = khachhang.MaKH and hoadon.MaThang = dienke.MaThang";
+            String sql = "SELECT hoadon.MaHD, hoadon.MaThang, hoadon.MaKH, khachhang.TenKH, khachhang.Diachi, dienke.SoDienMoi, dienke.SoDienCu, khachhang.MucDichSD , thue.giaThue, hoadon.Tien, hoadon.ThoiGian from hoadon, khachhang, dienke, thue where hoadon.MaKH = khachhang.MaKH and hoadon.MaThang = dienke.MaThang group by hoadon.MaHD order by hoadon.MaKH asc, hoadon.MaThang desc";
             Query query = entityManager.createNativeQuery(sql);
             return query.getResultList();
         } else if (maKH.equals("")) {
-            String sql = "SELECT hoadon.MaHD, hoadon.MaThang, hoadon.MaKH, khachhang.TenKH, khachhang.Diachi, dienke.SoDienMoi, dienke.SoDienCu, khachhang.MucDichSD , thue.giaThue, hoadon.Tien, hoadon.ThoiGian from hoadon, khachhang, dienke, thue where hoadon.MaKH = khachhang.MaKH and hoadon.MaThang = dienke.MaThang and hoadon.MaThang = " + maThang + "";
+            String sql = "SELECT hoadon.MaHD, hoadon.MaThang, hoadon.MaKH, khachhang.TenKH, khachhang.Diachi, dienke.SoDienMoi, dienke.SoDienCu, khachhang.MucDichSD , thue.giaThue, hoadon.Tien, hoadon.ThoiGian from hoadon, khachhang, dienke, thue where hoadon.MaKH = khachhang.MaKH and hoadon.MaThang = dienke.MaThang and hoadon.MaThang = " + maThang + " group by hoadon.MaHD order by hoadon.MaKH asc, hoadon.MaThang desc";
             Query query = entityManager.createNativeQuery(sql);
             return query.getResultList();
         } else if (maThang.equals("")) {
-            String sql = "SELECT hoadon.MaHD, hoadon.MaThang, hoadon.MaKH, khachhang.TenKH, khachhang.Diachi, dienke.SoDienMoi, dienke.SoDienCu, khachhang.MucDichSD , thue.giaThue, hoadon.Tien, hoadon.ThoiGian from hoadon, khachhang, dienke, thue where hoadon.MaKH = khachhang.MaKH and hoadon.MaThang = dienke.MaThang and hoadon.MaKH = " + maKH + "";
+            String sql = "SELECT hoadon.MaHD, hoadon.MaThang, hoadon.MaKH, khachhang.TenKH, khachhang.Diachi, dienke.SoDienMoi, dienke.SoDienCu, khachhang.MucDichSD , thue.giaThue, hoadon.Tien, hoadon.ThoiGian from hoadon, khachhang, dienke, thue where hoadon.MaKH = khachhang.MaKH and hoadon.MaThang = dienke.MaThang and hoadon.MaKH = " + maKH + " group by hoadon.MaHD order by hoadon.MaKH asc, hoadon.MaThang desc";
             Query query = entityManager.createNativeQuery(sql);
             return query.getResultList();
         } else {
-            String sql = "SELECT hoadon.MaHD, hoadon.MaThang, hoadon.MaKH, khachhang.TenKH, khachhang.Diachi, dienke.SoDienMoi, dienke.SoDienCu, khachhang.MucDichSD , thue.giaThue, hoadon.Tien, hoadon.ThoiGian from hoadon, khachhang, dienke, thue where hoadon.MaKH = khachhang.MaKH and hoadon.MaThang = dienke.MaThang and hoadon.MaKH = " + maKH + " and hoadon.MaThang = " + maThang + "";
+            String sql = "SELECT hoadon.MaHD, hoadon.MaThang, hoadon.MaKH, khachhang.TenKH, khachhang.Diachi, dienke.SoDienMoi, dienke.SoDienCu, khachhang.MucDichSD , thue.giaThue, hoadon.Tien, hoadon.ThoiGian from hoadon, khachhang, dienke, thue where hoadon.MaKH = khachhang.MaKH and hoadon.MaThang = dienke.MaThang and hoadon.MaKH = " + maKH + " and hoadon.MaThang = " + maThang + " group by hoadon.MaHD order by hoadon.MaKH asc, hoadon.MaThang desc";
             Query query = entityManager.createNativeQuery(sql);
             return query.getResultList();
         }
     }
 
     @Override
-    public List<String> getValueColumn(String columnName) {
-        String sql = "SELECT distinct ("+columnName+") from hoadon";
+    public List<String> getMaKH() {
+        String sql = "SELECT distinct (MaKH) from hoadon";
+        Query query = entityManager.createNativeQuery(sql);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<String> getMaThang() {
+        String sql = "SELECT distinct (MaThang) from hoadon";
         Query query = entityManager.createNativeQuery(sql);
         return query.getResultList();
     }

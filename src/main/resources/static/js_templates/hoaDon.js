@@ -61,10 +61,15 @@ $(function () {
 });
 
 function showTable(data) {
-    var contentString;
+    console.log(data);
+    var tongSodien = 0;
+    var tongTien = 0;
+    var contentString = "";
     for (var i = 0; i < data.length; i++) {
         var index = i + 1;
         var soDien = data[i][5] - data[i][6];
+        tongSodien += soDien;
+        tongTien += data[i][9];
         var thue = data[i][8] * 100;
         contentString = contentString
             + '<tr>'
@@ -85,6 +90,8 @@ function showTable(data) {
             +'</tr>';
     }
     $("#bang_hoa_don").html(contentString);
+    $("#tongSoDien").text(tongSodien + " Kwh");
+    $("#tongTien").text(tongTien + " VNĐ");
 }
 
 function layMaKH() {
@@ -101,6 +108,22 @@ function layMaKH() {
         }
     });
 }
+
+function layMaThang() {
+    $.ajax({
+        url: "/lay-maThang",
+        type: "POST",
+        dataType: "json",
+        success: function (data) {
+            $("#maThang").autocomplete({
+                source: data
+            });
+        }, error: function (data) {
+            swal("Fail", data.responseText, "warning");
+        }
+    });
+}
+
 function showHoaDon() {
     swal("Done", "OK", "success");
 }

@@ -282,10 +282,8 @@ public class ConfigController {
     @ResponseBody
     public String xemHoaDon() {
         List<Object> hoaDonCTList = hoaDonDAO.getAllDetail();
-        String data;
         try {
-            data = (new ObjectMapper()).writeValueAsString(hoaDonCTList);
-            return data;
+            return (new ObjectMapper()).writeValueAsString(hoaDonCTList);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -304,7 +302,7 @@ public class ConfigController {
                 e.printStackTrace();
             }
         } else {
-            return new ResponseEntity<>("Không tìm thấy hóa đơn", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Hóa đơn không tồn tại", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
@@ -313,10 +311,26 @@ public class ConfigController {
     @PostMapping("/lay-maKH")
     @ResponseBody
     public ResponseEntity<String> layMaKH() {
-        List<String> maKHList = hoaDonDAO.getValueColumn("MaKH");
+        List<String> maKHList = hoaDonDAO.getMaKH();
         if (maKHList.size() > 0) {
             try {
                 return new ResponseEntity<>((new ObjectMapper()).writeValueAsString(maKHList), HttpStatus.OK);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        } else {
+            return new ResponseEntity<>("Không tìm thấy kết quả", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+
+    @PostMapping("/lay-maThang")
+    @ResponseBody
+    public ResponseEntity<String> layMaThang() {
+        List<String> maThangList = hoaDonDAO.getMaThang();
+        if (maThangList.size() > 0) {
+            try {
+                return new ResponseEntity<>((new ObjectMapper()).writeValueAsString(maThangList), HttpStatus.OK);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }

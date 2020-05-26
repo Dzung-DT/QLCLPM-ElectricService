@@ -165,13 +165,6 @@ function showTable(data) {
     $("#bang_so_dien").html(contentString);
 }
 
-// function checkCompare(abc) {
-//     var maThang = $("#maThang_input").val().replace('/','');
-//     console.log(maThang);
-//     var value = document.getElementById("bang_so_dien").rows[0].cells[3].innerHTML;
-//     // if( abc < value) {}
-// }
-
 function lapHoaDon() {
     $('#bang_so_dien').find('tr').click(function () {
         var maKH = $(this).find('td').eq(1).text();
