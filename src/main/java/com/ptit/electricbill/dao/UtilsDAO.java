@@ -15,4 +15,6 @@ public interface UtilsDAO {
 
     boolean kiemTraTonTai(String tableName, String columnOut, String columnIn, String value);
 
+    boolean kiemTraTonTaiUpdateKH(String tableName, String columnOut, String columnIn, String value, String maKH);
+
 }

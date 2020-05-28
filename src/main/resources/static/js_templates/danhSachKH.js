@@ -26,6 +26,7 @@ $(function () {
                     "mailContent": mailContent
                 },
                 success: function () {
+                    $('#SendMailModal').modal('hide');
                     swal("Done", "Gửi mail thành công", "success");
                 }, error: function () {
                     swal("Fail", "Không thành công", "warning");
@@ -433,7 +434,7 @@ function closeEditForm() {
 }
 
 function showTable(data) {
-    var contentString="";
+    var contentString = "";
     for (var i = 0; i < data.length; i++) {
         contentString = contentString
             + '<tr role="row" class="odd">'

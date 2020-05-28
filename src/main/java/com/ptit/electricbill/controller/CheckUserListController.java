@@ -83,16 +83,15 @@ public class CheckUserListController {
                                                      @RequestParam("ngayBDSD_update") String ngayBDSD_update,
                                                      @RequestParam("MDSD_update") String MDSD_update) {
         String columnOut = "MaKH";
-        if (utilsDAO.kiemTraTonTai(KHTableName, columnOut, "CMND", soCmnd_update) == false) {
+        if (utilsDAO.kiemTraTonTaiUpdateKH(KHTableName, columnOut, "CMND", soCmnd_update, idKH_update) == false) {
             return new ResponseEntity<>("CMND đã tồn tại", HttpStatus.INTERNAL_SERVER_ERROR);
-        } else if (utilsDAO.kiemTraTonTai(KHTableName, columnOut, "MailAddress", mail_update) == false) {
+        } else if (utilsDAO.kiemTraTonTaiUpdateKH(KHTableName, columnOut, "MailAddress", mail_update, idKH_update) == false) {
             return new ResponseEntity<>("Mail đã dược sử dụng", HttpStatus.INTERNAL_SERVER_ERROR);
-        } else if (utilsDAO.kiemTraTonTai(KHTableName, columnOut, "SoDienThoai", soDT_update) == false) {
+        } else if (utilsDAO.kiemTraTonTaiUpdateKH(KHTableName, columnOut, "SoDienThoai", soDT_update, idKH_update) == false) {
             return new ResponseEntity<>("Số điện thoại đã dược sử dụng", HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
-            khachHangDAO.deleteKH(idKH_update);
             KhachHang KH = new KhachHang(idKH_update, tenKH_update, dob_update, soCmnd_update, diaChi_update, gioiTinh_update, soDT_update, ngayBDSD_update, mail_update, MDSD_update);
-            khachHangDAO.addKH(KH);
+            khachHangDAO.updateInformation(KH);
             return new ResponseEntity<>("Cập nhật thành công", HttpStatus.OK);
         }
     }
