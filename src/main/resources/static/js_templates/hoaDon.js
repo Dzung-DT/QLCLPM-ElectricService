@@ -68,8 +68,9 @@ function showTable(data) {
         var index = i + 1;
         var soDien = data[i][5] - data[i][6];
         tongSodien += soDien;
-        tongTien += data[i][9];
         var thue = data[i][8] * 100;
+        var giaTien = tinhTien(soDien, data[i][7], data[i][8]);
+        tongTien += giaTien;
         contentString = contentString
             + '<tr>'
             + '<td>' + index + '</td>'
@@ -83,8 +84,8 @@ function showTable(data) {
             + '<td>' + soDien + '</td>'
             + '<td>' + data[i][7] + '</td>'
             + '<td>' + thue + ' %</td>'
+            + '<td>' + giaTien + '</td>'
             + '<td>' + data[i][9] + '</td>'
-            + '<td>' + data[i][10] + '</td>'
             + '<td style="padding: 0 0 0 0"><a data-toggle="tooltip" title="Lập hóa đơn"><button class="btn btn-info center-block ml-1" onclick="showHoaDon()" style="padding: 3px 6px 3px 6px; border-radius: 54%;"><i class="icon-info22"></i></button></a></td>' +
             +'</tr>';
     }
@@ -123,6 +124,89 @@ function layMaThang() {
     });
 }
 
+function layDonGiaByMDSD() {
+    $.ajax({
+        url: "/lay-don-gia-by-MDSD",
+        type: "POST",
+        dataType: "json",
+        success: function (data) {
+            getDonGiaInfo(data);
+        }, error: function () {
+            alert("ERROR");
+        }
+    });
+}
+
 function showHoaDon() {
     swal("Done", "OK", "success");
+}
+
+var donGiaInfo;
+var MDSD_SH;
+var MDSD_SHTT;
+var giaSH;
+var giaSHTT;
+
+function getDonGiaInfo(response) {
+    donGiaInfo = response;
+    giaSH = Object.values(donGiaInfo)[0];
+    MDSD_SH = Object.keys(donGiaInfo)[0];
+    giaSHTT = Object.values(donGiaInfo)[1];
+    MDSD_SHTT = Object.keys(donGiaInfo)[1];
+}
+
+function tinhTien(soDien, MDSD, thue) {
+    var giaTien = 0;
+    if (MDSD == MDSD_SH) {
+        var a = giaSH;
+        var b = [50, 50, 100, 100, 100, 100];
+        var c = [];
+        if (soDien > 500) {
+            for (var x = 0; x < 5; x++) {
+                giaTien += a[x] * b[x];
+            }
+            giaTien += a[5] * (soDien - 400);
+        } else if (soDien <= 500 && soDien >= 100) {
+            var i = 0;
+            while (true) {
+                soDien = soDien - b[i];
+                if (soDien > 0) {
+                    c.push(b[i]);
+                    i++;
+                } else if (soDien < 0) {
+                    c.push(100 - soDien * (-1));
+                    break;
+                } else if (soDien == 0) {
+                    c.push(soDien + b[i]);
+                    break;
+                }
+            }
+            for (var j = 0; j < c.length; j++) {
+                giaTien += a[j] * c[j];
+            }
+        } else if (soDien < 100 && soDien >= 0) {
+            var i = 0;
+            while (true) {
+                soDien = soDien - b[i];
+                if (soDien > 0) {
+                    c.push(b[i]);
+                    i++;
+                } else if (soDien < 0) {
+                    c.push(50 - soDien * (-1));
+                    break;
+                } else if (soDien == 0) {
+                    c.push(soDien + b[i]);
+                    break;
+                }
+            }
+            for (var j = 0; j < c.length; j++) {
+                giaTien += a[j] * c[j];
+            }
+        }
+        return Math.round(giaTien + giaTien * thue);
+    }
+    if (MDSD == MDSD_SHTT) {
+        giaTien = giaSHTT[0] * soDien;
+        return Math.round(giaTien + giaTien * thue);
+    }
 }

@@ -1,8 +1,8 @@
 package untils;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-import org.modelmapper.ModelMapper;
 @Component
 public class BeanTools {
     private ModelMapper modelMapper;

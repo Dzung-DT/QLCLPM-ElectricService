@@ -14,12 +14,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+//Check role user và chuyển hường trang theo role khi đăng nhập
 @Component
 public class UrlAuthenSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Override
-    protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException{
         List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
         List<String> roles = new ArrayList<>();
 
@@ -27,14 +29,10 @@ public class UrlAuthenSuccessHandler extends SimpleUrlAuthenticationSuccessHandl
             roles.add(authority.getAuthority());
         }
 
-        String targetUrl = "";
-        if (roles.contains("ADMIN")) {
+        String targetUrl;
+        if (roles.contains("ROLE_ADMIN")) {
             targetUrl = "/trang-chu";
-//        } else if (roles.contains("ROLE_USER")) {
-//            targetUrl = "/client";
-//        }
             if (response.isCommitted()) {
-                System.out.println("Can't redirect");
                 return;
             }
             redirectStrategy.sendRedirect(request, response, targetUrl);

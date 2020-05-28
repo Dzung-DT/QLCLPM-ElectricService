@@ -12,11 +12,13 @@ import java.util.UUID;
 public class CustomURLFilter implements Filter {
     private static final String REQUEST_ID = "request_id";
 
+    //Khởi tạo filterConfig
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig){
 
     }
 
+    //Kiếm tra request hợp lệ
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
@@ -31,6 +33,7 @@ public class CustomURLFilter implements Filter {
 
     }
 
+    //Định dạng log được ghi
     private void logRequest(HttpServletRequest request, String requestId) {
         if (request != null) {
             StringBuilder data = new StringBuilder();

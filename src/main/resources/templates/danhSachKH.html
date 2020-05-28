@@ -2,7 +2,7 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{layout/template}">
 <head>
-    <title>Dashboard</title>
+    <title>Danh sách khách hàng</title>
     <style>
         label.error {
             color: red;
@@ -14,6 +14,8 @@
             left: 30px !important;
         }
     </style>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 </head>
 <body>
 <div class="content">
@@ -51,6 +53,7 @@
                         format: 'dd/mm/yyyy'
                     }
                 );
+                $("#customer_ID_search").focus();
             });
         </script>
         <script th:src="@{/js_templates/danhSachKH.js}"></script>
@@ -66,7 +69,6 @@
                                 <i class="icon-gear mr-2"></i>
                                 Chức năng
                             </a>
-
                             <div class="dropdown-menu dropdown-menu-right" x-placement="top-end"
                                  style="position: absolute; will-change: transform; top: 0; left: 0; transform: translate3d(-83px, -45px, 0px);">
                                 <a th:href="@{/trang-chu}" class="dropdown-item"><i class="icon-accessibility"></i>Xem
@@ -88,7 +90,7 @@
                                     <label class="error"></label>
                                 </div>
                                 <button data-toggle="tooltip" title="Tìm" class="btn btn-info center-block ml-1"
-                                        style="padding: 5px 5px 0px 5px; border-radius: 10px"><i
+                                        style="padding: 5px 5px 0 5px; border-radius: 10px"><i
                                         class="icon-search4 mb-1"></i></button>
                             </div>
                         </form>

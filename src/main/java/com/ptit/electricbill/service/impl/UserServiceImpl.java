@@ -22,8 +22,6 @@ import java.util.List;
 public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private UserDAO userDAO;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Override
     public User getByUsername(String username) {
@@ -50,8 +48,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userEntity.getRole());
         authorities.add(authority);
-
-//        return new User(email,userEntity.getPassword(),authorities);
         return new org.springframework.security.core.userdetails.User(username, userEntity.getPassword(), authorities);
     }
 }

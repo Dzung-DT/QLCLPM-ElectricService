@@ -7,6 +7,8 @@ import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
 @Configuration
 public class RequestLoggingFilterConfig {
+
+    // Cấu hình cho CommonsRequestLoggingFilter
     @Bean
     public CommonsRequestLoggingFilter logFilter() {
         CommonsRequestLoggingFilter filter
@@ -19,13 +21,14 @@ public class RequestLoggingFilterConfig {
         return filter;
     }
 
+    // Cấu hình cho FilterRegistrationBean<CustomURLFilter>
     @Bean
     public FilterRegistrationBean<CustomURLFilter> filterRegistrationBean() {
         FilterRegistrationBean<CustomURLFilter> registrationBean = new FilterRegistrationBean();
         CustomURLFilter customURLFilter = new CustomURLFilter();
 
         registrationBean.setFilter(customURLFilter);
-        registrationBean.setOrder(2); 
+        registrationBean.setOrder(2);
         return registrationBean;
     }
 }

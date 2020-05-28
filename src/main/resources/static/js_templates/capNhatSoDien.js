@@ -146,7 +146,7 @@ function getSoDienByCustomer(customerID) {
 }
 
 function showTable(data) {
-    var contentString;
+    var contentString = "";
     var stt = 0;
     for (var i = 0; i < data.length; i++) {
         stt++;
@@ -159,14 +159,15 @@ function showTable(data) {
             + '<td>' + data[i][4] + '</td>'
             + '<td style="padding: 0 0 0 0">' +
             '<a data-toggle="tooltip" title="Remove"><button onclick="deleteSoDien(' + data[i][0] + ')" class="btn btn-danger center-block ml-1" style="padding: 3px 6px 3px 6px; border-radius: 54%;"><i class="icon-trash"></i></button></a>' +
-            '<a data-toggle="tooltip" title="Lập hóa đơn"><button data-toggle="modal" data-target="#modalCreatBillForm" class="btn btn-info center-block ml-1" onclick="lapHoaDon()" style="padding: 3px 6px 3px 6px; border-radius: 54%;"><i class="icon-pencil"></i></button></a></td>'
+            '<a data-toggle="tooltip" title="Lập hóa đơn"><button data-toggle="modal" data-target="#modalCreatBillForm" class="btn btn-info center-block ml-1" onclick="lapHoaDon(' + data[i][0] + ')" style="padding: 3px 6px 3px 6px; border-radius: 54%;"><i class="icon-pencil"></i></button></a></td>'
             + '</tr>';
     }
     $("#bang_so_dien").html(contentString);
 }
 
-function lapHoaDon() {
+function lapHoaDon(maDK) {
     $('#bang_so_dien').find('tr').click(function () {
+        $("#maDK_modalCreatBillForm").html(maDK);
         var maKH = $(this).find('td').eq(1).text();
         $("#maKH_modalCreatBillForm").html(maKH);
         var maThang = $(this).find('td').eq(2).text();
@@ -194,20 +195,18 @@ function lapHoaDon() {
 }
 
 function taoHoaDon() {
+    var maDK = $("#maDK_modalCreatBillForm").text().trim();
     var maHD = $("#maHD_modalCreatBillForm").text().trim();
     var maKH = $("#maKH_modalCreatBillForm").text().trim();
     var maThang = $("#maThang_modalCreatBillForm").text().trim();
-    var luongDienTT = $("#luongDienTT_modalCreatBillForm").text().trim();
-    var loaiDienSD = $("#loaiDienSuDung_modalCreatBillForm").text().trim();
     $.ajax({
         url: "/them-hoa-don",
         type: "POST",
         data: {
+            "maDK": maDK,
             "maHD": maHD,
             "maKH": maKH,
-            "maThang": maThang,
-            "luongDienTT": luongDienTT,
-            "loaiDienSD": loaiDienSD
+            "maThang": maThang
         },
         success: function (data) {
             $('#modalCreatBillForm').modal('hide');

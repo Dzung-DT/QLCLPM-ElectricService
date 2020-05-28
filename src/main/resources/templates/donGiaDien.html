@@ -3,10 +3,12 @@
       layout:decorate="~{layout/template}">
 <head>
     <meta charset="UTF-8">
-    <title>Cấu hình</title>
+    <title>Cấu hình đơn giá điện</title>
     <style>
         label.error {
             color: red;
+            width: 200px;
+            position: absolute;
         }
     </style>
 </head>
@@ -15,6 +17,7 @@
     <script>
         $(document).ready(function () {
             showDonGia();
+            $("#addGia_input").focus();
         });
     </script>
     <script th:src="@{/js_templates/donGiaDien.js}"></script>
@@ -33,6 +36,7 @@
                             <label class="col-lg-3 col-form-label">Đơn giá</label>
                             <div class="col-lg-9">
                                 <input class="form-control" id="addGia_input" name="addGia_input">
+                                <label class="error"></label>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -72,7 +76,7 @@
                                 <thead>
                                 <tr role="row">
                                     <th>STT</th>
-                                    <th style="padding-left: 0px">Mã giá</th>
+                                    <th style="padding-left: 0">Mã giá</th>
                                     <th>Giá</th>
                                     <th>Ghi chú</th>
                                     <th>Tùy chọn</th>

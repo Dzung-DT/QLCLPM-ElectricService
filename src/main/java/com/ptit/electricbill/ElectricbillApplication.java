@@ -42,8 +42,8 @@ public class ElectricbillApplication extends WebSecurityConfigurerAdapter implem
         http.csrf().disable();
         //request hop le
         http.authorizeRequests()
-                .antMatchers("/login", "/logout").permitAll()
-                .antMatchers("/dashboard").hasAnyRole("ADMIN")
+                .antMatchers("/login", "/logout", "/assets/**", "/ckeditor/**", "/css_customize/**", "/global_assets/**", "/js_templates/**").permitAll()
+                .antMatchers("/**").hasRole("ADMIN")
                 .and().exceptionHandling().accessDeniedPage("/access-denied");
         http.authorizeRequests().and()
                 .formLogin()

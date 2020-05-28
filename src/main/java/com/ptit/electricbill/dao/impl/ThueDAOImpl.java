@@ -19,15 +19,20 @@ public class ThueDAOImpl implements ThueDAO {
     public Double getGiaThue() {
         String sql = "SELECT giaThue from thue";
         Query query = entityManager.createNativeQuery(sql);
-        Double giaThue = (Double) query.getSingleResult();
-        return giaThue;
+        return (Double) query.getSingleResult();
+    }
+
+    @Override
+    public Integer getMaThue() {
+        String sql = "SELECT id from thue";
+        Query query = entityManager.createNativeQuery(sql);
+        return (Integer) query.getSingleResult();
     }
 
     @Override
     public List<Object> getAll() {
         String sql = "SELECT * from thue";
         Query query = entityManager.createNativeQuery(sql);
-        List<Object> thueList = query.getResultList();
-        return thueList;
+        return query.getResultList();
     }
 }

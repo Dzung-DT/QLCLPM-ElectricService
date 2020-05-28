@@ -16,14 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 @Controller
 public class ConfigController {
-    // Don gia
+
+    //Khai báo DAO được sử dựng
     @Autowired
     private DonGiaDAO donGiaDAO;
 
@@ -38,14 +36,17 @@ public class ConfigController {
 
     @Autowired
     private HoaDonDAO hoaDonDAO;
+
     @Autowired
     private ThueDAO thueDAO;
 
+    //Trang cấu hình đơn giá
     @GetMapping("/cau-hinh-don-gia")
     public String donGia() {
         return "donGiaDien";
     }
 
+    //Lấy toàn bộ đơn giá
     @PostMapping("/danh-sach-don-gia")
     @ResponseBody
     public ResponseEntity<String> getDonGia() {
@@ -60,6 +61,8 @@ public class ConfigController {
         }
     }
 
+    // Cập nhật đơn giá
+    // Có check đơn giá tồn tại
     @PostMapping("/cap-nhat-don-gia")
     @ResponseBody
     public ResponseEntity<String> updateDonGia(@RequestParam("idDonGia") int idDonGia,
@@ -73,6 +76,8 @@ public class ConfigController {
         }
     }
 
+    //Thêm đơn giá
+    //Check số lượng giá của từng loại
     @PostMapping("/them-don-gia")
     @ResponseBody
     public ResponseEntity<String> addDonGia(@RequestParam("gia") String gia,
@@ -92,6 +97,7 @@ public class ConfigController {
         }
     }
 
+    //Xóa đơn giá có id = ?
     @PostMapping("/xoa-don-gia")
     @ResponseBody
     public ResponseEntity<String> addDonGia(@RequestParam("idDonGia") String idDonGia) {
@@ -105,7 +111,7 @@ public class ConfigController {
     }
 
 
-    //cấu hình điện kế
+    //Cấu hình điện kế
     @GetMapping("/cap-nhat-so-dien")
     public String capNhatSoDien() {
         return "capNhatSoDien";
@@ -125,6 +131,8 @@ public class ConfigController {
         return null;
     }
 
+    //Thêm số điện mới
+    //Check số điện tồn tại
     @PostMapping("/them-so-dien")
     @ResponseBody
     public ResponseEntity<String> addSoDien(@RequestParam("maKH") String maKH,
@@ -146,6 +154,7 @@ public class ConfigController {
         }
     }
 
+    // Xóa số điện có id = ?
     @PostMapping("/xoa-so-dien")
     @ResponseBody
     public ResponseEntity<String> xoaSoDien(@RequestParam("idSoDien") String idSoDien) {
@@ -153,6 +162,7 @@ public class ConfigController {
         return new ResponseEntity<>("Xóa thành công", HttpStatus.OK);
     }
 
+    //Lấy mục đích sử dụng của Khách hàng có Mã Khách hàng = ?
     @PostMapping("/lay-MDSD-by-maKH")
     @ResponseBody
     public ResponseEntity<String> getMDSDByMaKH(@RequestParam("maKH") String maKH) {
@@ -165,6 +175,7 @@ public class ConfigController {
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
+    //Lấy mã khách hàng
     @PostMapping("/get-customer-id-list")
     @ResponseBody
     public ResponseEntity<String> getCustomerID() {
@@ -177,6 +188,7 @@ public class ConfigController {
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
+    //Tìm điện kế bằng mã Khách hàng
     @PostMapping("/tim-kiem-dien-ke-KH")
     @ResponseBody
     public ResponseEntity<String> getDienKeByKH(@RequestParam("customerID") String customerID) {
@@ -194,90 +206,60 @@ public class ConfigController {
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
-    //Hóa đơn
+    //Trang hóa đơn
+    @GetMapping("/danh-sach-hoa-don")
+    public String xemHoadon() {
+        return "hoaDonChiTiet";
+    }
+
+    //Tạo mới hóa đơn
+    //Có kiểm tra hóa đơn tồn tại
     @PostMapping("/them-hoa-don")
     @ResponseBody
-    public ResponseEntity<String> themHoaDon(@RequestParam("maHD") String maHD,
+    public ResponseEntity<String> themHoaDon(@RequestParam("maDK") String maDK,
+                                             @RequestParam("maHD") String maHD,
                                              @RequestParam("maKH") String maKH,
-                                             @RequestParam("maThang") String maThang,
-                                             @RequestParam("luongDienTT") String luongDienTT,
-                                             @RequestParam("loaiDienSD") String loaiDienSD) {
+                                             @RequestParam("maThang") String maThang) {
         boolean checkExist = utilsDAO.kiemTraTonTai("hoadon", "MaHD", "MaHD", maHD);
         if (checkExist == false) {
             return new ResponseEntity<>("Hoá đơn có mã " + maHD + " đã tồn tại", HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
-            List<Integer> giaList = donGiaDAO.getGia(loaiDienSD);
-            int soDien = Integer.parseInt(luongDienTT);
-            long giaTien = 0;
-            if (loaiDienSD.equals("Sinh hoạt")) {
-                int[] a = {giaList.get(0), giaList.get(1), giaList.get(2), giaList.get(3), giaList.get(4), giaList.get(5)};
-                int[] b = {50, 50, 100, 100, 100, 100};
-                List<Integer> c = new ArrayList<>();
-                if (soDien > 500) {
-                    for (int x = 0; x < 5; x++) {
-                        giaTien += a[x] * b[x];
-                    }
-                    giaTien += a[5] * (soDien - 400);
-                } else if (soDien <= 500 && soDien >= 100) {
-                    int i = 0;
-                    while (true) {
-                        soDien = soDien - b[i];
-                        if (soDien > 0) {
-                            c.add(b[i]);
-                            i++;
-                        } else if (soDien < 0) {
-                            c.add(100 - soDien * (-1));
-                            break;
-                        } else if (soDien == 0) {
-                            c.add(soDien + b[i]);
-                            break;
-                        }
-                    }
-                    for (int j = 0; j < c.size(); j++) {
-                        giaTien += a[j] * c.get(j);
-                    }
-                } else if (soDien < 100 && soDien >= 0) {
-                    int i = 0;
-                    while (true) {
-                        soDien = soDien - b[i];
-                        if (soDien > 0) {
-                            c.add(b[i]);
-                            i++;
-                        } else if (soDien < 0) {
-                            c.add(50 - soDien * (-1));
-                            break;
-                        } else if (soDien == 0) {
-                            c.add(soDien + b[i]);
-                            break;
-                        }
-                    }
-                    for (int j = 0; j < c.size(); j++) {
-                        giaTien += a[j] * c.get(j);
-                    }
-                }
-            } else if (loaiDienSD.equals("Sinh hoạt trả trước")) {
-                giaTien = giaList.get(0) * soDien;
-            }
-            Double giaThue = thueDAO.getGiaThue();
-            SimpleDateFormat dateFormatGmt = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-            dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT+7"));
+
             HoaDon hoaDon = new HoaDon();
             hoaDon.setMaHD(maHD);
             hoaDon.setMaKH(maKH);
             hoaDon.setMaThang(maThang);
-            hoaDon.setMaThue(1);
-            hoaDon.setTien(Math.round(giaTien + giaTien * giaThue));
+            hoaDon.setMaDK(Integer.parseInt(maDK));
+            int thueID = thueDAO.getMaThue();
+            hoaDon.setMaThue(thueID);
+            SimpleDateFormat dateFormatGmt = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT+7"));
             hoaDon.setThoiGian(dateFormatGmt.format(new Date()) + "");
             hoaDonDAO.add(hoaDon);
             return new ResponseEntity<>("Tạo hóa đơn thành công", HttpStatus.OK);
         }
     }
 
-    @GetMapping("/danh-sach-hoa-don")
-    public String xemHoadon() {
-        return "hoaDonChiTiet";
+    //Lấy toàn bộ đơn giá có mục đích sử dụng = ?
+    @PostMapping("/lay-don-gia-by-MDSD")
+    @ResponseBody
+    public String getDonGiaByMDSD() {
+        String MDSD1 = "Sinh hoạt";
+        String MDSD2 = "Sinh hoạt trả trước";
+        List<Integer> giaList1 = donGiaDAO.getGia(MDSD1);
+        List<Integer> giaList2 = donGiaDAO.getGia(MDSD2);
+        Map<String, List> donGiaInfor = new LinkedHashMap<>();
+        donGiaInfor.put(MDSD1, giaList1);
+        donGiaInfor.put(MDSD2, giaList2);
+        try {
+            return (new ObjectMapper()).writeValueAsString(donGiaInfor);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
+    //Lấy danh sách hóa đơn
     @PostMapping("/danh-sach-hoa-don")
     @ResponseBody
     public String xemHoaDon() {
@@ -290,6 +272,7 @@ public class ConfigController {
         return null;
     }
 
+    //Tìm kiếm hóa đơn có maKH = ? && maThang = ?
     @PostMapping("/tim-kiem-hoa-don")
     @ResponseBody
     public ResponseEntity<String> timHoaDon(@RequestParam("maKH") String maKH,
@@ -307,7 +290,7 @@ public class ConfigController {
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
-
+    //Lấy mã Khách hàng cho autocomplete mã KH
     @PostMapping("/lay-maKH")
     @ResponseBody
     public ResponseEntity<String> layMaKH() {
@@ -324,6 +307,7 @@ public class ConfigController {
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
+    //Lấy mã Khách hàng cho autocomplete mã Tháng
     @PostMapping("/lay-maThang")
     @ResponseBody
     public ResponseEntity<String> layMaThang() {

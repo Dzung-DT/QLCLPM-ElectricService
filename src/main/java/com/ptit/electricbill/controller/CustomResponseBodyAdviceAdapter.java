@@ -12,6 +12,7 @@ import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+//Custom Response Body Advice Adapter
 @ControllerAdvice
 public class CustomResponseBodyAdviceAdapter implements ResponseBodyAdvice<Object> {
     @Autowired

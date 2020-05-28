@@ -11,8 +11,10 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAd
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Type;
 
+//Custom Request Body Advice Adapter
 @ControllerAdvice
 public class CustomRequestBodyAdviceAdapter extends RequestBodyAdviceAdapter {
+
     @Autowired
     LoggingService loggingService;
 

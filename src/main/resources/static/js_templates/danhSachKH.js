@@ -33,7 +33,7 @@ $(function () {
             });
         }
     });
-})
+});
 
 function getIDKH() {
 
@@ -112,7 +112,7 @@ $(function () {
             }
         }
     });
-})
+});
 
 //thêm khách hàng
 $(function () {
@@ -179,13 +179,13 @@ $(function () {
                 maxlength: "Chỉ nhập 9 chữ số"
             },
             diaChi_add: {
-                required: "Vui lòng nhập mã KH",
-                maxlength: "Bạn nhập quá dài"
+                required: "Vui lòng nhập địa chỉ",
+                maxlength: "Nhỏ hơn 100 kí tự"
             },
             mail_add: {
                 required: "VUi lòng nhập mail",
                 email: "Không phải gmail",
-                maxlength: "Bạn nhập quá dài"
+                maxlength: "nhỏ hơn 45 kí tự"
             },
             sdt_add: {
                 required: "Vui lòng nhập số đt",
@@ -240,7 +240,7 @@ $(function () {
             });
         }
     });
-})
+});
 
 // Nav form edit
 function showEditForm() {
@@ -334,13 +334,13 @@ $(function () {
                 maxlength: "Chỉ nhập 9 chữ số"
             },
             diaChi_edit: {
-                required: "Vui lòng nhập mã KH",
-                maxlength: "Bạn nhập quá dài"
+                required: "Vui lòng nhập địa chỉ",
+                maxlength: "Nhỏ hơn 100 kí tự"
             },
             mail_edit: {
                 required: "VUi lòng nhập mail",
                 email: "Không phải gmail",
-                maxlength: "Bạn nhập quá dài"
+                maxlength: "Nhỏ hơn 45 kí tự"
             },
             sdt_edit: {
                 required: "Vui lòng nhập số đt",
@@ -395,7 +395,7 @@ $(function () {
             });
         }
     });
-})
+});
 
 function deleteCustomer(idKHDelete) {
     swal({
@@ -433,7 +433,7 @@ function closeEditForm() {
 }
 
 function showTable(data) {
-    var contentString;
+    var contentString="";
     for (var i = 0; i < data.length; i++) {
         contentString = contentString
             + '<tr role="row" class="odd">'

@@ -53,4 +53,11 @@ public class KhachHangDAOImpl implements KhachHangDAO {
         Query query = entityManager.createNativeQuery(sql);
         query.executeUpdate();
     }
+
+    @Override
+    public String getMDSD(String mailAdd) {
+        String sql = "SELECT MucDichSD FROM khachhang where MailAddress = '" + mailAdd + "'";
+        Query query = entityManager.createNativeQuery(sql);
+        return (String) query.getSingleResult();
+    }
 }

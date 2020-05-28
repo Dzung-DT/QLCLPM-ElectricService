@@ -21,12 +21,16 @@ import java.util.List;
 
 @Controller
 public class CheckUserListController {
+
     private String KHTableName = "khachhang";
 
+    // Khai báo cáo DAO được sử dụng
     @Autowired
     private KhachHangDAO khachHangDAO;
+
     @Autowired
     private UserDAO userDAO;
+
     @Autowired
     private UtilsDAO utilsDAO;
 
@@ -36,11 +40,12 @@ public class CheckUserListController {
         return "danhSachKH";
     }
 
+    //Lấy toàn bộ danh sách khách hàng
     @PostMapping("/danh-sach-khach-hang")
     @ResponseBody
     public String getUserList() {
         List<Object> userList = khachHangDAO.getAll();
-        String data = null;
+        String data;
         try {
             data = (new ObjectMapper()).writeValueAsString(userList);
             return data;
@@ -50,6 +55,7 @@ public class CheckUserListController {
         return null;
     }
 
+    // Tìm kiếm khách hàng với mã khách hàng
     @PostMapping("/tim-kiem-khach-hang")
     @ResponseBody
     public String searchCustomerByID(@RequestParam("customerID") String customerID) {
@@ -63,6 +69,7 @@ public class CheckUserListController {
         return null;
     }
 
+    // Cập nhật thông tin khách hàng
     @PostMapping("/cap-nhat-thong-tin-khach-hang")
     @ResponseBody
     public ResponseEntity<String> updateCustomerByID(@RequestParam("idKH_update") String idKH_update,
@@ -83,12 +90,15 @@ public class CheckUserListController {
         } else if (utilsDAO.kiemTraTonTai(KHTableName, columnOut, "SoDienThoai", soDT_update) == false) {
             return new ResponseEntity<>("Số điện thoại đã dược sử dụng", HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
+            khachHangDAO.deleteKH(idKH_update);
             KhachHang KH = new KhachHang(idKH_update, tenKH_update, dob_update, soCmnd_update, diaChi_update, gioiTinh_update, soDT_update, ngayBDSD_update, mail_update, MDSD_update);
-            khachHangDAO.updateInformation(KH);
+            khachHangDAO.addKH(KH);
             return new ResponseEntity<>("Cập nhật thành công", HttpStatus.OK);
         }
     }
 
+    // Thêm mới khách hàng
+    // Có check MaKH, CMND, MailAddress, SoDienThoai tồn tại
     @PostMapping("/them-khach-hang")
     @ResponseBody
     public ResponseEntity<String> addCustomer(@RequestParam("idKH_add") String idKH_add,
@@ -117,13 +127,14 @@ public class CheckUserListController {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String hashedPassword = passwordEncoder.encode(password);
             if (userDAO.checkExistUser(mail_add) == false) {
-                User user = new User(mail_add, hashedPassword, "USER");
+                User user = new User(mail_add, hashedPassword, "ROLE_USER");
                 userDAO.addUser(user);
             }
             return new ResponseEntity<>("Thêm thành công", HttpStatus.OK);
         }
     }
 
+    // Xóa khách hàng có ID = ?
     @PostMapping("/xoa-khach-hang")
     @ResponseBody
     public ResponseEntity<String> deleteCustomer(@RequestParam("idKHDelete") String idKHDelete) {

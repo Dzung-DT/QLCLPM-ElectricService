@@ -5,13 +5,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class LoginController {
-    @GetMapping({"/login","/"})
-    public String login(){
+
+    //Gọi trang login
+    @GetMapping({"/login", "/"})
+    public String login() {
         return "login";
     }
 
+    //Chuyển hướng nếu login lỗi
     @GetMapping("/404-page")
-    public String error(){
+    public String error() {
         return "404error";
     }
 }
