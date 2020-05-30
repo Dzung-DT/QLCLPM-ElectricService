@@ -17,21 +17,26 @@ $(function () {
             var mailAddressReceive = emailPickUp;
             var mailSubject = $("#text_mail_subject").val().trim();
             var mailContent = CKEDITOR.instances['text_mail_content'].getData();
-            $.ajax({
-                url: "/gui-mail-khach-hang",
-                type: "POST",
-                data: {
-                    "mailAddressReceive": mailAddressReceive,
-                    "mailSubject": mailSubject,
-                    "mailContent": mailContent
-                },
-                success: function () {
-                    $('#SendMailModal').modal('hide');
-                    swal("Done", "Gửi mail thành công", "success");
-                }, error: function () {
-                    swal("Fail", "Không thành công", "warning");
-                }
-            });
+            if (mailContent == "") {
+                $("#content_mail_error").text("Nhập nội dung mail");
+            }
+            if (mailContent != "") {
+                $.ajax({
+                    url: "/gui-mail-khach-hang",
+                    type: "POST",
+                    data: {
+                        "mailAddressReceive": mailAddressReceive,
+                        "mailSubject": mailSubject,
+                        "mailContent": mailContent
+                    },
+                    success: function () {
+                        $('#SendMailModal').modal('hide');
+                        swal("Done", "Gửi mail thành công", "success");
+                    }, error: function () {
+                        swal("Fail", "Không thành công", "warning");
+                    }
+                });
+            }
         }
     });
 });

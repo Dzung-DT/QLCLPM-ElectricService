@@ -86,7 +86,6 @@ function showTable(data) {
             + '<td>' + thue + ' %</td>'
             + '<td>' + giaTien + '</td>'
             + '<td>' + data[i][9] + '</td>'
-            + '<td style="padding: 0 0 0 0"><a data-toggle="tooltip" title="Lập hóa đơn"><button class="btn btn-info center-block ml-1" onclick="showHoaDon()" style="padding: 3px 6px 3px 6px; border-radius: 54%;"><i class="icon-info22"></i></button></a></td>' +
             +'</tr>';
     }
     $("#bang_hoa_don").html(contentString);
@@ -135,10 +134,6 @@ function layDonGiaByMDSD() {
             alert("ERROR");
         }
     });
-}
-
-function showHoaDon() {
-    swal("Done", "OK", "success");
 }
 
 var donGiaInfo;

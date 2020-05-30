@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <meta http-equiv="content-type" content="text/html;charset=UTF-8"/><!-- /Added by HTTrack -->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Error</title>
+    <title>Login</title>
 
     <!-- Global stylesheets -->
     <link th:href="@{/global_assets/css/icons/icomoon/styles.min.css}" rel="stylesheet" type="text/css">
@@ -29,69 +30,65 @@
     <script th:src="@{/assets/js/app.js}"></script>
     <script th:src="@{/global_assets/js/demo_pages/login.js}"></script>
     <!-- /theme JS files -->
-
+    <script>
+        $(document).ready(function () {
+            swal("Fail", "Sai username hoặc password", "warning");
+        });
+    </script>
 </head>
 
 <body>
-
-<!-- Main navbar -->
-<div class="navbar navbar-expand-md navbar-dark bg-indigo navbar-static">
-
-
-    <div class="collapse navbar-collapse" id="navbar-mobile">
-        <ul class="navbar-nav ml-md-auto">
-            <li class="nav-item dropdown">
-                <a th:href="@{/login}" class="navbar-nav-link">
-                    <i class="icon-forward3"></i>
-                    Back
-                </a>
-            </li>
-        </ul>
-    </div>
-</div>
-<!-- /main navbar -->
-
-
 <!-- Page content -->
-<div class="page-content">
-
+<div class="page-content login-cover" style="background: none">
     <!-- Main content -->
     <div class="content-wrapper">
-
         <!-- Content area -->
         <div class="content d-flex justify-content-center align-items-center">
+            <!-- Login form -->
+            <form class="login-form wmin-sm-400" th:action="@{/login}" method="post">
+                <div class="card mb-0">
+                    <ul class="nav nav-tabs nav-justified alpha-grey mb-0">
+                        <li class="nav-item"><a href="#login-tab1" class="nav-link border-y-0 border-left-0 active"
+                                                data-toggle="tab"><h6 class="my-1">Sign in</h6></a></li>
+                    </ul>
+                    <div class="tab-content card-body">
+                        <div class="tab-pane fade show active" id="login-tab1">
+                            <div class="text-center mb-3">
+                                <i class="icon-reading icon-2x text-slate-300 border-slate-300 border-3 rounded-round p-3 mb-3 mt-1"></i>
+                                <h5 class="mb-0">Login to your account</h5>
 
-            <!-- Container -->
-            <div class="flex-fill">
+                            </div>
+                            <div class="form-group form-group-feedback form-group-feedback-left">
+                                <input type="Email" class="form-control" placeholder="Username" name="username" required>
+                                <div class="form-control-feedback">
+                                    <i class="icon-user text-muted"></i>
+                                </div>
+                            </div>
 
-                <!-- Error title -->
-                <div class="text-center mb-3">
-                    <h1 class="error-title">404</h1>
-                    <h5>Oops, an error has occurred. Page not found!</h5>
+                            <div class="form-group form-group-feedback form-group-feedback-left">
+                                <input type="password" class="form-control" placeholder="Password" name="password" required>
+                                <div class="form-control-feedback">
+                                    <i class="icon-lock2 text-muted"></i>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                            </div>
+                            <div class="form-group text-center text-muted content-divider">
+                                <span class="px-2">or sign in with</span>
+                            </div>
+                            <span class="navbar-text ml-5">&copy; 2020. <a href="#">Electric System</a> by <a href="#"
+                                                                                                              target="_blank">TrongDung</a></span>
+                        </div>
+                    </div>
                 </div>
-                <!-- /error title -->
-            </div>
-            <!-- /container -->
-
+            </form>
+            <!-- /login form -->
         </div>
         <!-- /content area -->
-
-        <!-- Footer -->
-        <div class="navbar navbar-expand-lg navbar-light">
-            <div class="navbar-collapse collapse" id="navbar-footer">
-					<span class="navbar-text" style="margin-left: 40%">
-						&copy; 2020. <a href="#">Electric System</a> by <a
-                            href="#" target="_blank">TrongDung</a>
-					</span>
-            </div>
-        </div>
-        <!-- /footer -->
-
     </div>
     <!-- /main content -->
-
 </div>
 <!-- /page content -->
-
 </body>
 </html>

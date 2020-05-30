@@ -42,14 +42,14 @@ public class ElectricbillApplication extends WebSecurityConfigurerAdapter implem
         http.csrf().disable();
         //request hop le
         http.authorizeRequests()
-                .antMatchers("/login", "/logout", "/assets/**", "/ckeditor/**", "/css_customize/**", "/global_assets/**", "/js_templates/**").permitAll()
+                .antMatchers("/login", "/logout", "/loginError", "/assets/**", "/ckeditor/**", "/css_customize/**", "/global_assets/**", "/js_templates/**").permitAll()
                 .antMatchers("/**").hasRole("ADMIN")
                 .and().exceptionHandling().accessDeniedPage("/access-denied");
         http.authorizeRequests().and()
                 .formLogin()
                 .loginPage("/login").loginProcessingUrl("/login")
                 .usernameParameter("username").passwordParameter("password")
-                .failureUrl("/404-page").successHandler(urlAuthenSuccessHandler)
+                .failureUrl("/loginError").successHandler(urlAuthenSuccessHandler)
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/login")
                 .deleteCookies("JSESSIONID").invalidateHttpSession(true);
     }
