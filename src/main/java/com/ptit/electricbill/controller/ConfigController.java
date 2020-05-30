@@ -147,6 +147,7 @@ public class ConfigController {
             dienKe.setMaThang(maThang);
             dienKe.setSoDienMoi(Integer.parseInt(chiSoMoi));
             dienKe.setSoDienCu(Integer.parseInt(chiSoCu));
+            dienKe.setStatus(0);
             dienKeDAO.add(dienKe);
             return new ResponseEntity<>("Thêm số điện thành công", HttpStatus.OK);
         } else {
@@ -158,7 +159,13 @@ public class ConfigController {
     @PostMapping("/xoa-so-dien")
     @ResponseBody
     public ResponseEntity<String> xoaSoDien(@RequestParam("idSoDien") String idSoDien) {
-        dienKeDAO.delete(Integer.parseInt(idSoDien));
+        String maHD = hoaDonDAO.getMaHDByMaDK(idSoDien);
+        if (maHD != null) {
+            dienKeDAO.delete(Integer.parseInt(idSoDien));
+            hoaDonDAO.deleteHoaDon(maHD);
+        } else {
+            dienKeDAO.delete(Integer.parseInt(idSoDien));
+        }
         return new ResponseEntity<>("Xóa thành công", HttpStatus.OK);
     }
 
@@ -214,7 +221,7 @@ public class ConfigController {
 
     //Tạo mới hóa đơn
     //Có kiểm tra hóa đơn tồn tại
-    @PostMapping("/them-hoa-don")
+    @PostMapping("/lap-hoa-don")
     @ResponseBody
     public ResponseEntity<String> themHoaDon(@RequestParam("maDK") String maDK,
                                              @RequestParam("maHD") String maHD,
@@ -224,7 +231,6 @@ public class ConfigController {
         if (checkExist == false) {
             return new ResponseEntity<>("Hoá đơn có mã " + maHD + " đã tồn tại", HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
-
             HoaDon hoaDon = new HoaDon();
             hoaDon.setMaHD(maHD);
             hoaDon.setMaKH(maKH);
@@ -236,6 +242,7 @@ public class ConfigController {
             dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT+7"));
             hoaDon.setThoiGian(dateFormatGmt.format(new Date()) + "");
             hoaDonDAO.add(hoaDon);
+            dienKeDAO.updateDienKeStatus(Integer.parseInt(maDK));
             return new ResponseEntity<>("Tạo hóa đơn thành công", HttpStatus.OK);
         }
     }

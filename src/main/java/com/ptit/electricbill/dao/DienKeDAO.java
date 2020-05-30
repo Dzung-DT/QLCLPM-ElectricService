@@ -14,4 +14,6 @@ public interface DienKeDAO {
     List<Object> searchByKHID(String KHID);
 
     boolean checkSoDien(String maKH, String maThang);
+
+    void updateDienKeStatus(int IDDienKe);
 }

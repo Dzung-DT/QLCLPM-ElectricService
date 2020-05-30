@@ -43,30 +43,30 @@ public class CheckUserListController {
     //Lấy toàn bộ danh sách khách hàng
     @PostMapping("/danh-sach-khach-hang")
     @ResponseBody
-    public String getUserList() {
+    public ResponseEntity<String> getUserList() {
         List<Object> userList = khachHangDAO.getAll();
-        String data;
         try {
-            data = (new ObjectMapper()).writeValueAsString(userList);
-            return data;
+            return new ResponseEntity<>((new ObjectMapper()).writeValueAsString(userList), HttpStatus.OK);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return null;
+        return new ResponseEntity<>("Lấy thông tin thành công", HttpStatus.OK);
     }
 
     // Tìm kiếm khách hàng với mã khách hàng
     @PostMapping("/tim-kiem-khach-hang")
     @ResponseBody
-    public String searchCustomerByID(@RequestParam("customerID") String customerID) {
-        Object customer = khachHangDAO.getByMaKH(customerID.trim());
-        try {
-            String data = (new ObjectMapper()).writeValueAsString(customer);
-            return data;
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+    public ResponseEntity<String> searchCustomerByID(@RequestParam("customerID") String customerID) {
+        boolean checkExistCustotmer = utilsDAO.kiemTraTonTai("khachhang", "TenKH", "MaKH", customerID);
+        if (checkExistCustotmer == false) {
+            Object customer = khachHangDAO.getByMaKH(customerID.trim());
+            try {
+                return new ResponseEntity<>((new ObjectMapper()).writeValueAsString(customer), HttpStatus.OK);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
         }
-        return null;
+        return new ResponseEntity<>("Không tìm thấy khách hàng", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // Cập nhật thông tin khách hàng

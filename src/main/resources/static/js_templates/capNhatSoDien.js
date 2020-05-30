@@ -35,26 +35,44 @@ function showDSSoDien() {
 $(function () {
     $("#form_them_so_dien").validate({
         rules: {
+            maKH_input: {
+                required: true,
+                digits: true,
+                minLength: 4,
+                maxlength: 4
+            },
+            maThang_input: {
+                required: true
+            },
             chiSoCu_input: {
                 required: true,
-                checkChar: "[0-9]+",
+                digits: true,
                 maxlength: 5
             },
             chiSoMoi_input: {
                 required: true,
-                checkChar: "[0-9]+",
+                digits: true,
                 maxlength: 5
             }
         },
         messages: {
+            maKH_input: {
+                required: "Nhập mã khách hàng",
+                digits: "Chỉ nhập kí tự số",
+                minLength: "Có 4 chữ số",
+                maxlength: "Có 4 chữ số"
+            },
+            maThang_input: {
+                required: "Chọn mã tháng"
+            },
             chiSoCu_input: {
                 required: "Nhập chỉ sổ cũ",
-                checkChar: "Chỉ nhập kí tự số",
+                digits: "Chỉ nhập kí tự số",
                 maxlength: "Nhỏ hơn 5 chữ số"
             },
             chiSoMoi_input: {
                 required: "Vui lòng nhập tên KH",
-                checkChar: "Chỉ nhập kí tự số",
+                digits: "Chỉ nhập kí tự số",
                 maxlength: "Nhỏ hơn 5 chữ số"
             }
         },
@@ -63,9 +81,8 @@ $(function () {
             var maThang = $('#maThang_input').val().trim().replace('/', '');
             var chiSoCu = $('#chiSoCu_input').val().trim();
             var chiSoMoi = $('#chiSoMoi_input').val().trim();
-
             if (chiSoCu > chiSoMoi) {
-                swal("Không thỏa mãn", "Nhập chỉ số mới phải lớn hơn chỉ số cũ", "warning");
+                swal("Không thỏa mãn", "Chỉ số mới phải lớn hơn chỉ số cũ", "warning");
             } else {
                 $.ajax({
                     url: "/them-so-dien",
@@ -137,7 +154,6 @@ function getSoDienByCustomer(customerID) {
                 showTable(data);
             },
             error: function () {
-                hideInput();
                 var contentString = "Thông tin điện kế với mã khách hàng này chưa có. Vui lòng thêm";
                 $("#bang_so_dien").html(contentString);
             }
@@ -150,6 +166,14 @@ function showTable(data) {
     var stt = 0;
     for (var i = 0; i < data.length; i++) {
         stt++;
+        var status = data[i][5];
+        if(status == 0){
+            status = "Chưa tạo hóa đơn";
+            var billStatus = '<td style="color: red">' + status + '</td>';
+        }else{
+            status = "Đã lập hóa đơn";
+            var billStatus = '<td style="color: green">' + status + '</td>';
+        }
         contentString = contentString
             + '<tr>'
             + '<td>' + stt + '</td>'
@@ -157,6 +181,7 @@ function showTable(data) {
             + '<td>' + data[i][2] + '</td>'
             + '<td>' + data[i][3] + '</td>'
             + '<td>' + data[i][4] + '</td>'
+            + billStatus
             + '<td style="padding: 0 0 0 0">' +
             '<a data-toggle="tooltip" title="Remove"><button onclick="deleteSoDien(' + data[i][0] + ')" class="btn btn-danger center-block ml-1" style="padding: 3px 6px 3px 6px; border-radius: 54%;"><i class="icon-trash"></i></button></a>' +
             '<a data-toggle="tooltip" title="Lập hóa đơn"><button data-toggle="modal" data-target="#modalCreatBillForm" class="btn btn-info center-block ml-1" onclick="lapHoaDon(' + data[i][0] + ')" style="padding: 3px 6px 3px 6px; border-radius: 54%;"><i class="icon-pencil"></i></button></a></td>'
@@ -200,7 +225,7 @@ function taoHoaDon() {
     var maKH = $("#maKH_modalCreatBillForm").text().trim();
     var maThang = $("#maThang_modalCreatBillForm").text().trim();
     $.ajax({
-        url: "/them-hoa-don",
+        url: "/lap-hoa-don",
         type: "POST",
         data: {
             "maDK": maDK,
@@ -210,6 +235,7 @@ function taoHoaDon() {
         },
         success: function (data) {
             $('#modalCreatBillForm').modal('hide');
+            getSoDienByCustomer(maKH);
             swal("Done", data, "success");
         },
         error: function (data) {
@@ -223,11 +249,13 @@ function showInput() {
     $("#maThang_input").prop('disabled', false);
     $("#chiSoMoi_input").prop('disabled', false);
     $("#chiSoCu_input").prop('disabled', false);
+    $("#btn_them_so_dien").prop('disabled', false);
 }
 
 function hideInput() {
     $("#maThang_input").prop('disabled', true);
     $("#chiSoMoi_input").prop('disabled', true);
     $("#chiSoCu_input").prop('disabled', true);
+    $("#btn_them_so_dien").prop('disabled', true);
 }
 

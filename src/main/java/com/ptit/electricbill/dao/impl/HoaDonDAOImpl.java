@@ -61,15 +61,33 @@ public class HoaDonDAOImpl implements HoaDonDAO {
 
     @Override
     public List<String> getMaKH() {
-        String sql = "SELECT distinct (MaKH) from hoadon";
+        String sql = "SELECT distinct (MaKH) from hoadon order by MaKH asc ";
         Query query = entityManager.createNativeQuery(sql);
         return query.getResultList();
     }
 
     @Override
     public List<String> getMaThang() {
-        String sql = "SELECT distinct (MaThang) from hoadon";
+        String sql = "SELECT distinct (MaThang) from hoadon order by MaThang asc";
         Query query = entityManager.createNativeQuery(sql);
         return query.getResultList();
+    }
+
+    @Override
+    public String getMaHDByMaDK(String maDK) {
+        String sql = "SELECT MaHD FROM hoadon where MaDK = " + maDK + "";
+        Query query = entityManager.createNativeQuery(sql);
+        List<String> resultList = query.getResultList();
+        if (resultList.size() != 0) {
+            return resultList.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public void deleteHoaDon(String maHD) {
+        String sql = "DELETE FROM hoadon WHERE (MaHD = '" + maHD + "')";
+        Query query = entityManager.createNativeQuery(sql);
+        query.executeUpdate();
     }
 }

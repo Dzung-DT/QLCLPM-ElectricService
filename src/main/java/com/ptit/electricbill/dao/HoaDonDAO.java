@@ -16,4 +16,8 @@ public interface HoaDonDAO {
     List<String> getMaKH();
 
     List<String> getMaThang();
+
+    String getMaHDByMaDK(String maDK);
+
+    void deleteHoaDon(String maHD);
 }

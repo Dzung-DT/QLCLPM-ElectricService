@@ -13,4 +13,5 @@ public class DienKe {
     private String maThang;
     private int soDienMoi;
     private int soDienCu;
+    private int status;
 }

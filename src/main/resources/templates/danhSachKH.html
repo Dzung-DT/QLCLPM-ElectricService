@@ -14,8 +14,6 @@
             left: 30px !important;
         }
     </style>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 </head>
 <body>
 <div class="content">
@@ -62,43 +60,43 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-header header-elements-inline">
+                    <div class="card-header header-elements-inline" style="padding-bottom: 0;">
                         <div class="breadcrumb-elements-item dropdown p-0">
-                            <a href="#" class="breadcrumb-elements-item dropdown-toggle" data-toggle="dropdown"
-                               aria-expanded="false">
-                                <i class="icon-gear mr-2"></i>
-                                Chức năng
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right" x-placement="top-end"
-                                 style="position: absolute; will-change: transform; top: 0; left: 0; transform: translate3d(-83px, -45px, 0px);">
-                                <a th:href="@{/trang-chu}" class="dropdown-item"><i class="icon-accessibility"></i>Xem
-                                    danh sách khách hàng</a>
-                                <div class="dropdown-divider"></div>
-                                <a href="#" onclick="showAddFormCustomer()" class="dropdown-item"><i
-                                        class="icon-plus-circle2"></i>Thêm khách hàng</a>
-                            </div>
+                            <label class="breadcrumb-elements-item" aria-expanded="false">
+                                <i class="icon-arrow-right8 mr-2"></i>Số người dùng:
+                            </label>
+                            <label class="breadcrumb-elements-item ml-1" aria-expanded="false" id="soNguoiDung"></label>
+                            <button class="breadcrumb-elements-item dropdown p-0 ml-4" data-toggle="tooltip"
+                                    onclick="showCustomerTable()"
+                                    title="Xem danh sách khách hàng">
+                                <i class="icon-accessibility mr-1"></i><span class="mr-1">Xem danh sách</span>
+                            </button>
+                            <button onclick="showAddFormCustomer()" class="breadcrumb-elements-item dropdown p-0 ml-1"
+                                    data-toggle="tooltip" title="Thêm khách hàng">
+                                <i class="icon-plus-circle2"></i><span class="ml-1 mr-1">Thêm KH</span>
+                            </button>
                         </div>
                         <form id="form_search_customer">
                             <div class="d-flex align-items-end flex-nowrap flex-xl-nowrap"
                                  style="margin-left: auto; margin-right: 60px">
                                 <label class="mr-2 mb-0" for="customer_ID_search">Tìm:</label>
                                 <div style="position: relative">
-                                    <input type="text" class="form-control text-dark flex-1 wmin-xl-200 border-bottom-1"
-                                           placeholder="Nhập mã khách hàng"
+                                    <input type="text" class="form-control text-dark flex-1 wmin-xl-100 border-bottom-1"
+                                           placeholder="Mã khách hàng"
                                            style="text-align: center"
                                            id="customer_ID_search" name="customer_ID_search">
                                     <label class="error"></label>
                                 </div>
                                 <button data-toggle="tooltip" title="Tìm" class="btn btn-info center-block ml-1"
-                                        style="padding: 5px 5px 0 5px; border-radius: 10px"><i
+                                        style="padding: 4px 4px 0 3px; border-radius: 10px"><i
                                         class="icon-search4 mb-1"></i></button>
                             </div>
                         </form>
                     </div>
-                    <hr>
+                    <div class="dropdown-divider" style="border: 1px solid #ced3cf"></div>
                     <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
                         <div class="datatable-scroll-wrap"
-                             style="overflow-y:scroll; max-height: 500px; text-align: center; margin-top: 30px">
+                             style="overflow-y:scroll; max-height: 500px; text-align: center;">
                             <table class="table datatable-responsive dataTable no-footer dtr-inline"
                                    id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
                                 <div class="overlay_bang_khach_hang"></div>
@@ -169,13 +167,11 @@
                                     <label class="error"></label>
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    Giới tính:
-                                    <input type="checkbox" id="nam_checkbox_add" name="nam" value="Nam"
-                                           style="margin-left: 80px">
-                                    <label for="nam_checkbox_edit">Nam</label>
-                                    <input type="checkbox" id="nu_checkbox_add" name="nu" value="Nữ"
-                                           style="margin-left: 30px">
-                                    <label for="nu_checkbox_edit">Nữ</label>
+                                    Mục đích SD:
+                                    <select id="gioiTinh_add">
+                                        <option value="1">Nam</option>
+                                        <option value="2">Nữ</option>
+                                    </select>
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
                                     Số ĐT: <input id="sdt_add" name="sdt_add"
@@ -254,13 +250,11 @@
                                     <label class="error"></label>
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    Giới tính:
-                                    <input type="checkbox" id="nam_checkbox_edit" name="nam" value="Nam"
-                                           style="margin-left: 80px">
-                                    <label for="nam_checkbox_edit">Nam</label>
-                                    <input type="checkbox" id="nu_checkbox_edit" name="nu" value="Nữ"
-                                           style="margin-left: 30px">
-                                    <label for="nu_checkbox_edit">Nữ</label>
+                                    Mục đích SD:
+                                    <select id="gioiTinh_edit">
+                                        <option value="1">Nam</option>
+                                        <option value="2">Nữ</option>
+                                    </select>
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
                                     Số ĐT: <input id="sdt_edit" name="sdt_edit"

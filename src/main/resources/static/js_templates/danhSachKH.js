@@ -58,7 +58,7 @@ function showCustomerTable() {
         success: function (data) {
             showTable(data);
         }, error: function () {
-            alert("FAIL!");
+            swal("Fail", "Không có dữ liệu", "error");
         }
     });
 }
@@ -102,12 +102,10 @@ $(function () {
                         "customerID": customerID,
                     },
                     success: function (data) {
-                        if (data.length == 0) {
-                            swal("Fail", "Khách hàng không tồn tại", "warning");
-                        }
+                        swal("Done", "Tìm thành công", "success");
                         showTable(data);
-                    }, error: function () {
-                        alert("FAIL!");
+                    }, error: function (data) {
+                        swal("Fail", data.responseText, "warning");
                     }
                 });
             }
@@ -205,12 +203,7 @@ $(function () {
             var soCmnd_add = $('#soCmnd_add').val().trim();
             var diaChi_add = $('#diaChi_add').val().trim();
             var mail_add = $('#mail_add').val().trim();
-            var gioiTinh_add;
-            if ($('#nam_checkbox_add').is(':checked')) {
-                gioiTinh_add = $('#nam_checkbox_add').val().trim();
-            } else if ($('#nu_checkbox_add').is(':checked')) {
-                gioiTinh_add = $('#nu_checkbox_add').val().trim();
-            }
+            var gioiTinh_add = $("#gioiTinh_add option:selected").text().trim();
             var soDT_add = $('#sdt_add').val().trim();
             var ngayBDSD_add = $('#ngayBDSD_add').val().trim();
             var MDSD_add = $("#MDSD_add option:selected").text().trim();
@@ -233,6 +226,7 @@ $(function () {
                 success: function (data) {
                     $('.nav__add-customer').hide();
                     $('.overlay_bang_khach_hang').hide();
+                    resetAddForm();
                     swal("Done", data, "success");
                     showCustomerTable();
                 }, error: function (data) {
@@ -262,9 +256,11 @@ function showEditForm() {
         $('#mail_edit').val(mail);
         var gioiTinh = $(this).find('td').eq(6).text();
         if (gioiTinh.trim() == 'Nam') {
-            $('input:checkbox[name=nam]').attr('checked', true);
+            $('#gioiTinh_edit').children('option:first').text('Nam');
+            $('#gioiTinh_edit').children('option:last').text('Nữ');
         } else if (gioiTinh.trim() == 'Nữ') {
-            $('input:checkbox[name=nu]').attr('checked', true);
+            $('#gioiTinh_edit').children('option:first').text('Nữ');
+            $('#gioiTinh_edit').children('option:last').text('Nam');
         }
         var soDT = $(this).find('td').eq(7).text();
         $('#sdt_edit').val(soDT);
@@ -360,12 +356,7 @@ $(function () {
             var soCmnd_update = $('#soCmnd_edit').val().trim();
             var diaChi_update = $('#diaChi_edit').val().trim();
             var mail_update = $('#mail_edit').val().trim();
-            var gioiTinh_update;
-            if ($('#nam_checkbox_edit').is(':checked')) {
-                gioiTinh_update = $('#nam_checkbox_edit').val().trim();
-            } else if ($('#nu_checkbox_edit').is(':checked')) {
-                gioiTinh_update = $('#nu_checkbox_edit').val().trim();
-            }
+            var gioiTinh_update = $("#gioiTinh_edit option:selected").text().trim();
             var soDT_update = $('#sdt_edit').val().trim();
             var ngayBDSD_update = $('#ngayBDSD_edit').val().trim();
             var MDSD_update = $("#MDSD_edit option:selected").text().trim();
@@ -430,7 +421,10 @@ function deleteCustomer(idKHDelete) {
 }
 
 function closeEditForm() {
-    location.reload();
+    $('.overlay_bang_khach_hang').hide();
+    $('.nav__add-customer').hide();
+    $('.nav__edit-customer').hide();
+    resetAddForm();
 }
 
 function showTable(data) {
@@ -453,5 +447,17 @@ function showTable(data) {
             '<a data-toggle="tooltip" title="Remove"><button onclick="deleteCustomer(' + data[i][0] + ')" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
             + '</tr>';
     }
+    $("#soNguoiDung").html(data.length);
     $("#bang_khach_hang").html(contentString);
+}
+
+function resetAddForm() {
+    $("#idKH_add_input").val("");
+    $("#ten_add").val("");
+    $("#dob_add").val("");
+    $("#soCmnd_add").val("");
+    $("#diaChi_add").val("");
+    $("#mail_add").val("");
+    $("#sdt_add").val("");
+    $("#ngayBDSD_add").val("");
 }

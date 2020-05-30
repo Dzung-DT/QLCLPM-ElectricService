@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class DienKeDAOImpl implements DienKeDAO{
+public class DienKeDAOImpl implements DienKeDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -28,21 +28,21 @@ public class DienKeDAOImpl implements DienKeDAO{
 
     @Override
     public void add(DienKe dienKe) {
-        String sql = "INSERT INTO dienke (MaKH,MaThang,SoDienCu,SoDienMoi) VALUES ('"+dienKe.getMaKH()+"', '"+dienKe.getMaThang()+"', '"+dienKe.getSoDienCu()+"', '"+dienKe.getSoDienMoi()+"')";
+        String sql = "INSERT INTO dienke (MaKH,MaThang,SoDienCu,SoDienMoi,Status) VALUES ('" + dienKe.getMaKH() + "', '" + dienKe.getMaThang() + "', '" + dienKe.getSoDienCu() + "', '" + dienKe.getSoDienMoi() + "', '" + dienKe.getStatus() + "')";
         Query query = entityManager.createNativeQuery(sql);
         query.executeUpdate();
     }
 
     @Override
     public void delete(int IDDienKe) {
-        String sql = "DELETE FROM dienke where id = '"+IDDienKe+"'";
+        String sql = "DELETE FROM dienke where id = '" + IDDienKe + "'";
         Query query = entityManager.createNativeQuery(sql);
         query.executeUpdate();
     }
 
     @Override
     public List<Object> searchByKHID(String KHID) {
-        String sql = "SELECT  * from dienke where MaKH = '"+KHID+"' order by MaThang desc";
+        String sql = "SELECT  * from dienke where MaKH = '" + KHID + "' order by MaThang desc";
         Query query = entityManager.createNativeQuery(sql);
         List<Object> dienKeList = query.getResultList();
         return dienKeList;
@@ -58,7 +58,15 @@ public class DienKeDAOImpl implements DienKeDAO{
             if (resultList.size() == 0) {
                 return true;
             }
-        } catch (NoResultException nre) {}
+        } catch (NoResultException nre) {
+        }
         return false;
+    }
+
+    @Override
+    public void updateDienKeStatus(int IDDienKe) {
+        String sql = "UPDATE dienke SET Status = '1' WHERE (id = '" + IDDienKe + "')";
+        Query query = entityManager.createNativeQuery(sql);
+        query.executeUpdate();
     }
 }
