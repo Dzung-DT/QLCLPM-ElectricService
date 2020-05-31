@@ -1,6 +1,6 @@
 package com.ptit.electricbill.controller;
 
-import com.ptit.electricbill.config.ExcelGenerator;
+import com.ptit.electricbill.config.PdfGenerator;
 import com.ptit.electricbill.model.HoaDonBill;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -17,27 +17,26 @@ import java.io.IOException;
 import java.util.List;
 
 @Controller
-public class ExportBillExcelController {
+public class ExportBillPdfController {
+    List<HoaDonBill> hoaDonBills;
 
-    List<HoaDonBill> hoaDonExcels;
-
-    @PostMapping("/export-bill-excel/send-data")
+    @PostMapping("/export-bill-pdf/send-data")
     @ResponseBody
-    public ResponseEntity<String> exportBllExcel(@RequestBody List<HoaDonBill> hoaDonExcelList) throws IOException {
-        hoaDonExcels = hoaDonExcelList;
+    public ResponseEntity<String> exportBillPdf(@RequestBody List<HoaDonBill> hoaDonPdfList) throws IOException {
+        hoaDonBills = hoaDonPdfList;
+        System.out.println("Size pdf " + hoaDonBills.size());
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
-    @GetMapping("/download-bill-excel/bills.xlsx")
+    @GetMapping("/download-bill-pdf/bills.pdf")
     @ResponseBody
-    public ResponseEntity<InputStreamResource> downloadBllExcel() throws IOException {
-        ByteArrayInputStream in = ExcelGenerator.billsToExcel(hoaDonExcels);
+    public ResponseEntity<InputStreamResource> downloadBillPdf() throws IOException {
+        ByteArrayInputStream in = PdfGenerator.billsToPdf(hoaDonBills);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition", "attachment; filename=bills.xlsx");
+        headers.add("Content-Disposition", "attachment; filename=bills.pdf");
         return ResponseEntity
                 .ok()
                 .headers(headers)
                 .body(new InputStreamResource(in));
     }
 }
-

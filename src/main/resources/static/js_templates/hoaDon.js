@@ -89,7 +89,43 @@ function exportExcel() {
         contentType: "application/json",
         data: JSON.stringify(array),
         success: function (data) {
-            $('#DownloadExcellFileModal').modal('show');
+            $('#DownloadExcelFileModal').modal('show');
+        }, error: function (data) {
+            swal("Fail", data.responseText, "warning");
+        }
+    });
+}
+
+function exportPdf() {
+    var array = [];
+    $('#bang_hoa_don tr').each(function (a, b) {
+        var stt = $('#stt_td', b).text();
+        var maHD = $('#maHD_td', b).text();
+        var maKH = $('#maKH_td', b).text();
+        var maThang = $('#maThang_td', b).text();
+        var tenKH = $('#ten_td', b).text();
+        var diaChi = $('#diaChi_td', b).text();
+        var soDienHienTai = $('#soDienHienTai_td', b).text();
+        var soThangTruoc = $('#soThangTruoc_td', b).text();
+        var soKwh = $('#soKwh_td', b).text();
+        var loaiDien = $('#loaiDien_td', b).text();
+        var thue = $('#thue_td', b).text();
+        var tien = $('#tien_td', b).text();
+        var ngayTao = $('#ngayTao_td', b).text();
+        array.push({
+            stt: stt, maHD: maHD, maKH: maKH, maThang: maThang, tenKH: tenKH, diaChi: diaChi,
+            soDienHienTai: soDienHienTai, soThangTruoc: soThangTruoc, soKwh: soKwh, loaiDien: loaiDien,
+            thue: thue, tien: tien, ngayTao: ngayTao
+        });
+
+    });
+    $.ajax({
+        url: "/export-bill-pdf/send-data",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(array),
+        success: function (data) {
+            $('#DownloadPdfFileModal').modal('show');
         }, error: function (data) {
             swal("Fail", data.responseText, "warning");
         }

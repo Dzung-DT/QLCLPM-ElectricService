@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class HoaDonExcel {
+public class HoaDonBill {
     private String stt;
     private String maHD;
     private String maKH;

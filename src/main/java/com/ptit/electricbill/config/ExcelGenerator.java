@@ -1,6 +1,6 @@
 package com.ptit.electricbill.config;
 
-import com.ptit.electricbill.model.HoaDonExcel;
+import com.ptit.electricbill.model.HoaDonBill;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class ExcelGenerator {
-    public static ByteArrayInputStream billsToExcel(List<HoaDonExcel> hoaDonExcells) throws IOException {
+    public static ByteArrayInputStream billsToExcel(List<HoaDonBill> hoaDonExcels) throws IOException {
         String[] COLUMNs = {"STT", "Mã hóa đơn", "Mã tháng", "Mã khách hàng", "Tên", "Địa chỉ", "Số điện hiện tại", "Số điện tháng trước", "Số Kwh", "Loại điện", "Thuế", "Tiền(Đồng)", "Ngày tạo"};
         try (
                 Workbook workbook = new XSSFWorkbook();
@@ -42,7 +42,7 @@ public class ExcelGenerator {
             ageCellStyle.setDataFormat(createHelper.createDataFormat().getFormat("#"));
 
             int rowIdx = 1;
-            for (HoaDonExcel hoaDon : hoaDonExcells) {
+            for (HoaDonBill hoaDon : hoaDonExcels) {
                 Row row = sheet.createRow(rowIdx++);
                 row.createCell(0).setCellValue(hoaDon.getStt());
                 row.createCell(1).setCellValue(hoaDon.getMaHD());
@@ -57,12 +57,7 @@ public class ExcelGenerator {
                 row.createCell(10).setCellValue(hoaDon.getThue());
                 row.createCell(11).setCellValue(hoaDon.getTien());
                 row.createCell(12).setCellValue(hoaDon.getNgayTao());
-
-                Cell ageCell = row.createCell(3);
-                ageCell.setCellValue(hoaDon.getMaKH());
-                ageCell.setCellStyle(ageCellStyle);
             }
-
             workbook.write(out);
             return new ByteArrayInputStream(out.toByteArray());
         }

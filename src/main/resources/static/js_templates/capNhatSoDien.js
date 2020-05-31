@@ -71,7 +71,7 @@ $(function () {
                 maxlength: "Nhỏ hơn 5 chữ số"
             },
             chiSoMoi_input: {
-                required: "Vui lòng nhập tên KH",
+                required: "Nhập chỉ số mới",
                 digits: "Chỉ nhập kí tự số",
                 maxlength: "Nhỏ hơn 5 chữ số"
             }
@@ -81,27 +81,29 @@ $(function () {
             var maThang = $('#maThang_input').val().trim().replace('/', '');
             var chiSoCu = $('#chiSoCu_input').val().trim();
             var chiSoMoi = $('#chiSoMoi_input').val().trim();
-            if (chiSoCu > chiSoMoi) {
+            if (Number(chiSoCu) >= Number(chiSoMoi)) {
+                alert(chiSoMoi + " " + chiSoCu);
                 swal("Không thỏa mãn", "Chỉ số mới phải lớn hơn chỉ số cũ", "warning");
-            } else {
-                $.ajax({
-                    url: "/them-so-dien",
-                    type: "POST",
-                    data: {
-                        "maKH": maKH,
-                        "maThang": maThang,
-                        "chiSoCu": chiSoCu,
-                        "chiSoMoi": chiSoMoi
-                    },
-                    success: function (data) {
-                        getSoDienByCustomer(maKH);
-                        swal("Done", data, "success");
-                    },
-                    error: function (data) {
-                        swal("Fail", data.responseText, "warning");
-                    }
-                });
             }
+            // else {
+            //     $.ajax({
+            //         url: "/them-so-dien",
+            //         type: "POST",
+            //         data: {
+            //             "maKH": maKH,
+            //             "maThang": maThang,
+            //             "chiSoCu": chiSoCu,
+            //             "chiSoMoi": chiSoMoi
+            //         },
+            //         success: function (data) {
+            //             getSoDienByCustomer(maKH);
+            //             swal("Done", data, "success");
+            //         },
+            //         error: function (data) {
+            //             swal("Fail", data.responseText, "warning");
+            //         }
+            //     });
+            // }
         }
     });
 });
@@ -167,10 +169,10 @@ function showTable(data) {
     for (var i = 0; i < data.length; i++) {
         stt++;
         var status = data[i][5];
-        if(status == 0){
+        if (status == 0) {
             status = "Chưa tạo hóa đơn";
             var billStatus = '<td style="color: red">' + status + '</td>';
-        }else{
+        } else {
             status = "Đã lập hóa đơn";
             var billStatus = '<td style="color: green">' + status + '</td>';
         }

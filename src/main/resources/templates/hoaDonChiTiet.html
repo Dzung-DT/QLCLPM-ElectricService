@@ -66,7 +66,7 @@
                                 </button>
                             </div>
                             <div class="ui-widget ml-2">
-                                <button type="button"
+                                <button type="button" onclick="exportPdf()"
                                         class="btn btn-outline alpha-warning text-warning-800 border-warning-600 legitRipple"
                                         style="padding: 4px 3px 4px 4px;">
                                     <i class="icon-file-pdf text-warning" data-toggle="tooltip"
@@ -119,29 +119,57 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="DownloadExcellFileModal" tabindex="-1" role="dialog"
+    <div class="modal fade" id="DownloadExcelFileModal" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Xuất dữ liệu ra file excel ?</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                        <span aria-hidden="false">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    Bill.xlxs
+                <div class="modal-body d-flex">
+                    <i class="icon-file-excel text-success mr-1 mt-1"></i><h5>Bill.xlxs</h5>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
                     <a th:href="@{/download-bill-excel/bills.xlsx}">
-                        <button type="button" class="btn btn-primary">Tải xuống</button>
+                        <button type="button" class="btn btn-primary"
+                                onclick="setTimeout(function () {$('#DownloadExcelFileModal').modal('hide')}, 300);">
+                            Tải xuống
+                        </button>
                     </a>
                 </div>
             </div>
         </div>
     </div>
 
+    <div class="modal fade" id="DownloadPdfFileModal" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Xuất dữ liệu ra file pdf ?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body d-flex">
+                    <i class="icon-file-excel text-warning mr-1 mt-1"></i><h5>Bill.pdf</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <a th:href="@{/download-bill-pdf/bills.pdf}">
+                        <button type="button" class="btn btn-primary"
+                                onclick="setTimeout(function () {$('#DownloadPdfFileModal').modal('hide')}, 300);">Tải
+                            xuống
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 </body>
 </html>
