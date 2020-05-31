@@ -60,6 +60,43 @@ $(function () {
     });
 });
 
+function exportExcel() {
+    var array = [];
+    $('#bang_hoa_don tr').each(function (a, b) {
+        var stt = $('#stt_td', b).text();
+        var maHD = $('#maHD_td', b).text();
+        var maKH = $('#maKH_td', b).text();
+        var maThang = $('#maThang_td', b).text();
+        var tenKH = $('#ten_td', b).text();
+        var diaChi = $('#diaChi_td', b).text();
+        var soDienHienTai = $('#soDienHienTai_td', b).text();
+        var soThangTruoc = $('#soThangTruoc_td', b).text();
+        var soKwh = $('#soKwh_td', b).text();
+        var loaiDien = $('#loaiDien_td', b).text();
+        var thue = $('#thue_td', b).text();
+        var tien = $('#tien_td', b).text();
+        var ngayTao = $('#ngayTao_td', b).text();
+        array.push({
+            stt: stt, maHD: maHD, maKH: maKH, maThang: maThang, tenKH: tenKH, diaChi: diaChi,
+            soDienHienTai: soDienHienTai, soThangTruoc: soThangTruoc, soKwh: soKwh, loaiDien: loaiDien,
+            thue: thue, tien: tien, ngayTao: ngayTao
+        });
+
+    });
+    $.ajax({
+        url: "/export-bill-excel/send-data",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(array),
+        success: function (data) {
+            $('#DownloadExcellFileModal').modal('show');
+        }, error: function (data) {
+            swal("Fail", data.responseText, "warning");
+        }
+    });
+}
+
+
 function showTable(data) {
     var tongSodien = 0;
     var tongTien = 0;
@@ -73,20 +110,20 @@ function showTable(data) {
         tongTien += giaTien;
         contentString = contentString
             + '<tr>'
-            + '<td>' + index + '</td>'
-            + '<td>' + data[i][0] + '</td>'
-            + '<td>' + data[i][1] + '</td>'
-            + '<td>' + data[i][2] + '</td>'
-            + '<td>' + data[i][3] + '</td>'
-            + '<td>' + data[i][4] + '</td>'
-            + '<td>' + data[i][5] + '</td>'
-            + '<td>' + data[i][6] + '</td>'
-            + '<td>' + soDien + '</td>'
-            + '<td>' + data[i][7] + '</td>'
-            + '<td>' + thue + ' %</td>'
-            + '<td>' + giaTien + '</td>'
-            + '<td>' + data[i][9] + '</td>'
-            +'</tr>';
+            + '<td id="stt_td">' + index + '</td>'
+            + '<td id="maHD_td">' + data[i][0] + '</td>'
+            + '<td id="maKH_td">' + data[i][1] + '</td>'
+            + '<td id="maThang_td">' + data[i][2] + '</td>'
+            + '<td id="ten_td">' + data[i][3] + '</td>'
+            + '<td id="diaChi_td">' + data[i][4] + '</td>'
+            + '<td id="soDienHienTai_td">' + data[i][5] + '</td>'
+            + '<td id="soThangTruoc_td">' + data[i][6] + '</td>'
+            + '<td id="soKwh_td">' + soDien + '</td>'
+            + '<td id="loaiDien_td">' + data[i][7] + '</td>'
+            + '<td id="thue_td">' + thue + ' %</td>'
+            + '<td id="tien_td">' + giaTien + '</td>'
+            + '<td id="ngayTao_td">' + data[i][9] + '</td>'
+            + '</tr>';
     }
     $("#bang_hoa_don").html(contentString);
     $("#tongSoDien").text(tongSodien + " Kwh");

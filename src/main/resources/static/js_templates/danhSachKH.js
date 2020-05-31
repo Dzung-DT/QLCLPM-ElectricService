@@ -138,7 +138,7 @@ $(function () {
             },
             soCmnd_add: {
                 required: true,
-                checkChar: "[0-9]+",
+                digits: true,
                 minlength: 9,
                 maxlength: 9
             },
@@ -153,7 +153,7 @@ $(function () {
             },
             sdt_add: {
                 required: true,
-                checkChar: "[0-9]+",
+                digits: true,
                 minlength: 10,
                 maxlength: 10
             },
@@ -178,7 +178,7 @@ $(function () {
             },
             soCmnd_add: {
                 required: "Vui lòng nhập số CMND",
-                checkChar: "Chỉ nhập kí tự số",
+                digits: "Chỉ nhập kí tự số",
                 minlength: "Chỉ nhập 9 chữ số",
                 maxlength: "Chỉ nhập 9 chữ số"
             },
@@ -193,7 +193,7 @@ $(function () {
             },
             sdt_add: {
                 required: "Vui lòng nhập số đt",
-                checkChar: "Chỉ nhập kí tự số",
+                digits: "Chỉ nhập kí tự số",
                 minlength: "Chỉ nhập 10 chữ số",
                 maxlength: "Chỉ nhập 10 chữ số"
             },
@@ -297,7 +297,7 @@ $(function () {
             },
             soCmnd_edit: {
                 required: true,
-                checkChar: "[0-9]+",
+                digits: true,
                 minlength: 9,
                 maxlength: 9
             },
@@ -312,7 +312,7 @@ $(function () {
             },
             sdt_edit: {
                 required: true,
-                checkChar: "[0-9]+",
+                digits: true,
                 minlength: 10,
                 maxlength: 10
             },
@@ -331,7 +331,7 @@ $(function () {
             },
             soCmnd_edit: {
                 required: "Vui lòng nhập số CMND",
-                checkChar: "Chỉ nhập kí tự số",
+                digits: "Chỉ nhập kí tự số",
                 minlength: "Chỉ nhập 9 chữ số",
                 maxlength: "Chỉ nhập 9 chữ số"
             },
@@ -346,7 +346,7 @@ $(function () {
             },
             sdt_edit: {
                 required: "Vui lòng nhập số đt",
-                checkChar: "Chỉ nhập kí tự số",
+                digits: "Chỉ nhập kí tự số",
                 minlength: "Chỉ nhập 10 chữ số",
                 maxlength: "Chỉ nhập 10 chữ số"
             },
@@ -367,25 +367,46 @@ $(function () {
             var MDSD_update = $("#MDSD_edit option:selected").text().trim();
 
             $.ajax({
-                url: "/cap-nhat-thong-tin-khach-hang",
+                url: "/tim-kiem-khach-hang",
                 type: "POST",
+                dataType: "json",
                 data: {
-                    "idKH_update": idKH_update,
-                    "tenKH_update": tenKH_update,
-                    "dob_update": dob_update,
-                    "soCmnd_update": soCmnd_update,
-                    "diaChi_update": diaChi_update,
-                    "mail_update": mail_update,
-                    "gioiTinh_update": gioiTinh_update,
-                    "soDT_update": soDT_update,
-                    "ngayBDSD_update": ngayBDSD_update,
-                    "MDSD_update": MDSD_update
+                    "customerID": idKH_update,
                 },
                 success: function (data) {
-                    $('.nav__edit-customer').hide();
-                    $('.overlay_bang_khach_hang').hide();
-                    swal("Done", data, "success");
-                    showCustomerTable();
+                    console.log(idKH_update+" "+tenKH_update+" "+dob_update+" "+soCmnd_update+" "+diaChi_update+" "+mail_update+" "+gioiTinh_update+" "+soDT_update+" "+ngayBDSD_update+" "+MDSD_update);
+                    if (data[0][1] != tenKH_update || data[0][2] != dob_update || data[0][3] != soCmnd_update || data[0][4] != diaChi_update ||
+                        data[0][5] != mail_update || data[0][6] != gioiTinh_update || data[0][7] != soDT_update || data[0][8] != ngayBDSD_update || data[0][9] != MDSD_update) {
+                        $.ajax({
+                            url: "/cap-nhat-thong-tin-khach-hang",
+                            type: "POST",
+                            data: {
+                                "idKH_update": idKH_update,
+                                "tenKH_update": tenKH_update,
+                                "dob_update": dob_update,
+                                "soCmnd_update": soCmnd_update,
+                                "diaChi_update": diaChi_update,
+                                "mail_update": mail_update,
+                                "gioiTinh_update": gioiTinh_update,
+                                "soDT_update": soDT_update,
+                                "ngayBDSD_update": ngayBDSD_update,
+                                "MDSD_update": MDSD_update
+                            },
+                            success: function (data) {
+                                $('.nav__edit-customer').hide();
+                                $('.overlay_bang_khach_hang').hide();
+                                swal("Done", data, "success");
+                                showCustomerTable();
+                            }, error: function (data) {
+                                swal("Fail", data.responseText, "warning");
+                            }
+                        });
+                    }
+                    else {
+                        $('.nav__edit-customer').hide();
+                        $('.overlay_bang_khach_hang').hide();
+                        swal("Status", "Không có thông tin nào được cập nhật", "warning");
+                    }
                 }, error: function (data) {
                     swal("Fail", data.responseText, "warning");
                 }
