@@ -2,9 +2,7 @@ package com.ptit.electricbill.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptit.electricbill.dao.KhachHangDAO;
-import com.ptit.electricbill.dao.UserDAO;
-import com.ptit.electricbill.dao.UtilsDAO;
+import com.ptit.electricbill.dao.*;
 import com.ptit.electricbill.model.KhachHang;
 import com.ptit.electricbill.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -34,6 +33,11 @@ public class CheckUserListController {
     @Autowired
     private UtilsDAO utilsDAO;
 
+    @Autowired
+    private DienKeDAO dienKeDAO;
+
+    @Autowired
+    private HoaDonDAO hoaDonDAO;
 
     @GetMapping("/trang-chu")
     public String dashboard() {
@@ -137,7 +141,30 @@ public class CheckUserListController {
     @PostMapping("/xoa-khach-hang")
     @ResponseBody
     public ResponseEntity<String> deleteCustomer(@RequestParam("idKHDelete") String idKHDelete) {
-        khachHangDAO.deleteKH(idKHDelete);
+        List<Integer> maDKList = dienKeDAO.getIDListByMaDK(idKHDelete);
+        if (maDKList.size() == 0) {
+            khachHangDAO.deleteKH(idKHDelete);
+        } else {
+            List<String> maHDList = new ArrayList<>();
+            for (Integer maDienKe : maDKList) {
+                maHDList.add(hoaDonDAO.getMaHDByMaDK(String.valueOf(maDienKe)));
+            }
+            if (maHDList.size() == 0) {
+                for (Integer maDienKe : maDKList) {
+                    dienKeDAO.delete(maDienKe);
+                }
+                khachHangDAO.deleteKH(idKHDelete);
+            } else {
+                for (String maHD : maHDList) {
+                    hoaDonDAO.deleteHoaDon(maHD);
+                }
+                for (Integer maDienKe : maDKList) {
+                    dienKeDAO.delete(maDienKe);
+                }
+                khachHangDAO.deleteKH(idKHDelete);
+            }
+        }
+
         return new ResponseEntity<>("Xóa thành công", HttpStatus.OK);
     }
 

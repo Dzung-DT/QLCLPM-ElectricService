@@ -16,4 +16,6 @@ public interface DienKeDAO {
     boolean checkSoDien(String maKH, String maThang);
 
     void updateDienKeStatus(int IDDienKe);
+
+    List<Integer> getIDListByMaDK(String maDK);
 }

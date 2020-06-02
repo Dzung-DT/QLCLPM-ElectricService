@@ -20,4 +20,5 @@ public interface HoaDonDAO {
     String getMaHDByMaDK(String maDK);
 
     void deleteHoaDon(String maHD);
+
 }

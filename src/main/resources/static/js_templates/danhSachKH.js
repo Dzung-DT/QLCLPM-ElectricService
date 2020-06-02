@@ -340,7 +340,7 @@ $(function () {
                 maxlength: "Nhỏ hơn 100 kí tự"
             },
             mail_edit: {
-                required: "VUi lòng nhập mail",
+                required: "Vui lòng nhập mail",
                 email: "Không phải gmail",
                 maxlength: "Nhỏ hơn 45 kí tự"
             },
@@ -374,7 +374,7 @@ $(function () {
                     "customerID": idKH_update,
                 },
                 success: function (data) {
-                    console.log(idKH_update+" "+tenKH_update+" "+dob_update+" "+soCmnd_update+" "+diaChi_update+" "+mail_update+" "+gioiTinh_update+" "+soDT_update+" "+ngayBDSD_update+" "+MDSD_update);
+                    console.log(idKH_update + " " + tenKH_update + " " + dob_update + " " + soCmnd_update + " " + diaChi_update + " " + mail_update + " " + gioiTinh_update + " " + soDT_update + " " + ngayBDSD_update + " " + MDSD_update);
                     if (data[0][1] != tenKH_update || data[0][2] != dob_update || data[0][3] != soCmnd_update || data[0][4] != diaChi_update ||
                         data[0][5] != mail_update || data[0][6] != gioiTinh_update || data[0][7] != soDT_update || data[0][8] != ngayBDSD_update || data[0][9] != MDSD_update) {
                         $.ajax({
@@ -401,8 +401,7 @@ $(function () {
                                 swal("Fail", data.responseText, "warning");
                             }
                         });
-                    }
-                    else {
+                    } else {
                         $('.nav__edit-customer').hide();
                         $('.overlay_bang_khach_hang').hide();
                         swal("Status", "Không có thông tin nào được cập nhật", "warning");
@@ -415,35 +414,40 @@ $(function () {
     });
 });
 
-function deleteCustomer(idKHDelete) {
-    swal({
-            title: "Are you sure?",
-            text: "Do you want to delete this customer ?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Delete",
-            cancelButtonText: "Cancel",
-            closeOnConfirm: false,
-            closeOnCancel: true
-        },
-        function (isConfirm) {
-            if (isConfirm) {
-                $.ajax({
-                    url: "/xoa-khach-hang",
-                    type: "POST",
-                    data: {
-                        "idKHDelete": idKHDelete
-                    },
-                    success: function (data) {
-                        swal("Done", data, "success");
-                        showCustomerTable();
-                    }, error: function () {
-                        swal("Fail", "Không xóa được", "warning");
-                    }
-                });
-            }
-        });
+function deleteCustomer() {
+    $('#bang_khach_hang').find('tr').click(function () {
+        var maKH = $(this).find('td').eq(0).text();
+        $("#id_KH_delete_td").text(maKH);
+        var idKHDelete = $("#id_KH_delete_td").text();
+        swal({
+                title: "Are you sure?",
+                text: "Do you want to delete this customer ?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Delete",
+                cancelButtonText: "Cancel",
+                closeOnConfirm: false,
+                closeOnCancel: true
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        url: "/xoa-khach-hang",
+                        type: "POST",
+                        data: {
+                            "idKHDelete": idKHDelete
+                        },
+                        success: function (data) {
+                            swal("Done", data, "success");
+                            showCustomerTable();
+                        }, error: function () {
+                            swal("Fail", "Không xóa được", "warning");
+                        }
+                    });
+                }
+            });
+    });
 }
 
 function closeEditForm() {
@@ -458,7 +462,7 @@ function showTable(data) {
     for (var i = 0; i < data.length; i++) {
         contentString = contentString
             + '<tr role="row" class="odd">'
-            + '<td>' + data[i][0] + '</td>'
+            + '<td id="id_KH_td">' + data[i][0] + '</td>'
             + '<td>' + data[i][1] + '</td>'
             + '<td>' + data[i][2] + '</td>'
             + '<td>' + data[i][3] + '</td>'
@@ -470,7 +474,7 @@ function showTable(data) {
             + '<td>' + data[i][9] + '</td>'
             + '<td><a href="#" data-toggle="tooltip" title="Send Mail" onclick="getIDKH()"><button data-toggle="modal" data-target="#SendMailModal" class="btn btn-primary center-block mb-1" style="padding: 1px 1px 1px 1px;"><i class="icon-mail-read"></i></button></a>' +
             '<button data-toggle="tooltip" title="Update" class="btn btn-info center-block mb-1" onclick="showEditForm()" style="padding:1px 1px 1px 1px; border-radius: 20px"><i class="icon-pencil"></i></button>' +
-            '<a data-toggle="tooltip" title="Remove"><button onclick="deleteCustomer(' + data[i][0] + ')" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
+            '<a data-toggle="tooltip" title="Remove"><button onclick="deleteCustomer()" class="btn btn-danger center-block" style="padding: 1px 1px 1px 1px; border-radius: 20px"><i class="icon-trash"></i></button></a></td>'
             + '</tr>';
     }
     $("#soNguoiDung").html(data.length);

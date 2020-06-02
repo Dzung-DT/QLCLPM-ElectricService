@@ -82,28 +82,26 @@ $(function () {
             var chiSoCu = $('#chiSoCu_input').val().trim();
             var chiSoMoi = $('#chiSoMoi_input').val().trim();
             if (Number(chiSoCu) >= Number(chiSoMoi)) {
-                alert(chiSoMoi + " " + chiSoCu);
                 swal("Không thỏa mãn", "Chỉ số mới phải lớn hơn chỉ số cũ", "warning");
+            } else {
+                $.ajax({
+                    url: "/them-so-dien",
+                    type: "POST",
+                    data: {
+                        "maKH": maKH,
+                        "maThang": maThang,
+                        "chiSoCu": chiSoCu,
+                        "chiSoMoi": chiSoMoi
+                    },
+                    success: function (data) {
+                        getSoDienByCustomer(maKH);
+                        swal("Done", data, "success");
+                    },
+                    error: function (data) {
+                        swal("Fail", data.responseText, "warning");
+                    }
+                });
             }
-            // else {
-            //     $.ajax({
-            //         url: "/them-so-dien",
-            //         type: "POST",
-            //         data: {
-            //             "maKH": maKH,
-            //             "maThang": maThang,
-            //             "chiSoCu": chiSoCu,
-            //             "chiSoMoi": chiSoMoi
-            //         },
-            //         success: function (data) {
-            //             getSoDienByCustomer(maKH);
-            //             swal("Done", data, "success");
-            //         },
-            //         error: function (data) {
-            //             swal("Fail", data.responseText, "warning");
-            //         }
-            //     });
-            // }
         }
     });
 });
@@ -248,16 +246,16 @@ function taoHoaDon() {
 }
 
 function showInput() {
-    $("#maThang_input").prop('disabled', false);
-    $("#chiSoMoi_input").prop('disabled', false);
-    $("#chiSoCu_input").prop('disabled', false);
-    $("#btn_them_so_dien").prop('disabled', false);
+    $("#maThang_input").prop('disabled', false).css("background-color", "#fff");
+    $("#chiSoMoi_input").prop('disabled', false).css("background-color", "#fff");
+    $("#chiSoCu_input").prop('disabled', false).css("background-color", "#fff");
+    $("#btn_them_so_dien").prop('disabled', false).css("background-color", "#737fff");
 }
 
 function hideInput() {
-    $("#maThang_input").prop('disabled', true);
-    $("#chiSoMoi_input").prop('disabled', true);
-    $("#chiSoCu_input").prop('disabled', true);
-    $("#btn_them_so_dien").prop('disabled', true);
+    $("#maThang_input").prop('disabled', true).css("background-color", "#f4f4f4");
+    $("#chiSoMoi_input").prop('disabled', true).css("background-color", "#f4f4f4");
+    $("#chiSoCu_input").prop('disabled', true).css("background-color", "#f4f4f4");
+    $("#btn_them_so_dien").prop('disabled', true).css("background-color", "#e8e8e8");
 }
 

@@ -69,4 +69,11 @@ public class DienKeDAOImpl implements DienKeDAO {
         Query query = entityManager.createNativeQuery(sql);
         query.executeUpdate();
     }
+
+    @Override
+    public List<Integer> getIDListByMaDK(String maDK) {
+        String sql = "SELECT id from dienke where MaKH = '" + maDK + "'";
+        Query query = entityManager.createNativeQuery(sql);
+        return query.getResultList();
+    }
 }

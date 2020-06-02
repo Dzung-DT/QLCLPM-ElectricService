@@ -81,7 +81,7 @@
                             </button>
                             <button onclick="showAddFormCustomer()" class="breadcrumb-elements-item dropdown p-0 ml-1"
                                     data-toggle="tooltip" title="Thêm khách hàng">
-                                <i class="icon-plus-circle2"></i><span class="ml-1 mr-1">Thêm KH</span>
+                                <i class="icon-plus-circle2"></i><span class="ml-1 mr-1">Thêm khách hàng</span>
                             </button>
                         </div>
                         <form id="form_search_customer">
@@ -110,17 +110,17 @@
                                 <div class="overlay_bang_khach_hang"></div>
                                 <thead>
                                 <tr role="row">
-                                    <th>Mã KH</th>
-                                    <th>Tên KH</th>
+                                    <th>Mã</th>
+                                    <th>Tên</th>
                                     <th>Ngày sinh</th>
-                                    <th>Số CMND</th>
+                                    <th>Số chứng minh nhân dân</th>
                                     <th>Địa chỉ</th>
                                     <th>Mail</th>
                                     <th>Giới tính</th>
-                                    <th>Số ĐT</th>
-                                    <th>Ngày BDSD</th>
-                                    <th>Mục đích SD</th>
-                                    <th>Tùy chọn</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Ngày sử dụng</th>
+                                    <th>Loại điện</th>
+                                    <th>Tác vụ</th>
                                 </tr>
                                 </thead>
                                 <tbody id="bang_khach_hang">
@@ -141,13 +141,13 @@
                             <hr>
                             <form id="add_form">
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    <label>Mã KH:</label>
+                                    <label>Mã:</label>
                                     <input name="idKH_add_input" id="idKH_add_input"
                                            style="border: 1px #ececec solid; margin-left: 16px; margin-right: 30px" size="40">
                                     <label class="error"></label>
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    Tên KH: <input id="ten_add" name="ten_add"
+                                    Tên: <input id="ten_add" name="ten_add"
                                                    style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px"
                                                    size="40">
                                     <label class="error"></label>
@@ -182,20 +182,20 @@
                                     </select>
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    Số ĐT: <input id="sdt_add" name="sdt_add"
+                                    Số điện thoại: <input id="sdt_add" name="sdt_add"
                                                   style="border: 1px #ececec solid; margin-left: 3px; margin-right: 30px"
                                                   size="43">
                                     <label class="error"></label>
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    Ngày BĐSD: <input id="ngayBDSD_add" name="ngayBDSD_add"
+                                    Ngày sử dụng: <input id="ngayBDSD_add" name="ngayBDSD_add"
                                                       placeholder="Chọn ngày sử dụng"
                                                       style="border: 1px #ececec solid; margin-left: 1px; margin-right: 30px" size="38"
                                                       readonly>
                                     <label class="error"></label>
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    Mục đích SD:
+                                    Loại điện:
                                     <select id="MDSD_add">
                                         <option value="1">Sinh hoạt</option>
                                         <option value="2">Sinh hoạt trả trước</option>
@@ -224,13 +224,13 @@
                             <hr>
                             <form id="edit_form">
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    <label>Mã KH:</label>
+                                    <label>Mã:</label>
                                     <input name="idKH_edit_input" id="idKH_edit_input"
                                            style="border: 1px #ececec solid; margin-left: 16px;" size="40" readonly>
                                     <label class="error"></label>
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    Tên KH: <input id="ten_edit" name="ten_edit"
+                                    Tên: <input id="ten_edit" name="ten_edit"
                                                    style="border: 1px #ececec solid; margin-left: 14px; margin-right: 30px"
                                                    size="40">
                                     <label class="error"></label>
@@ -265,20 +265,20 @@
                                     </select>
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    Số ĐT: <input id="sdt_edit" name="sdt_edit"
+                                    Số điện thoại: <input id="sdt_edit" name="sdt_edit"
                                                   style="border: 1px #ececec solid;margin-left: 3px; margin-right: 30px"
                                                   size="43">
                                     <label class="error"></label>
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    Ngày BĐSD: <input id="ngayBDSD_edit" name="ngayBDSD_edit"
+                                    Ngày bắt đầu sử dụng: <input id="ngayBDSD_edit" name="ngayBDSD_edit"
                                                       placeholder="Chọn ngày sử dụng"
                                                       style="border: 1px #ececec solid; margin-left: 1px; margin-right: 30px" size="38"
                                                       readonly>
                                     <label class="error"></label>
                                 </li>
                                 <li class="nav__edit-input" style=" padding-bottom: 5px">
-                                    Mục đích SD:
+                                    Loại điện:
                                     <select id="MDSD_edit">
                                         <option value="1">Sinh hoạt</option>
                                         <option value="2">Sinh hoạt trả trước</option>
@@ -349,6 +349,7 @@
                 </div>
             </div>
         </div>
+        <span id="id_KH_delete_td" style="display: none"></span>
         <!--End Modal send mail-->
     </section>
 </div>
